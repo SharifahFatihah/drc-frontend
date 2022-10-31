@@ -6,19 +6,26 @@ import AliceCarousel from "react-alice-carousel";
 import { useNavigate } from "react-router-dom";
 
 const useStyle = makeStyles(() => ({
-  scrollh: {
-    height: "50%",
-    width: "70%",
+  priceh: {
+    height: "30px",
+    width: "100%",
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
   },
   scrollElement: {
-    boxShadow: "0px 0px 105px 45px 0px 0px 105px 45px ",
+    display: "flex",
+    justifyContent: "center",
+  },
+  red: {
+    color: "#FF4B25",
+  },
+  green: {
+    color: "#00FF19",
   },
 }));
 
-function ScrollHorizontal() {
+function PriceHorizontal() {
   const classes = useStyle();
   const navigate = useNavigate();
 
@@ -45,11 +52,13 @@ function ScrollHorizontal() {
     getTrendingCoins(currency);
   }, [currency]);
 
+  console.log(trending);
+
   if (loading) {
     return <div>Loading...</div>;
   }
 
-  const responsive = { 0: { items: 2 }, 512: { items: 4 } };
+  const responsive = { 0: { items: 4 }, 512: { items: 6 } };
 
   const items = trending.map((coin) => {
     return (
@@ -57,20 +66,27 @@ function ScrollHorizontal() {
         className={classes.scrollElement}
         onClick={() => navigate(`/coins/${coin.id}`)}
       >
-        <img src={coin?.image} alt={coin.name} height="150" />
+        <div>{coin?.symbol.toUpperCase()} &thinsp; &thinsp; </div>
+        <div
+          className={
+            coin?.price_change_percentage_24h > 0 ? classes.green : classes.red
+          }
+        >
+          {parseFloat(coin?.price_change_percentage_24h).toFixed(2)}%
+        </div>
       </div>
     );
   });
   return (
-    <div className={classes.scrollh}>
+    <div className={classes.priceh}>
       <AliceCarousel
         mouseTracking
         infinite={true}
         autoPlay={true}
-        autoPlayInterval={2000}
-        animationDuration={2000}
+        autoPlayInterval={0}
+        animationDuration={10000}
         disableDotsControls
-        disableButtonsControls
+        disableButtonsControls={true}
         responsive={responsive}
         items={items}
       />
@@ -78,4 +94,4 @@ function ScrollHorizontal() {
   );
 }
 
-export default ScrollHorizontal;
+export default PriceHorizontal;

@@ -1,8 +1,7 @@
-import React, { useState } from "react";
+import React from "react";
 import { makeStyles, Container, Typography } from "@material-ui/core";
 import ScrollHorizontal from "./ScrollHorizontal";
-import Service from "../service/Service";
-import { CryptoState } from "../CryptoContext";
+import PriceHorizontal from "./PriceHorizontal";
 
 const useStyle = makeStyles(() => ({
   banner: {
@@ -17,6 +16,10 @@ const useStyle = makeStyles(() => ({
     margin: "0",
     height: 800,
     paddingTop: 25,
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
   },
   tagline: {
     display: "flex",
@@ -28,34 +31,6 @@ const useStyle = makeStyles(() => ({
 
 function Banner() {
   const classes = useStyle();
-  const { currency } = CryptoState();
-
-  const [trending, setTrending] = useState([]);
-  const [loading, setLoading] = useState(false);
-
-  const getTrendingCoins = (e) => {
-    setLoading(true);
-
-    Service.getTrendingCoins(e)
-      .then((response) => {
-        setTrending(response);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
-  React.useEffect(() => {
-    setLoading(true);
-    getTrendingCoins(currency);
-  }, [currency]);
-
-  console.log(trending);
-
-  if (loading) {
-    return <div>Loading...</div>;
-  }
 
   return (
     <div className={classes.banner}>
