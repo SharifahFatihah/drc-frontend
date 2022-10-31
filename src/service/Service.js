@@ -13,7 +13,11 @@ const TrendingCoins = (currency) =>
 
 class Service {
   getTrendingCoins = (e) => {
-    return axios.get(TrendingCoins(e)).then((response) => response.data);
+    return axios.get(TrendingCoins(e));
+  };
+
+  getSingleCoin = (e) => {
+    return axios.get(SingleCoin(e));
   };
 }
 
