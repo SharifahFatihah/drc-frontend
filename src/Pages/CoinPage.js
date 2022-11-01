@@ -5,6 +5,7 @@ import Service from "../service/Service";
 import { makeStyles } from "@material-ui/core";
 import { Typography } from "@material-ui/core";
 import parser from "html-react-parser";
+import CoinChart from "../components/CoinChart";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -69,8 +70,6 @@ function CoinPage() {
     [currency]
   );
 
-  console.log(coin);
-
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -103,7 +102,7 @@ function CoinPage() {
           </span>
         </div>
       </div>
-      {/* <CoinChart key={coin} /> */}
+      <CoinChart coin={coin} />
     </div>
   );
 }
