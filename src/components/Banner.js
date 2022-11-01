@@ -59,8 +59,6 @@ function Banner() {
             We make your life goes ka-ching &amp; ba-bling
           </Typography>
         </div>
-
-        <ScrollHorizontal />
       </Container>
     </div>
   );

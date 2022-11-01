@@ -3,6 +3,8 @@ import Banner from "../components/Banner";
 import Memories from "../asset/memories.mp3";
 import Sound from "react-sound";
 import PriceHorizontal from "../components/PriceHorizontal";
+import CoinTable from "../components/CoinTable";
+import MockTable from "../components/MockTable";
 
 function Homepage() {
   return (
@@ -10,10 +12,11 @@ function Homepage() {
       <Sound
         url={Memories}
         playStatus={Sound.status.PLAYING}
-        playFromPosition={300 /* in milliseconds */}
+        playFromPosition={0 /* in milliseconds */}
       />
       <PriceHorizontal />
-      <Banner />{" "}
+      <Banner />
+      <CoinTable />
     </div>
   );
 }

@@ -52,8 +52,6 @@ function PriceHorizontal() {
     getTrendingCoins(currency);
   }, [currency]);
 
-  console.log(trending);
-
   if (loading) {
     return <div>Loading...</div>;
   }
