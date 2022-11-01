@@ -5,7 +5,7 @@ name: CI
 
 on:
   push:
-    branches: [master]
+    branches: [Afifi]
 
   workflow_dispatch:
 
