@@ -70,6 +70,7 @@ function PriceHorizontal() {
             coin?.price_change_percentage_24h > 0 ? classes.green : classes.red
           }
         >
+          {Service.isProfit(coin?.price_change_percentage_24h) ? "+" : ""}
           {parseFloat(coin?.price_change_percentage_24h).toFixed(2)}%
         </div>
       </div>

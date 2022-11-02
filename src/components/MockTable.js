@@ -1,6 +1,5 @@
 import * as React from "react";
 import PropTypes from "prop-types";
-import { alpha } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -10,14 +9,12 @@ import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import TableSortLabel from "@mui/material/TableSortLabel";
-
 import Paper from "@mui/material/Paper";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
-
-import Favorite from "@mui/icons-material/Favorite";
-
 import { visuallyHidden } from "@mui/utils";
+import Service from "../service/Service";
+import { CryptoState } from "../CryptoContext";
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -134,6 +131,8 @@ export default function EnhancedTable({ coins }) {
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
+  const { currency, symbol } = CryptoState();
+
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
     setOrder(isAsc ? "desc" : "asc");
@@ -229,11 +228,26 @@ export default function EnhancedTable({ coins }) {
                         />
                         {row.name}
                       </TableCell>
-                      <TableCell align="right">{row.current_price}</TableCell>
                       <TableCell align="right">
-                        {row.price_change_percentage_24h}
+                        {Service.addCommas(row.current_price)} {symbol}
                       </TableCell>
-                      <TableCell align="right">{row.market_cap}</TableCell>
+                      <TableCell
+                        align="right"
+                        style={
+                          Service.isProfit(row.price_change_percentage_24h)
+                            ? { color: "green" }
+                            : { color: "red" }
+                        }
+                      >
+                        {Service.isProfit(row.price_change_percentage_24h)
+                          ? "+"
+                          : ""}
+                        {parseFloat(row.price_change_percentage_24h).toFixed(2)}
+                        {"%"}
+                      </TableCell>
+                      <TableCell align="right">
+                        {Service.addCommas(row.market_cap)} {symbol}
+                      </TableCell>
                     </TableRow>
                   );
                 })}
