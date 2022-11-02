@@ -11,6 +11,13 @@ const HistoricalChart = (id, days = 365, currency) =>
 const TrendingCoins = (currency) =>
   `https://api.coingecko.com/api/v3/coins/markets?vs_currency=${currency}&order=gecko_desc&per_page=10&page=1&sparkline=false&price_change_percentage=24h`;
 
+export const chartDays = [
+  { label: "24 Hours", value: 1 },
+  { label: "30 Days", value: 30 },
+  { label: "3 Month", value: 90 },
+  { label: "1 year", value: 365 },
+];
+
 class Service {
   getTrendingCoins = (e) => {
     return axios.get(TrendingCoins(e));
@@ -18,6 +25,29 @@ class Service {
 
   getSingleCoin = (e) => {
     return axios.get(SingleCoin(e));
+  };
+
+  getHistoricalChart = (e, f, g) => {
+    return axios.get(HistoricalChart(e, f, g));
+  };
+  getCoinList = (e) => {
+    return axios.get(CoinList(e));
+  };
+
+  handleSearch = (e, search) => {
+    return e.filter(
+      (f) =>
+        f.name.toLowerCase().includes(search) ||
+        f.symbol.toLowerCase().includes(search)
+    );
+  };
+
+  isProfit = (e) => {
+    return e >= 0 ? true : false;
+  };
+
+  addCommas = (e) => {
+    return e.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   };
 }
 
