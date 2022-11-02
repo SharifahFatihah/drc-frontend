@@ -46,7 +46,6 @@ function Banner() {
               fontFamily: "",
               color: "white",
             }}
-            sx={{ typography: { sm: "body1", xs: "body2" } }}
           >
             TEST!
           </Typography>
@@ -60,7 +59,6 @@ function Banner() {
               fontFamily: "",
               color: "white",
             }}
-            sx={{ typography: { sm: "body1", xs: "body2" } }}
           >
             Happy Testing~
           </Typography>

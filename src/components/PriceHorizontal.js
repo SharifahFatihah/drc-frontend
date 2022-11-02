@@ -69,7 +69,9 @@ function PriceHorizontal() {
         className={classes.scrollElement}
         onClick={() => navigate(`/coins/${coin.id}`)}
       >
-        <div>{coin?.symbol.toUpperCase()} &thinsp; &thinsp; </div>
+        <img src={coin.image} height="20" style={{ marginRight: "10px" }} />
+
+        <div>{coin?.symbol.toUpperCase()} &thinsp; </div>
         <div
           className={
             coin?.price_change_percentage_24h > 0 ? classes.green : classes.red

@@ -16,6 +16,7 @@ import { visuallyHidden } from "@mui/utils";
 import Service from "../service/Service";
 import { CryptoState } from "../CryptoContext";
 import { useNavigate } from "react-router-dom";
+import { Typography } from "@material-ui/core";
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -75,14 +76,7 @@ const headCells = [
 ];
 
 function EnhancedTableHead(props) {
-  const {
-    onSelectAllClick,
-    order,
-    orderBy,
-    numSelected,
-    rowCount,
-    onRequestSort,
-  } = props;
+  const { order, orderBy, onRequestSort } = props;
   const createSortHandler = (property) => (event) => {
     onRequestSort(event, property);
   };
@@ -205,7 +199,11 @@ export default function EnhancedTable({ coins }) {
                         component="th"
                         id={labelId}
                         scope="row"
-                        style={{ display: "flex", alignItems: "flex-end" }}
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          cursor: "pointer",
+                        }}
                         onClick={() => navigate(`/coins/${row.id}`)}
                       >
                         <img
@@ -213,7 +211,16 @@ export default function EnhancedTable({ coins }) {
                           height="20"
                           style={{ marginRight: "10px" }}
                         />
-                        {row.name}
+                        <div
+                          style={{ display: "flex", flexDirection: "column" }}
+                        >
+                          <Typography variant="h7">
+                            {row.symbol.toUpperCase()}
+                          </Typography>
+                          <Typography variant="subtitle2">
+                            {row.name}
+                          </Typography>
+                        </div>
                       </TableCell>
                       <TableCell align="right">
                         {Service.addCommas(row.current_price)} {symbol}

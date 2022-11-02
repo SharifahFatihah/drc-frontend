@@ -71,10 +71,10 @@ function CoinPage() {
     [currency]
   );
 
-  if (loading) {
+  if (!coin) {
     return (
       <div>
-        <LinearProgress color="pink" />
+        <LinearProgress />
       </div>
     );
   }
@@ -95,19 +95,19 @@ function CoinPage() {
           </span>
           <span className={classes.coinBasic}>
             <Typography variant="h5" className={classes.description}>
-              Current Price:
+              Current Price:{" "}
               {coin?.market_data.current_price[currency.toLowerCase()]
                 .toString()
-                .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}{" "}
               {symbol}
             </Typography>
           </span>
           <span className={classes.coinBasic}>
             <Typography variant="h5" className={classes.description}>
-              Market Cap:
+              Market Cap:{" "}
               {coin?.market_data.market_cap[currency.toLowerCase()]
                 .toString()
-                .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}{" "}
               {symbol}
             </Typography>
           </span>
