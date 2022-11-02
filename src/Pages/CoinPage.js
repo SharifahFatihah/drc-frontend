@@ -90,14 +90,16 @@ function CoinPage() {
           </span>
           <span className={classes.coinBasic}>
             <Typography variant="h5" className={classes.description}>
-              Current Price: {symbol}
+              Current Price:
               {coin?.market_data.current_price[currency.toLowerCase()]}
+              {symbol}
             </Typography>
           </span>
           <span className={classes.coinBasic}>
             <Typography variant="h5" className={classes.description}>
-              Market Cap: {symbol}
+              Market Cap:
               {coin?.market_data.market_cap[currency.toLowerCase()]}
+              {symbol}
             </Typography>
           </span>
         </div>

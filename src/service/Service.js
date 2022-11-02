@@ -41,6 +41,14 @@ class Service {
         f.symbol.toLowerCase().includes(search)
     );
   };
+
+  isProfit = (e) => {
+    return e >= 0 ? true : false;
+  };
+
+  addCommas = (e) => {
+    return e.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  };
 }
 
 export default new Service();
