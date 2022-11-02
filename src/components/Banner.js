@@ -45,7 +45,7 @@ function Banner() {
               fontSize: "160px",
             }}
           >
-            Ka-Ching !
+            TEST !
           </Typography>
           <Typography
             variant="h4"
