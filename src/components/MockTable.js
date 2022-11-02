@@ -15,6 +15,7 @@ import Switch from "@mui/material/Switch";
 import { visuallyHidden } from "@mui/utils";
 import Service from "../service/Service";
 import { CryptoState } from "../CryptoContext";
+import { useNavigate } from "react-router-dom";
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -132,6 +133,7 @@ export default function EnhancedTable({ coins }) {
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
   const { currency, symbol } = CryptoState();
+  const navigate = useNavigate();
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -139,25 +141,7 @@ export default function EnhancedTable({ coins }) {
     setOrderBy(property);
   };
 
-  const handleClick = (event, name) => {
-    const selectedIndex = selected.indexOf(name);
-    let newSelected = [];
-
-    if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, name);
-    } else if (selectedIndex === 0) {
-      newSelected = newSelected.concat(selected.slice(1));
-    } else if (selectedIndex === selected.length - 1) {
-      newSelected = newSelected.concat(selected.slice(0, -1));
-    } else if (selectedIndex > 0) {
-      newSelected = newSelected.concat(
-        selected.slice(0, selectedIndex),
-        selected.slice(selectedIndex + 1)
-      );
-    }
-
-    setSelected(newSelected);
-  };
+  const handleClick = () => {};
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -208,7 +192,7 @@ export default function EnhancedTable({ coins }) {
                   return (
                     <TableRow
                       hover
-                      onClick={(event) => handleClick(event, row.name)}
+                      onClick={() => handleClick()}
                       role="checkbox"
                       aria-checked={isItemSelected}
                       tabIndex={-1}
@@ -220,6 +204,7 @@ export default function EnhancedTable({ coins }) {
                         id={labelId}
                         scope="row"
                         style={{ display: "flex", alignItems: "flex-end" }}
+                        onClick={() => navigate(`/coins/${row.id}`)}
                       >
                         <img
                           src={row.image}
