@@ -130,7 +130,7 @@ export default function EnhancedTable({ coins }) {
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [rowsPerPage, setRowsPerPage] = React.useState(100);
 
   const { currency, symbol } = CryptoState();
   const navigate = useNavigate();
@@ -167,11 +167,13 @@ export default function EnhancedTable({ coins }) {
     <Box sx={{ width: "100%" }}>
       <Paper sx={{ width: "100%", mb: 2 }}>
         {/* <EnhancedTableToolbar numSelected={selected.length} /> */}
-        <TableContainer>
+        <TableContainer sx={{ maxHeight: 640 }}>
           <Table
             sx={{ minWidth: 750 }}
             aria-labelledby="tableTitle"
             size={dense ? "small" : "medium"}
+            stickyHeader
+            aria-label="sticky table"
           >
             <EnhancedTableHead
               numSelected={selected.length}
@@ -249,7 +251,7 @@ export default function EnhancedTable({ coins }) {
           </Table>
         </TableContainer>
         <TablePagination
-          rowsPerPageOptions={[5, 10, 25]}
+          rowsPerPageOptions={[5, 10, 25, 50, 100]}
           component="div"
           count={coins.length}
           rowsPerPage={rowsPerPage}

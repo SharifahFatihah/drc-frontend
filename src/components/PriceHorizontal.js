@@ -4,6 +4,7 @@ import Service from "../service/Service";
 import { CryptoState } from "../CryptoContext";
 import AliceCarousel from "react-alice-carousel";
 import { useNavigate } from "react-router-dom";
+import { LinearProgress } from "@material-ui/core";
 
 const useStyle = makeStyles(() => ({
   priceh: {
@@ -53,7 +54,11 @@ function PriceHorizontal() {
   }, [currency]);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div>
+        <LinearProgress color="pink" />
+      </div>
+    );
   }
 
   const responsive = { 0: { items: 4 }, 512: { items: 6 } };

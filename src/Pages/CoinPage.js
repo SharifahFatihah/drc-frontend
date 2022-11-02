@@ -6,6 +6,7 @@ import { makeStyles } from "@material-ui/core";
 import { Typography } from "@material-ui/core";
 import parser from "html-react-parser";
 import CoinChart from "../components/CoinChart";
+import { LinearProgress } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -71,7 +72,11 @@ function CoinPage() {
   );
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div>
+        <LinearProgress color="pink" />
+      </div>
+    );
   }
 
   return (
@@ -91,14 +96,18 @@ function CoinPage() {
           <span className={classes.coinBasic}>
             <Typography variant="h5" className={classes.description}>
               Current Price:
-              {coin?.market_data.current_price[currency.toLowerCase()]}
+              {Service.addCommas(
+                coin?.market_data.current_price[currency.toLowerCase()]
+              )}
               {symbol}
             </Typography>
           </span>
           <span className={classes.coinBasic}>
             <Typography variant="h5" className={classes.description}>
               Market Cap:
-              {coin?.market_data.market_cap[currency.toLowerCase()]}
+              {Service.addCommas(
+                coin?.market_data.market_cap[currency.toLowerCase()]
+              )}
               {symbol}
             </Typography>
           </span>
