@@ -46,7 +46,7 @@ function Header() {
             <Typography onClick={() => navigate("/")} className={classes.title}>
               KA-CHING!
             </Typography>
-            <Select //refer https://mui.com/material-ui/react-select/ for styling
+            <Select
               variant="outlined"
               style={{ width: 100, height: 40, marginLeft: 15 }}
               value={currency}
