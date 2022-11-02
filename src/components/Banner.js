@@ -37,26 +37,32 @@ function Banner() {
       <Container maxWidth="xl" className={classes.bannerContent}>
         <div className={classes.tagline}>
           <Typography
+            variant="h1"
             style={{
               fontWeight: "bold",
               marginBottom: 5,
+              paddingRight: 20,
+              paddingLeft: 20,
               fontFamily: "",
               color: "white",
-              fontSize: "160px",
             }}
+            sx={{ typography: { sm: "body1", xs: "body2" } }}
           >
-            TEST !
+            TEST!
           </Typography>
           <Typography
-            variant="h4"
+            variant="subtitle1"
             style={{
               fontWeight: "bold",
               marginBottom: 15,
+              paddingRight: 20,
+              paddingLeft: 20,
               fontFamily: "",
               color: "white",
             }}
+            sx={{ typography: { sm: "body1", xs: "body2" } }}
           >
-            We make your life goes ka-ching &amp; ba-bling
+            Happy Testing~
           </Typography>
         </div>
       </Container>

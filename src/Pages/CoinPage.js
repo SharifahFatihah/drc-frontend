@@ -96,18 +96,18 @@ function CoinPage() {
           <span className={classes.coinBasic}>
             <Typography variant="h5" className={classes.description}>
               Current Price:
-              {Service.addCommas(
-                coin?.market_data.current_price[currency.toLowerCase()]
-              )}
+              {coin?.market_data.current_price[currency.toLowerCase()]
+                .toString()
+                .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
               {symbol}
             </Typography>
           </span>
           <span className={classes.coinBasic}>
             <Typography variant="h5" className={classes.description}>
               Market Cap:
-              {Service.addCommas(
-                coin?.market_data.market_cap[currency.toLowerCase()]
-              )}
+              {coin?.market_data.market_cap[currency.toLowerCase()]
+                .toString()
+                .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
               {symbol}
             </Typography>
           </span>
