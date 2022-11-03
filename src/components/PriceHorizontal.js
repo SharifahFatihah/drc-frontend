@@ -4,6 +4,7 @@ import Service from "../service/Service";
 import { CryptoState } from "../CryptoContext";
 import AliceCarousel from "react-alice-carousel";
 import { useNavigate } from "react-router-dom";
+import { LinearProgress } from "@material-ui/core";
 
 const useStyle = makeStyles(() => ({
   priceh: {
@@ -16,6 +17,7 @@ const useStyle = makeStyles(() => ({
   scrollElement: {
     display: "flex",
     justifyContent: "center",
+    cursor: "pointer",
   },
   red: {
     color: "#FF4B25",
@@ -52,13 +54,20 @@ function PriceHorizontal() {
     getTrendingCoins(currency);
   }, [currency]);
 
-  console.log(trending);
-
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div>
+        <LinearProgress />
+      </div>
+    );
   }
 
-  const responsive = { 0: { items: 4 }, 512: { items: 6 } };
+  const responsive = {
+    0: { items: 2 },
+    512: { items: 3 },
+    624: { items: 4 },
+    1024: { items: 6 },
+  };
 
   const items = trending.map((coin) => {
     return (
@@ -66,12 +75,15 @@ function PriceHorizontal() {
         className={classes.scrollElement}
         onClick={() => navigate(`/coins/${coin.id}`)}
       >
-        <div>{coin?.symbol.toUpperCase()} &thinsp; &thinsp; </div>
+        <img src={coin.image} height="20" style={{ marginRight: "10px" }} />
+
+        <div>{coin?.symbol.toUpperCase()} &thinsp; </div>
         <div
           className={
             coin?.price_change_percentage_24h > 0 ? classes.green : classes.red
           }
         >
+          {Service.isProfit(coin?.price_change_percentage_24h) ? "+" : ""}
           {parseFloat(coin?.price_change_percentage_24h).toFixed(2)}%
         </div>
       </div>

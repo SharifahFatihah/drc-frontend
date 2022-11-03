@@ -37,30 +37,32 @@ function Banner() {
       <Container maxWidth="xl" className={classes.bannerContent}>
         <div className={classes.tagline}>
           <Typography
+            variant="h1"
             style={{
               fontWeight: "bold",
               marginBottom: 5,
+              paddingRight: 20,
+              paddingLeft: 20,
               fontFamily: "",
               color: "white",
-              fontSize: "160px",
             }}
           >
-            Ka-Ching !
+            TEST!
           </Typography>
           <Typography
-            variant="h4"
+            variant="subtitle1"
             style={{
               fontWeight: "bold",
               marginBottom: 15,
+              paddingRight: 20,
+              paddingLeft: 20,
               fontFamily: "",
               color: "white",
             }}
           >
-            We make your life goes ka-ching &amp; ba-bling
+            Happy Testing~
           </Typography>
         </div>
-
-        <ScrollHorizontal />
       </Container>
     </div>
   );
