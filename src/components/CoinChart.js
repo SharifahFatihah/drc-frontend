@@ -10,6 +10,7 @@ import {
 import { Line } from "react-chartjs-2";
 import { Chart as ChartJS } from "chart.js/auto";
 import { chartDays } from "../service/Service";
+import { CleaningServices } from "@mui/icons-material";
 
 const useStyle = makeStyles((theme) => ({
   container: {
@@ -23,6 +24,20 @@ const useStyle = makeStyles((theme) => ({
       padding: "20",
     },
   },
+  selectButton: {
+    border: "1px solid pink",
+    borderRadius: 5,
+    padding: 10,
+    paddingLeft: 20,
+    paddingRight: 20,
+    cursor: "pointer",
+
+    "&:hover": {
+      backgroundColor: "pink",
+      color: "black",
+    },
+    width: "22%",
+  },
 }));
 
 function CoinChart({ coin }) {
@@ -33,6 +48,7 @@ function CoinChart({ coin }) {
   const [histData, setHistData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [days, setDays] = useState(1);
+  const [selected, setSelected] = useState();
 
   const getHistoricalChart = (e, f, g) => {
     setLoading(true);
@@ -88,9 +104,26 @@ function CoinChart({ coin }) {
                 ],
               }}
             />
-            <div>
+            <div
+              style={{
+                display: "flex",
+                marginTop: 20,
+                justifyContent: "space-around",
+                width: "100 % ",
+              }}
+            >
               {chartDays.map((e) => (
-                <button onClick={() => setDays(e.value)}>{e.label}</button>
+                <div
+                  key={e.value}
+                  onClick={() => setDays(e.value)}
+                  className={classes.selectButton}
+                  style={{
+                    backgroundColor: e.value === days ? "pink" : "",
+                    color: e.value === days ? "black" : "",
+                  }}
+                >
+                  {e.label}
+                </div>
               ))}
             </div>
           </>

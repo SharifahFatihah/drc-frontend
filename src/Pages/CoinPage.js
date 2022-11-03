@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
   sidebar: {
     width: "30%",
     [theme.breakpoints.down("md")]: {
-      width: "100",
+      width: "100%",
     },
     display: "flex",
     flexDirection: "column",
@@ -34,6 +34,19 @@ const useStyles = makeStyles((theme) => ({
   coinBasicContainer: {
     display: "flex",
     flexDirection: "column",
+    [theme.breakpoints.down("md")]: {
+      flexDirection: "row",
+      justifyContent: "space-around",
+    },
+    [theme.breakpoints.down("sm")]: {
+      width: "100%",
+      flexDirection: "column",
+
+      alignItems: "center",
+    },
+    [theme.breakpoints.down("xs")]: {
+      alignItems: "start",
+    },
   },
   coinBasic: {
     display: "flex",
@@ -107,7 +120,9 @@ function CoinPage() {
               Market Cap:{" "}
               {coin?.market_data.market_cap[currency.toLowerCase()]
                 .toString()
-                .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}{" "}
+                .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                .slice(0, -8)}
+              {"M "}
               {symbol}
             </Typography>
           </span>

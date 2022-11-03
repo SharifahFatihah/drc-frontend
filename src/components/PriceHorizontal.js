@@ -17,6 +17,7 @@ const useStyle = makeStyles(() => ({
   scrollElement: {
     display: "flex",
     justifyContent: "center",
+    cursor: "pointer",
   },
   red: {
     color: "#FF4B25",
@@ -56,12 +57,17 @@ function PriceHorizontal() {
   if (loading) {
     return (
       <div>
-        <LinearProgress color="pink" />
+        <LinearProgress />
       </div>
     );
   }
 
-  const responsive = { 0: { items: 4 }, 512: { items: 6 } };
+  const responsive = {
+    0: { items: 2 },
+    512: { items: 3 },
+    624: { items: 4 },
+    1024: { items: 6 },
+  };
 
   const items = trending.map((coin) => {
     return (

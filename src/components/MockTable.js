@@ -16,7 +16,7 @@ import { visuallyHidden } from "@mui/utils";
 import Service from "../service/Service";
 import { CryptoState } from "../CryptoContext";
 import { useNavigate } from "react-router-dom";
-import { Typography } from "@material-ui/core";
+import { LinearProgress, Typography } from "@material-ui/core";
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -34,8 +34,6 @@ function getComparator(order, orderBy) {
     : (a, b) => -descendingComparator(a, b, orderBy);
 }
 
-// This method is created for cross-browser compatibility, if you don't
-// need to support IE11, you can use Array.prototype.sort() directly
 function stableSort(array, comparator) {
   const stabilizedThis = array.map((el, index) => [el, index]);
   stabilizedThis.sort((a, b) => {
@@ -152,22 +150,21 @@ export default function EnhancedTable({ coins }) {
 
   const isSelected = (name) => selected.indexOf(name) !== -1;
 
-  // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - coins.length) : 0;
 
-  console.log(coins);
   return (
     <Box sx={{ width: "100%" }}>
       <Paper sx={{ width: "100%", mb: 2 }}>
-        {/* <EnhancedTableToolbar numSelected={selected.length} /> */}
-        <TableContainer sx={{ maxHeight: 640 }}>
+        <TableContainer
+          sx={{ maxHeight: 640 }}
+          style={{ borderRadius: "25px" }}
+        >
           <Table
             sx={{ minWidth: 750 }}
             aria-labelledby="tableTitle"
             size={dense ? "small" : "medium"}
             stickyHeader
-            aria-label="sticky table"
           >
             <EnhancedTableHead
               numSelected={selected.length}
@@ -177,8 +174,6 @@ export default function EnhancedTable({ coins }) {
               rowCount={coins.length}
             />
             <TableBody>
-              {/* if you don't need to support IE11, you can replace the `stableSort` call with:
-                 rows.sort(getComparator(order, orderBy)).slice() */}
               {stableSort(coins, getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
@@ -240,7 +235,8 @@ export default function EnhancedTable({ coins }) {
                         {"%"}
                       </TableCell>
                       <TableCell align="right">
-                        {Service.addCommas(row.market_cap)} {symbol}
+                        {Service.addCommas(row.market_cap).slice(0, -8)}
+                        {"M "} {symbol}
                       </TableCell>
                     </TableRow>
                   );
