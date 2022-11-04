@@ -5,7 +5,7 @@ name: CI
 
 on:
   push:
-    branches: [Nic]
+    branches: [Afifi]
     
     
     
@@ -25,6 +25,7 @@ jobs:
 
       - run: npm i --force
       - run: CI=false npm run build
+      - run: cp drc-frontend/src/error_page ./build 
 
       - name: rsync deployments
         uses: burnett01/rsync-deployments@5.1
