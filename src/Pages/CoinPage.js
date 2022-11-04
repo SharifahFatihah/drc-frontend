@@ -109,13 +109,12 @@ function CoinPage() {
           <span className={classes.coinBasic}></span>
           <span className={classes.coinBasic}>
             <Typography variant="h5" className={classes.description}>
-              Market Cap:{" "}
+              Market Cap: {symbol}
               {coin?.market_data.market_cap[currency.toLowerCase()]
                 .toString()
                 .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
                 .slice(0, -8)}
               {"M "}
-              {symbol}
             </Typography>
           </span>
         </div>

@@ -51,6 +51,7 @@ const useStyle = makeStyles((theme) => ({
     display: "flex",
     justifyContent: "flex-end",
     width: "50% ",
+    alignItems: "center",
     [theme.breakpoints.down("sm")]: {
       width: "100%",
       justifyContent: "center",
@@ -106,10 +107,12 @@ function CoinChart({ coin }) {
         <div className={classes.chartContainer}>
           <div className={classes.basicContainer}>
             <Typography variant="h2" className={classes.description}>
-              {coin?.market_data.current_price[currency.toLowerCase()]
-                .toString()
-                .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}{" "}
               {symbol}
+              {coin?.market_data.current_price[currency.toLowerCase()] > 1
+                ? coin?.market_data.current_price[currency.toLowerCase()]
+                    .toString()
+                    .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                : coin?.market_data.current_price[currency.toLowerCase()]}
             </Typography>
           </div>
 
