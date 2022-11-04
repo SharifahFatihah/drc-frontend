@@ -5,10 +5,16 @@ const Crypto = createContext();
 function CryptoContext({ children }) {
   const [currency, setCurrency] = useState("USD");
   const [symbol, setSymbol] = useState("$");
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
-    if (currency === "MYR") setSymbol("MYR");
-    else if (currency === "USD") setSymbol("USD");
+    if (currency === "MYR") setSymbol("RM");
+    else if (currency === "USD") setSymbol("$");
+    else if (currency === "EUR") setSymbol("€");
+    else if (currency === "JPY") setSymbol("¥");
+    else if (currency === "GBP") setSymbol("£");
+    else if (currency === "AUD") setSymbol("$");
+    else if (currency === "CAD") setSymbol("$");
   }, [currency]);
 
   return (
