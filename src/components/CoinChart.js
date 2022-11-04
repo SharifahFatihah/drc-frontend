@@ -146,7 +146,7 @@ function CoinChart({ coin }) {
                 datasets: [
                   {
                     data: histData.map((chartData) => chartData[1]),
-                    label: `Price of last ${days} days in ${currency}`,
+                    label: `Price of ${coin?.name} in the last ${days} days in ${currency}`,
                     borderColor: "#C53BA4",
                     borderWidth: 2,
                     pointBorderColor: "rgba(0,0,0,0)",

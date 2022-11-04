@@ -6,6 +6,7 @@ import Homepage from "./Pages/Homepage";
 import CoinPage from "./Pages/CoinPage";
 import { makeStyles } from "@material-ui/core";
 import "./App.css";
+import AlertSnackbar from "./components/AlertSnackbar";
 
 const useStyles = makeStyles(() => ({
   app: {
@@ -28,6 +29,7 @@ function App() {
           </Route>
         </Routes>
       </div>
+      <AlertSnackbar />
     </BrowserRouter>
   );
 }
