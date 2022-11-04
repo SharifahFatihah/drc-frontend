@@ -59,7 +59,9 @@ function CoinTable() {
           style={{ marginBottom: 20 }}
         />
 
-        <MockTable coins={Service.handleSearch(coins, search)} />
+        <MockTable
+          coins={Service.handleSearch(coins, search.toLocaleLowerCase())}
+        />
       </Container>
     </ThemeProvider>
   );

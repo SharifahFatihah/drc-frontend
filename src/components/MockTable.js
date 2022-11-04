@@ -6,7 +6,6 @@ import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
-import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import TableSortLabel from "@mui/material/TableSortLabel";
 import Paper from "@mui/material/Paper";
@@ -15,6 +14,8 @@ import Switch from "@mui/material/Switch";
 import { visuallyHidden } from "@mui/utils";
 import Service from "../service/Service";
 import { CryptoState } from "../CryptoContext";
+import { useNavigate } from "react-router-dom";
+import { Typography } from "@material-ui/core";
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -32,8 +33,6 @@ function getComparator(order, orderBy) {
     : (a, b) => -descendingComparator(a, b, orderBy);
 }
 
-// This method is created for cross-browser compatibility, if you don't
-// need to support IE11, you can use Array.prototype.sort() directly
 function stableSort(array, comparator) {
   const stabilizedThis = array.map((el, index) => [el, index]);
   stabilizedThis.sort((a, b) => {
@@ -74,14 +73,7 @@ const headCells = [
 ];
 
 function EnhancedTableHead(props) {
-  const {
-    onSelectAllClick,
-    order,
-    orderBy,
-    numSelected,
-    rowCount,
-    onRequestSort,
-  } = props;
+  const { order, orderBy, onRequestSort } = props;
   const createSortHandler = (property) => (event) => {
     onRequestSort(event, property);
   };
@@ -129,9 +121,10 @@ export default function EnhancedTable({ coins }) {
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [rowsPerPage, setRowsPerPage] = React.useState(100);
 
   const { currency, symbol } = CryptoState();
+  const navigate = useNavigate();
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -139,55 +132,28 @@ export default function EnhancedTable({ coins }) {
     setOrderBy(property);
   };
 
-  const handleClick = (event, name) => {
-    const selectedIndex = selected.indexOf(name);
-    let newSelected = [];
-
-    if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, name);
-    } else if (selectedIndex === 0) {
-      newSelected = newSelected.concat(selected.slice(1));
-    } else if (selectedIndex === selected.length - 1) {
-      newSelected = newSelected.concat(selected.slice(0, -1));
-    } else if (selectedIndex > 0) {
-      newSelected = newSelected.concat(
-        selected.slice(0, selectedIndex),
-        selected.slice(selectedIndex + 1)
-      );
-    }
-
-    setSelected(newSelected);
-  };
-
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
-  };
-
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
-  };
-
+  const handleClick = () => {};
   const handleChangeDense = (event) => {
     setDense(event.target.checked);
   };
 
   const isSelected = (name) => selected.indexOf(name) !== -1;
 
-  // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - coins.length) : 0;
 
-  console.log(coins);
   return (
     <Box sx={{ width: "100%" }}>
       <Paper sx={{ width: "100%", mb: 2 }}>
-        {/* <EnhancedTableToolbar numSelected={selected.length} /> */}
-        <TableContainer>
+        <TableContainer
+          sx={{ maxHeight: 640 }}
+          style={{ borderRadius: "25px" }}
+        >
           <Table
             sx={{ minWidth: 750 }}
             aria-labelledby="tableTitle"
             size={dense ? "small" : "medium"}
+            stickyHeader
           >
             <EnhancedTableHead
               numSelected={selected.length}
@@ -197,8 +163,6 @@ export default function EnhancedTable({ coins }) {
               rowCount={coins.length}
             />
             <TableBody>
-              {/* if you don't need to support IE11, you can replace the `stableSort` call with:
-                 rows.sort(getComparator(order, orderBy)).slice() */}
               {stableSort(coins, getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
@@ -208,7 +172,7 @@ export default function EnhancedTable({ coins }) {
                   return (
                     <TableRow
                       hover
-                      onClick={(event) => handleClick(event, row.name)}
+                      onClick={() => handleClick()}
                       role="checkbox"
                       aria-checked={isItemSelected}
                       tabIndex={-1}
@@ -219,17 +183,34 @@ export default function EnhancedTable({ coins }) {
                         component="th"
                         id={labelId}
                         scope="row"
-                        style={{ display: "flex", alignItems: "flex-end" }}
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          cursor: "pointer",
+                        }}
+                        onClick={() => navigate(`/coins/${row.id}`)}
                       >
                         <img
                           src={row.image}
                           height="20"
                           style={{ marginRight: "10px" }}
                         />
-                        {row.name}
+                        <div
+                          style={{ display: "flex", flexDirection: "column" }}
+                        >
+                          <Typography variant="h7">
+                            {row.symbol.toUpperCase()}
+                          </Typography>
+                          <Typography variant="subtitle2">
+                            {row.name}
+                          </Typography>
+                        </div>
                       </TableCell>
                       <TableCell align="right">
-                        {Service.addCommas(row.current_price)} {symbol}
+                        {symbol}
+                        {row.current_price > 1
+                          ? Service.addCommas(row.current_price)
+                          : row.current_price}{" "}
                       </TableCell>
                       <TableCell
                         align="right"
@@ -246,7 +227,9 @@ export default function EnhancedTable({ coins }) {
                         {"%"}
                       </TableCell>
                       <TableCell align="right">
-                        {Service.addCommas(row.market_cap)} {symbol}
+                        {symbol}
+                        {Service.addCommas(row.market_cap).slice(0, -8)}
+                        {" Million"}
                       </TableCell>
                     </TableRow>
                   );
@@ -263,15 +246,6 @@ export default function EnhancedTable({ coins }) {
             </TableBody>
           </Table>
         </TableContainer>
-        <TablePagination
-          rowsPerPageOptions={[5, 10, 25]}
-          component="div"
-          count={coins.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-        />
       </Paper>
       <FormControlLabel
         control={<Switch checked={dense} onChange={handleChangeDense} />}

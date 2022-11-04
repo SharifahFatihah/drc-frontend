@@ -6,6 +6,7 @@ import { makeStyles } from "@material-ui/core";
 import { Typography } from "@material-ui/core";
 import parser from "html-react-parser";
 import CoinChart from "../components/CoinChart";
+import { LinearProgress } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -18,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
   sidebar: {
     width: "30%",
     [theme.breakpoints.down("md")]: {
-      width: "100",
+      width: "100%",
     },
     display: "flex",
     flexDirection: "column",
@@ -33,6 +34,19 @@ const useStyles = makeStyles((theme) => ({
   coinBasicContainer: {
     display: "flex",
     flexDirection: "column",
+    [theme.breakpoints.down("md")]: {
+      flexDirection: "row",
+      justifyContent: "space-around",
+    },
+    [theme.breakpoints.down("sm")]: {
+      width: "100%",
+      flexDirection: "column",
+
+      alignItems: "center",
+    },
+    [theme.breakpoints.down("xs")]: {
+      alignItems: "start",
+    },
   },
   coinBasic: {
     display: "flex",
@@ -70,8 +84,12 @@ function CoinPage() {
     [currency]
   );
 
-  if (loading) {
-    return <div>Loading...</div>;
+  if (!coin) {
+    return (
+      <div>
+        <LinearProgress />
+      </div>
+    );
   }
 
   return (
@@ -88,18 +106,15 @@ function CoinPage() {
               Rank: {coin?.market_cap_rank}
             </Typography>
           </span>
+          <span className={classes.coinBasic}></span>
           <span className={classes.coinBasic}>
             <Typography variant="h5" className={classes.description}>
-              Current Price:
-              {coin?.market_data.current_price[currency.toLowerCase()]}
-              {symbol}
-            </Typography>
-          </span>
-          <span className={classes.coinBasic}>
-            <Typography variant="h5" className={classes.description}>
-              Market Cap:
-              {coin?.market_data.market_cap[currency.toLowerCase()]}
-              {symbol}
+              Market Cap: {symbol}
+              {coin?.market_data.market_cap[currency.toLowerCase()]
+                .toString()
+                .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                .slice(0, -8)}
+              {"M "}
             </Typography>
           </span>
         </div>
