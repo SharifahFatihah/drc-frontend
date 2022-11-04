@@ -1,12 +1,23 @@
 import { Box, Button, TextField } from "@material-ui/core";
 import React, { useState } from "react";
+import { CryptoState } from "../../CryptoContext";
 
 function Signup() {
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
   const [confirmPassword, setConfirmPassword] = useState();
 
-  const handleSubmit = () => {};
+  const { setAlert } = CryptoState();
+
+  const handleSubmit = () => {
+    if (password !== confirmPassword) {
+      setAlert({
+        open: true,
+        message: "Passwords do not match",
+        type: "error",
+      });
+    }
+  };
   return (
     <div>
       <Box
