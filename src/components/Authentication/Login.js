@@ -29,7 +29,7 @@ function Login() {
         type="password"
         label="Enter Password"
         value={password}
-        onChange={(e) => setEmail(e.target.value)}
+        onChange={(e) => setPassword(e.target.value)}
         fullWidth
       />
       <Button
