@@ -6,6 +6,11 @@ function CryptoContext({ children }) {
   const [currency, setCurrency] = useState("USD");
   const [symbol, setSymbol] = useState("$");
   const [user, setUser] = useState(null);
+  const [alert, setAlert] = useState({
+    open: false,
+    message: "",
+    type: "success",
+  });
 
   useEffect(() => {
     if (currency === "MYR") setSymbol("RM");
@@ -18,7 +23,7 @@ function CryptoContext({ children }) {
   }, [currency]);
 
   return (
-    <Crypto.Provider value={{ currency, symbol, setCurrency }}>
+    <Crypto.Provider value={{ currency, symbol, setCurrency, alert, setAlert }}>
       {children}
     </Crypto.Provider>
   );
