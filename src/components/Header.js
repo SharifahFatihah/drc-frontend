@@ -13,7 +13,6 @@ import {
 } from "@material-ui/core";
 
 import { CryptoState } from "../CryptoContext";
-import AuthModal from "./Authentication/AuthModal";
 
 const useStyles = makeStyles(() => ({
   title: {
@@ -49,20 +48,13 @@ function Header() {
             </Typography>
             <Select
               variant="outlined"
-              style={{ width: 100, height: 40, margin: 15 }}
+              style={{ width: 100, height: 40, marginLeft: 15 }}
               value={currency}
               onChange={(e) => setCurrency(e.target.value)}
             >
               <MenuItem value={"USD"}> USD </MenuItem>
               <MenuItem value={"MYR"}> MYR </MenuItem>
-              <MenuItem value={"EUR"}> EUR </MenuItem>
-              <MenuItem value={"JPY"}> JPY </MenuItem>
-              <MenuItem value={"GBP"}> GBP </MenuItem>
-              <MenuItem value={"AUD"}> AUD </MenuItem>
-              <MenuItem value={"CAD"}> CAD </MenuItem>
             </Select>
-
-            <AuthModal />
           </Toolbar>
         </Container>
       </AppBar>
