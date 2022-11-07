@@ -6,11 +6,11 @@ import {
   createTheme,
   ThemeProvider,
   CircularProgress,
-  Typography,
 } from "@material-ui/core";
 import { Line } from "react-chartjs-2";
 import { Chart as ChartJS } from "chart.js/auto";
 import { chartDays } from "../service/Service";
+import { CleaningServices } from "@mui/icons-material";
 
 const useStyle = makeStyles((theme) => ({
   container: {
@@ -25,56 +25,30 @@ const useStyle = makeStyles((theme) => ({
     },
   },
   selectButton: {
-    width: "15%",
     border: "1px solid pink",
     borderRadius: 5,
     padding: 10,
+    paddingLeft: 20,
+    paddingRight: 20,
     cursor: "pointer",
-    marginLeft: 10,
-    alignItems: "center",
 
     "&:hover": {
       backgroundColor: "pink",
       color: "black",
     },
-  },
-  chartContainer: {
-    display: "flex",
-    width: "100%",
-    justifyContent: "space-between",
-    marginBottom: 10,
-    [theme.breakpoints.down("sm")]: {
-      flexDirection: "column",
-    },
-  },
-  buttonContainer: {
-    display: "flex",
-    justifyContent: "flex-end",
-    width: "50% ",
-    alignItems: "center",
-    [theme.breakpoints.down("sm")]: {
-      width: "100%",
-      justifyContent: "center",
-    },
-  },
-  basicContainer: {
-    display: "flex",
-    [theme.breakpoints.down("sm")]: {
-      width: "100%",
-      justifyContent: "center",
-      marginBottom: 20,
-    },
+    width: "22%",
   },
 }));
 
 function CoinChart({ coin }) {
   const classes = useStyle();
 
-  const { currency, symbol } = CryptoState();
+  const { currency } = CryptoState();
 
   const [histData, setHistData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [days, setDays] = useState(1);
+  const [selected, setSelected] = useState();
 
   const getHistoricalChart = (e, f, g) => {
     setLoading(true);
@@ -104,34 +78,6 @@ function CoinChart({ coin }) {
   return (
     <ThemeProvider theme={darkTheme}>
       <div className={classes.container}>
-        <div className={classes.chartContainer}>
-          <div className={classes.basicContainer}>
-            <Typography variant="h2" className={classes.description}>
-              {symbol}
-              {coin?.market_data.current_price[currency.toLowerCase()] > 1
-                ? coin?.market_data.current_price[currency.toLowerCase()]
-                    .toString()
-                    .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                : coin?.market_data.current_price[currency.toLowerCase()]}
-            </Typography>
-          </div>
-
-          <div className={classes.buttonContainer}>
-            {chartDays.map((e) => (
-              <div
-                key={e.value}
-                onClick={() => setDays(e.value)}
-                className={classes.selectButton}
-                style={{
-                  backgroundColor: e.value === days ? "pink" : "",
-                  color: e.value === days ? "black" : "",
-                }}
-              >
-                {e.label}
-              </div>
-            ))}
-          </div>
-        </div>
         {loading ? (
           <CircularProgress color="pink" />
         ) : (
@@ -158,6 +104,28 @@ function CoinChart({ coin }) {
                 ],
               }}
             />
+            <div
+              style={{
+                display: "flex",
+                marginTop: 20,
+                justifyContent: "space-around",
+                width: "100 % ",
+              }}
+            >
+              {chartDays.map((e) => (
+                <div
+                  key={e.value}
+                  onClick={() => setDays(e.value)}
+                  className={classes.selectButton}
+                  style={{
+                    backgroundColor: e.value === days ? "pink" : "",
+                    color: e.value === days ? "black" : "",
+                  }}
+                >
+                  {e.label}
+                </div>
+              ))}
+            </div>
           </>
         )}
       </div>

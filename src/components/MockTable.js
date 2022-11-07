@@ -6,6 +6,7 @@ import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
+import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import TableSortLabel from "@mui/material/TableSortLabel";
 import Paper from "@mui/material/Paper";
@@ -15,7 +16,7 @@ import { visuallyHidden } from "@mui/utils";
 import Service from "../service/Service";
 import { CryptoState } from "../CryptoContext";
 import { useNavigate } from "react-router-dom";
-import { Typography } from "@material-ui/core";
+import { LinearProgress, Typography } from "@material-ui/core";
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -133,6 +134,16 @@ export default function EnhancedTable({ coins }) {
   };
 
   const handleClick = () => {};
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+
   const handleChangeDense = (event) => {
     setDense(event.target.checked);
   };
@@ -207,10 +218,7 @@ export default function EnhancedTable({ coins }) {
                         </div>
                       </TableCell>
                       <TableCell align="right">
-                        {symbol}
-                        {row.current_price > 1
-                          ? Service.addCommas(row.current_price)
-                          : row.current_price}{" "}
+                        {Service.addCommas(row.current_price)} {symbol}
                       </TableCell>
                       <TableCell
                         align="right"
@@ -227,9 +235,8 @@ export default function EnhancedTable({ coins }) {
                         {"%"}
                       </TableCell>
                       <TableCell align="right">
-                        {symbol}
                         {Service.addCommas(row.market_cap).slice(0, -8)}
-                        {" Million"}
+                        {"M "} {symbol}
                       </TableCell>
                     </TableRow>
                   );
@@ -246,6 +253,15 @@ export default function EnhancedTable({ coins }) {
             </TableBody>
           </Table>
         </TableContainer>
+        <TablePagination
+          rowsPerPageOptions={[5, 10, 25, 50, 100]}
+          component="div"
+          count={coins.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+        />
       </Paper>
       <FormControlLabel
         control={<Switch checked={dense} onChange={handleChangeDense} />}
