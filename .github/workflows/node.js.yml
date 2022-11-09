@@ -3,12 +3,10 @@
 
 name: CI
 
+#test
 on:
   push:
     branches: [Nic]
-    
-    
-    
 
   workflow_dispatch:
 
@@ -35,3 +33,5 @@ jobs:
           remote_host: ec2-54-251-108-112.ap-southeast-1.compute.amazonaws.com
           remote_user: ubuntu
           remote_key: "${{ secrets.YOUR_SECRET }}"
+
+        #run

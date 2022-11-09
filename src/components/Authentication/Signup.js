@@ -1,19 +1,47 @@
 import { Box, Button, TextField } from "@material-ui/core";
+import { createUserWithEmailAndPassword } from "firebase/auth";
 import React, { useState } from "react";
 import { CryptoState } from "../../CryptoContext";
+import { auth } from "../../firebase";
 
-function Signup() {
-  const [email, setEmail] = useState();
-  const [password, setPassword] = useState();
-  const [confirmPassword, setConfirmPassword] = useState();
+function Signup({ handleClose }) {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
   const { setAlert } = CryptoState();
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (password !== confirmPassword) {
       setAlert({
         open: true,
         message: "Passwords do not match",
+        type: "error",
+      });
+    }
+    if (!email || !password || !confirmPassword) {
+      setAlert({
+        open: true,
+        message: "Please fill in the required information",
+        type: "error",
+      });
+    }
+    try {
+      const result = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      setAlert({
+        open: true,
+        message: `Welcome abroad ${result.user.email}`,
+        type: "success",
+      });
+      handleClose();
+    } catch (error) {
+      setAlert({
+        open: true,
+        message: error.message,
         type: "error",
       });
     }
