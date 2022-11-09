@@ -112,7 +112,8 @@ function CoinChart({ coin }) {
                 ? coin?.market_data.current_price[currency.toLowerCase()]
                     .toString()
                     .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                : coin?.market_data.current_price[currency.toLowerCase()]}
+                : coin?.market_data.current_price[currency.toLowerCase()]}{" "}
+              {currency}
             </Typography>
           </div>
 
@@ -133,7 +134,7 @@ function CoinChart({ coin }) {
           </div>
         </div>
         {loading ? (
-          <CircularProgress color="pink" />
+          <CircularProgress />
         ) : (
           <>
             <Line //can be further config (styles)
@@ -146,7 +147,7 @@ function CoinChart({ coin }) {
                 datasets: [
                   {
                     data: histData.map((chartData) => chartData[1]),
-                    label: `Price of last ${days} days in ${currency}`,
+                    label: `Price of ${coin?.name} in the last ${days} days in ${currency}`,
                     borderColor: "#C53BA4",
                     borderWidth: 2,
                     pointBorderColor: "rgba(0,0,0,0)",

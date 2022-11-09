@@ -6,6 +6,8 @@ import Homepage from "./Pages/Homepage";
 import CoinPage from "./Pages/CoinPage";
 import { makeStyles } from "@material-ui/core";
 import "./App.css";
+import AlertSnackbar from "./components/AlertSnackbar";
+import PageNotFound from "./Pages/PageNotFound";
 
 const useStyles = makeStyles(() => ({
   app: {
@@ -25,6 +27,7 @@ function App() {
           <Route element={<MainPageLayout />}>
             <Route path="/" element={<Homepage />} />
             <Route path="/coins/:id" element={<CoinPage />} />
+            <Route path="*" element={<PageNotFound />} />
           </Route>
         </Routes>
       </div>
@@ -37,6 +40,7 @@ function MainPageLayout() {
     <>
       <Header />
       <Outlet />
+      <AlertSnackbar />
       <Footer />
     </>
   );
