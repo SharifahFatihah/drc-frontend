@@ -14,6 +14,7 @@ import {
 
 import { CryptoState } from "../CryptoContext";
 import AuthModal from "./Authentication/AuthModal";
+import UserSidebar from "./UserSidebar";
 
 const useStyles = makeStyles(() => ({
   title: {
@@ -30,7 +31,7 @@ function Header() {
   const classes = useStyles();
   const navigate = useNavigate();
 
-  const { currency, setCurrency } = CryptoState();
+  const { currency, setCurrency, user } = CryptoState();
 
   const darkTheme = createTheme({
     palette: {
@@ -41,12 +42,13 @@ function Header() {
 
   return (
     <ThemeProvider theme={darkTheme}>
-      <AppBar color="transparent" position="static">
+      <AppBar color="transparent" position="sticky">
         <Container>
           <Toolbar>
             <Typography onClick={() => navigate("/")} className={classes.title}>
               KA-CHING!
             </Typography>
+
             <Select
               variant="outlined"
               style={{ width: 100, height: 40, margin: 15 }}
@@ -62,7 +64,7 @@ function Header() {
               <MenuItem value={"CAD"}> CAD </MenuItem>
             </Select>
 
-            <AuthModal />
+            {user ? <UserSidebar /> : <AuthModal />}
           </Toolbar>
         </Container>
       </AppBar>

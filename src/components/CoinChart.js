@@ -112,7 +112,8 @@ function CoinChart({ coin }) {
                 ? coin?.market_data.current_price[currency.toLowerCase()]
                     .toString()
                     .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                : coin?.market_data.current_price[currency.toLowerCase()]}
+                : coin?.market_data.current_price[currency.toLowerCase()]}{" "}
+              {currency}
             </Typography>
           </div>
 
@@ -133,7 +134,7 @@ function CoinChart({ coin }) {
           </div>
         </div>
         {loading ? (
-          <CircularProgress color="pink" />
+          <CircularProgress />
         ) : (
           <>
             <Line //can be further config (styles)
