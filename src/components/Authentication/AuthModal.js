@@ -7,6 +7,9 @@ import Modal from "@mui/material/Modal";
 import Login from "./Login";
 import Signup from "./Signup";
 import { AppBar, makeStyles } from "@material-ui/core";
+import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { CryptoState } from "../../CryptoContext";
+import { auth } from "../../firebase";
 
 const useStyle = makeStyles((theme) => ({
   paper: {
@@ -20,6 +23,14 @@ const useStyle = makeStyles((theme) => ({
     boxShadow: 24,
     borderRadius: 10,
   },
+  google: {
+    padding: 24,
+    paddingTop: 0,
+    display: "flex",
+    flexDirection: "column",
+    textAlign: "center",
+    gap: 20,
+  },
 }));
 
 export default function AuthModal() {
@@ -28,12 +39,35 @@ export default function AuthModal() {
   const handleClose = () => setOpen(false);
   const [value, setValue] = React.useState(0);
 
+  const { setAlert } = CryptoState();
+
   const classes = useStyle();
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
 
+  const googleProvider = new GoogleAuthProvider();
+  const signInWithGoogle = () => {
+    signInWithPopup(auth, googleProvider)
+      .then((res) => {
+        setAlert({
+          open: true,
+          message: `Welcome ${res.user.email}`,
+          type: "success",
+        });
+
+        handleClose();
+      })
+      .catch((error) => {
+        setAlert({
+          open: true,
+          message: error.message,
+          type: "error",
+        });
+        return;
+      });
+  };
   return (
     <div>
       <Button
@@ -71,6 +105,17 @@ export default function AuthModal() {
               {value === 0 && <Login handleClose={handleClose} />}
               {value === 1 && <Signup handleClose={handleClose} />}
             </div>
+
+            <Box className={classes.google}>
+              <span>OR</span>
+              <Button
+                variant="contained"
+                onClick={signInWithGoogle}
+                style={{ backgroundColor: "Blue" }}
+              >
+                Sign In With Google
+              </Button>
+            </Box>
           </AppBar>
         </div>
       </Modal>
