@@ -15,6 +15,8 @@ import {
 import { CryptoState } from "../CryptoContext";
 import AuthModal from "./Authentication/AuthModal";
 import UserSidebar from "./UserSidebar";
+import LogoIcon from "../asset/logoicon.png";
+import LogoWord from "../asset/logoword.png";
 
 const useStyles = makeStyles(() => ({
   title: {
@@ -22,7 +24,6 @@ const useStyles = makeStyles(() => ({
     color: "#fcc7f4",
     //fontFamily: "", //add later when font decided
     fontWeight: "bold",
-    cursor: "pointer",
     alignItems: "start",
   },
 }));
@@ -42,11 +43,16 @@ function Header() {
 
   return (
     <ThemeProvider theme={darkTheme}>
-      <AppBar color="transparent" position="sticky">
+      <AppBar style={{ background: "#000000" }} position="sticky">
         <Container>
           <Toolbar>
-            <Typography onClick={() => navigate("/")} className={classes.title}>
-              KA-CHING!
+            <Typography className={classes.title}>
+              <img
+                src={LogoIcon}
+                height="30"
+                onClick={() => navigate("/homepage")}
+                style={{ cursor: "pointer" }}
+              />
             </Typography>
 
             <Select
