@@ -13,6 +13,7 @@ function CryptoContext({ children }) {
   const [watchlist, setWatchlist] = useState([]);
   const [coins, setCoins] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [globalInfo, setGlobalInfo] = useState();
 
   const [alert, setAlert] = useState({
     open: false,
@@ -38,16 +39,32 @@ function CryptoContext({ children }) {
     getCoinList(currency);
   }, [currency]);
 
+  const getGlobalInfo = async () => {
+    setLoading(true);
+
+    await Service.getGlobalInfo()
+      .then((response) => {
+        setGlobalInfo(response.data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  useEffect(() => {
+    setLoading(true);
+    getGlobalInfo();
+  }, []);
+
   useEffect(() => {
     if (user) {
       const coinRef = doc(db, "watchlist", user?.uid);
 
       var unsubscribe = onSnapshot(coinRef, (coin) => {
         if (coin.exists()) {
-          console.log(coin.data().coins);
           setWatchlist(coin.data().coins);
         } else {
-          console.log("no item in list");
         }
       });
       return () => {
@@ -86,6 +103,7 @@ function CryptoContext({ children }) {
         coins,
         loading,
         setLoading,
+        globalInfo,
       }}
     >
       {children}

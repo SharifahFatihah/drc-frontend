@@ -73,7 +73,12 @@ export default function AuthModal() {
       <Button
         variant="contained"
         onClick={handleOpen}
-        style={{ backgroundColor: "purple" }}
+        style={{
+          backgroundColor: "#FFE227",
+          color: "black",
+          fontFamily: "VT323",
+          fontSize: 16,
+        }}
       >
         Login
       </Button>
