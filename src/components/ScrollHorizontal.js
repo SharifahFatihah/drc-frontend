@@ -1,10 +1,14 @@
-import { CircularProgress, makeStyles, Typography } from "@material-ui/core";
+import {
+  CircularProgress,
+  LinearProgress,
+  makeStyles,
+  Typography,
+} from "@material-ui/core";
 import React, { useState, useEffect } from "react";
 import Service from "../service/Service";
 import { CryptoState } from "../CryptoContext";
 import AliceCarousel from "react-alice-carousel";
 import { useNavigate } from "react-router-dom";
-import { display } from "@mui/system";
 
 const useStyle = makeStyles(() => ({
   scrollh: {
@@ -41,7 +45,7 @@ function ScrollHorizontal() {
     getTrendingCoins(currency);
   }, [currency]);
 
-  if (!trending) {
+  if (trending.length === 0) {
     return (
       <div>
         <CircularProgress />
@@ -49,7 +53,12 @@ function ScrollHorizontal() {
     );
   }
 
-  const responsive = { 0: { items: 2 }, 512: { items: 4 } };
+  const responsive = {
+    0: { items: 1 },
+    730: { items: 2 },
+    1150: { items: 3 },
+    1600: { items: 4 },
+  };
 
   const items = trending.map((coin) => {
     return (

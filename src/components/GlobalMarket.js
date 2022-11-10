@@ -1,8 +1,14 @@
 import { Typography } from "@material-ui/core";
+import { ConstructionOutlined } from "@mui/icons-material";
 import React from "react";
-import ScrollHorizontal from "../components/ScrollHorizontal";
+import { CryptoState } from "../CryptoContext";
+import ScrollHorizontal from "./ScrollHorizontal";
 
-function Trending() {
+function GlobalMarket() {
+  const { globalInfo } = CryptoState();
+
+  console.log(globalInfo);
+
   return (
     <div
       style={{
@@ -23,11 +29,10 @@ function Trending() {
           marginBottom: 50,
         }}
       >
-        Popular Coins
+        Global Market
       </Typography>
-      <ScrollHorizontal />
     </div>
   );
 }
 
-export default Trending;
+export default GlobalMarket;

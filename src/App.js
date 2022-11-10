@@ -9,6 +9,7 @@ import "./App.css";
 import AlertSnackbar from "./components/AlertSnackbar";
 import PageNotFound from "./Pages/PageNotFound";
 import WelcomePage from "./Pages/WelcomePage";
+import PriceHorizontal from "./components/PriceHorizontal";
 
 const useStyles = makeStyles(() => ({
   app: {
@@ -41,6 +42,7 @@ function MainPageLayout() {
   return (
     <>
       <Header />
+      <PriceHorizontal />
       <Outlet />
       <AlertSnackbar />
       <Footer />
