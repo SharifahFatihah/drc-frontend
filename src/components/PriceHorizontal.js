@@ -8,11 +8,13 @@ import { LinearProgress } from "@material-ui/core";
 
 const useStyle = makeStyles(() => ({
   priceh: {
-    height: "30px",
+    height: "35px",
     width: "100%",
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
+    backgroundColor: "#FFE227",
+    color: "black",
   },
   scrollElement: {
     display: "flex",
