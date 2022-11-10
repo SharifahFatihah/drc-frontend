@@ -71,7 +71,7 @@ function ScrollHorizontal() {
           cursor: "pointer",
           padding: 30,
           margin: 15,
-          borderRadius: "50px",
+          borderRadius: "15px",
           background: "rgba(79, 58, 84, 0.52)",
         }}
       >
