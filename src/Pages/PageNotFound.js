@@ -15,8 +15,6 @@ function PageNotFound() {
         <h1>Error Page not Found </h1>
       </div>
       <ChromeDinoGame />
-      {console.log("hye")}
-      {console.log("hye")}
     </div>
   );
 }

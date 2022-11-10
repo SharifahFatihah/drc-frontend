@@ -9,6 +9,7 @@ import CoinChart from "../components/CoinChart";
 import { LinearProgress } from "@material-ui/core";
 import { doc, setDoc } from "firebase/firestore";
 import { db } from "../firebase";
+import { useNavigate } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -57,6 +58,8 @@ const useStyles = makeStyles((theme) => ({
 
 function CoinPage() {
   const classes = useStyles();
+  const navigate = useNavigate();
+
   const { id } = useParams();
   const [coin, setCoin] = useState();
   const [loading, setLoading] = useState(false);
@@ -73,6 +76,7 @@ function CoinPage() {
       })
       .catch((err) => {
         console.log(err);
+        navigate(`*`);
       });
   };
 
