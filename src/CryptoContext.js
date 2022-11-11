@@ -14,6 +14,7 @@ function CryptoContext({ children }) {
   const [coins, setCoins] = useState([]);
   const [loading, setLoading] = useState(false);
   const [globalInfo, setGlobalInfo] = useState();
+  const [PopularInfo, setPopularInfo] =useState();
 
   const [alert, setAlert] = useState({
     open: false,

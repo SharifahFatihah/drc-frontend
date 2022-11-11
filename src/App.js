@@ -10,6 +10,7 @@ import AlertSnackbar from "./components/AlertSnackbar";
 import PageNotFound from "./Pages/PageNotFound";
 import WelcomePage from "./Pages/WelcomePage";
 import PriceHorizontal from "./components/PriceHorizontal";
+import CoinListPage from "./Pages/CoinListPage";
 
 const useStyles = makeStyles(() => ({
   app: {
@@ -26,8 +27,9 @@ function App() {
     <BrowserRouter>
       <div className={classes.app}>
         <Routes>
-          <Route path="/" element={<WelcomePage />} />
+          <Route path="/" element={<Homepage />} />
           <Route element={<MainPageLayout />}>
+            <Route path="/coinList" element={<CoinListPage />} />
             <Route path="/homepage" element={<Homepage />} />
             <Route path="/coins/:id" element={<CoinPage />} />
             <Route path="*" element={<PageNotFound />} />

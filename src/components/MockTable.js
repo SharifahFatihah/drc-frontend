@@ -146,7 +146,8 @@ export default function EnhancedTable({ coins }) {
   }, [coins]);
   return (
     <Box sx={{ width: "100%" }}>
-      <Paper sx={{ width: "100%", mb: 2 }}>
+      <Paper sx={{ width: "100%", mb: 2 }} style={{}}>
+        <Paper elevation={7} />
         <TableContainer
           sx={{ maxHeight: 640 }}
           style={{ borderRadius: "25px" }}
