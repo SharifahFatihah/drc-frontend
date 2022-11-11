@@ -10,6 +10,11 @@ import { doc, setDoc } from "firebase/firestore";
 import { db } from "../firebase";
 import { useNavigate } from "react-router-dom";
 import CoinDesc from "../components/CoinDesc";
+import favouriteIcon from "../asset/favouriteicon.png";
+import unfavouriteIcon from "../asset/unfavouriteicon.png";
+import githubIcon from "../asset/github.png";
+import redditIcon from "../asset/reddit.png";
+import announcementIcon from "../asset/announcement.png";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -24,6 +29,10 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     flexDirection: "column",
     alignItems: "flex-start",
+    [theme.breakpoints.down("md")]: {
+      width: "100%",
+      alignItems: "center",
+    },
   },
   sidebar: {
     width: "30%",
@@ -83,7 +92,10 @@ function CoinPage() {
   const [coin, setCoin] = useState();
   const [loading, setLoading] = useState(false);
 
-  const { currency, symbol, user, watchlist, setAlert } = CryptoState();
+  const { currency, symbol, user, watchlist, setAlert, open, setOpen } =
+    CryptoState();
+
+  const handleOpen = () => setOpen(true);
 
   const getSingleCoin = (e) => {
     setLoading(true);
@@ -158,8 +170,10 @@ function CoinPage() {
   return (
     <div className={classes.container}>
       <div className={classes.sidebar}>
-        <div style={{ display: "flex", alignItems: "center" }}>
-          <img src={coin?.image.large} alt={coin?.name} height="150" />
+        <div
+          style={{ display: "flex", alignItems: "center", marginBottom: 25 }}
+        >
+          <img src={coin?.image.large} alt={coin?.name} height="110" />
           <div style={{ marginLeft: 20 }}>
             <Typography variant="h3">{coin?.symbol.toUpperCase()}</Typography>
             <Typography variant="h4">{coin?.name}</Typography>
@@ -180,11 +194,33 @@ function CoinPage() {
               #{coin?.market_cap_rank}
             </div>
           </Card>
+          {user ? (
+            inWatchlist ? (
+              <img
+                src={favouriteIcon}
+                height="30rem"
+                onClick={inWatchlist ? removeFromWatchlist : addToWatchList}
+                style={{ cursor: "pointer" }}
+              />
+            ) : (
+              <img
+                src={unfavouriteIcon}
+                height="30rem"
+                onClick={inWatchlist ? removeFromWatchlist : addToWatchList}
+                style={{ cursor: "pointer" }}
+              />
+            )
+          ) : (
+            <img
+              src={unfavouriteIcon}
+              height="30rem"
+              onClick={handleOpen}
+              style={{ cursor: "pointer" }}
+            />
+          )}
         </div>
 
         <div className={classes.coinBasicContainer}>
-          <span className={classes.coinBasic}></span>
-
           <span className={classes.coinBasic}>
             <Typography variant="h5" className={classes.description}>
               Market Cap: {symbol}
@@ -209,7 +245,7 @@ function CoinPage() {
             <Typography variant="h5" className={classes.description}>
               Total Supply:{" "}
               {coin?.market_data.total_supply
-                .toString()
+                ?.toString()
                 .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
                 .slice(0, -8)}
               {" Million "}
@@ -221,10 +257,9 @@ function CoinPage() {
               {coin?.market_data.max_supply
                 ? coin?.market_data.max_supply.toString().slice(0, -6)
                 : "-"}
-              {" Million "}
+              {coin?.market_data.max_supply && " Million "}
             </Typography>
           </span>
-
           <Button
             variant="outlined"
             style={{
@@ -233,29 +268,82 @@ function CoinPage() {
               width: "90%",
               height: 40,
               marginBottom: 20,
+              marginTop: 20,
             }}
           >
             <a
               href={coin?.links?.homepage[0]}
-              style={{ color: "black", fontFamily: "VT323" }}
+              style={{ color: "black", fontFamily: "VT323", fontSize: 20 }}
             >
               Visit Website
             </a>
           </Button>
 
-          {user && (
-            <Button
-              style={{
-                width: "90%",
-                height: 40,
-                backgroundColor: "#FFE227",
-                fontFamily: "VT323",
-              }}
-              onClick={inWatchlist ? removeFromWatchlist : addToWatchList}
-            >
-              {inWatchlist ? "Remove from watchlist" : "Add to watchlist"}
-            </Button>
-          )}
+          <div style={{ width: "90%", display: "flex" }}>
+            {coin?.links?.repos_url?.github[0] && (
+              <Button
+                variant="outlined"
+                style={{
+                  backgroundColor: "#5F5F5F",
+
+                  width: "90%",
+                  height: 40,
+                  margin: 5,
+                }}
+              >
+                <a
+                  href={coin?.links?.repos_url?.github[0]}
+                  style={{ display: "flex" }}
+                >
+                  <img src={githubIcon} alt="github icon" height={20} />
+                </a>
+              </Button>
+            )}
+
+            {coin?.links?.subreddit_url && (
+              <Button
+                variant="outlined"
+                style={{
+                  backgroundColor: "#FF5733",
+                  color: "black",
+                  width: "90%",
+                  height: 40,
+                  margin: 5,
+                }}
+              >
+                <a
+                  href={coin?.links?.subreddit_url}
+                  style={{ display: "flex" }}
+                >
+                  <img src={redditIcon} alt="reddit icon" height={20} />
+                </a>
+              </Button>
+            )}
+
+            {coin?.links?.announcement_url[0] && (
+              <Button
+                variant="outlined"
+                style={{
+                  backgroundColor: "#626FC2",
+                  color: "black",
+                  width: "90%",
+                  height: 40,
+                  margin: 5,
+                }}
+              >
+                <a
+                  href={coin?.links?.announcement_url[0]}
+                  style={{ display: "flex" }}
+                >
+                  <img
+                    src={announcementIcon}
+                    alt="announcement icon"
+                    height={20}
+                  />
+                </a>
+              </Button>
+            )}
+          </div>
         </div>
       </div>
       <div className={classes.mainbar}>

@@ -64,11 +64,11 @@ function FavCoin() {
               Favourite Coins
             </Typography>
             <Typography
-              variant="h5"
+              variant="h3"
               style={{
                 paddingRight: 20,
                 paddingLeft: 20,
-                fontFamily: "Inter",
+                fontFamily: "VT323",
                 color: "white",
                 marginBottom: 50,
               }}
