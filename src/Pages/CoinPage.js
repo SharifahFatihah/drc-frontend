@@ -192,37 +192,36 @@ function CoinPage() {
                 .toString()
                 .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
                 .slice(0, -8)}
-              {"M "}
+              {" Million "}
             </Typography>
           </span>
           <span className={classes.coinBasic}>
             <Typography variant="h5" className={classes.description}>
-              Market Cap: {symbol}
-              {coin?.market_data.market_cap[currency.toLowerCase()]
+              Circulating Supply:{" "}
+              {coin?.market_data?.circulating_supply
                 .toString()
                 .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
                 .slice(0, -8)}
-              {"M "}
+              {" Million "}
             </Typography>
           </span>
           <span className={classes.coinBasic}>
             <Typography variant="h5" className={classes.description}>
-              Market Cap: {symbol}
-              {coin?.market_data.market_cap[currency.toLowerCase()]
+              Total Supply:{" "}
+              {coin?.market_data.total_supply
                 .toString()
                 .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
                 .slice(0, -8)}
-              {"M "}
+              {" Million "}
             </Typography>
           </span>
           <span className={classes.coinBasic}>
             <Typography variant="h5" className={classes.description}>
-              Market Cap: {symbol}
-              {coin?.market_data.market_cap[currency.toLowerCase()]
-                .toString()
-                .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                .slice(0, -8)}
-              {"M "}
+              Max Supply:{" "}
+              {coin?.market_data.max_supply
+                ? coin?.market_data.max_supply.toString().slice(0, -6)
+                : "-"}
+              {" Million "}
             </Typography>
           </span>
 
