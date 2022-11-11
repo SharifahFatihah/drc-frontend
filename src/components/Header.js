@@ -13,6 +13,10 @@ import {
 } from "@material-ui/core";
 
 import { CryptoState } from "../CryptoContext";
+import AuthModal from "./Authentication/AuthModal";
+import UserSidebar from "./UserSidebar";
+import LogoIcon from "../asset/logoicon.png";
+import LogoWord from "../asset/logoword.png";
 
 const useStyles = makeStyles(() => ({
   title: {
@@ -20,7 +24,6 @@ const useStyles = makeStyles(() => ({
     color: "#fcc7f4",
     //fontFamily: "", //add later when font decided
     fontWeight: "bold",
-    cursor: "pointer",
     alignItems: "start",
   },
 }));
@@ -29,7 +32,7 @@ function Header() {
   const classes = useStyles();
   const navigate = useNavigate();
 
-  const { currency, setCurrency } = CryptoState();
+  const { currency, setCurrency, user } = CryptoState();
 
   const darkTheme = createTheme({
     palette: {
@@ -40,21 +43,34 @@ function Header() {
 
   return (
     <ThemeProvider theme={darkTheme}>
-      <AppBar color="transparent" position="static">
+      <AppBar style={{ background: "#000000" }} position="sticky">
         <Container>
           <Toolbar>
-            <Typography onClick={() => navigate("/")} className={classes.title}>
-              KA-CHING!
+            <Typography className={classes.title}>
+              <img
+                src={LogoIcon}
+                height="30"
+                onClick={() => navigate("/homepage")}
+                style={{ cursor: "pointer" }}
+              />
             </Typography>
+
             <Select
               variant="outlined"
-              style={{ width: 100, height: 40, marginLeft: 15 }}
+              style={{ width: 100, height: 40, margin: 15 }}
               value={currency}
               onChange={(e) => setCurrency(e.target.value)}
             >
               <MenuItem value={"USD"}> USD </MenuItem>
               <MenuItem value={"MYR"}> MYR </MenuItem>
+              <MenuItem value={"EUR"}> EUR </MenuItem>
+              <MenuItem value={"JPY"}> JPY </MenuItem>
+              <MenuItem value={"GBP"}> GBP </MenuItem>
+              <MenuItem value={"AUD"}> AUD </MenuItem>
+              <MenuItem value={"CAD"}> CAD </MenuItem>
             </Select>
+
+            {user ? <UserSidebar /> : <AuthModal />}
           </Toolbar>
         </Container>
       </AppBar>

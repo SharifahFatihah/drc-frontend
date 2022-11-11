@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const CoinList = (currency) =>
-  `https://api.coingecko.com/api/v3/coins/markets?vs_currency=${currency}&order=market_cap_desc&per_page=100&page=1&sparkline=false`;
+  `https://api.coingecko.com/api/v3/coins/markets?vs_currency=${currency}&order=market_cap_desc&per_page=250&page=1&sparkline=false`;
 
 const SingleCoin = (id) => `https://api.coingecko.com/api/v3/coins/${id}`;
 
@@ -11,11 +11,13 @@ const HistoricalChart = (id, days = 365, currency) =>
 const TrendingCoins = (currency) =>
   `https://api.coingecko.com/api/v3/coins/markets?vs_currency=${currency}&order=gecko_desc&per_page=10&page=1&sparkline=false&price_change_percentage=24h`;
 
+const GlobalInfo = () => `https://api.coingecko.com/api/v3/global`;
+
 export const chartDays = [
-  { label: "24 Hours", value: 1 },
-  { label: "30 Days", value: 30 },
-  { label: "3 Month", value: 90 },
-  { label: "1 Year", value: 365 },
+  { label: "24H", value: 1 },
+  { label: "30D", value: 30 },
+  { label: "3M", value: 90 },
+  { label: "1Y", value: 365 },
 ];
 
 class Service {
@@ -32,6 +34,10 @@ class Service {
   };
   getCoinList = (e) => {
     return axios.get(CoinList(e));
+  };
+
+  getGlobalInfo = () => {
+    return axios.get(GlobalInfo());
   };
 
   handleSearch = (e, search) => {

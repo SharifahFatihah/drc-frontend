@@ -12,32 +12,13 @@ import {
 import MockTable from "../components/MockTable";
 
 const useStyle = makeStyles((theme) => ({}));
+
 function CoinTable() {
   const classes = useStyle();
 
-  const { currency } = CryptoState();
+  const { currency, coins } = CryptoState();
 
-  const [coins, setCoins] = useState([]);
-  const [loading, setLoading] = useState(false);
   const [search, setSearch] = useState("");
-
-  const getCoinList = (currency) => {
-    setLoading(true);
-
-    Service.getCoinList(currency)
-      .then((response) => {
-        setCoins(response.data);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
-  useEffect(() => {
-    setLoading(true);
-    getCoinList(currency);
-  }, [currency]);
 
   const darkTheme = createTheme({
     palette: {

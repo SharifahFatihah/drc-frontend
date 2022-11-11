@@ -2,11 +2,14 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { CryptoState } from "../CryptoContext";
 import Service from "../service/Service";
-import { makeStyles } from "@material-ui/core";
+import { Button, makeStyles } from "@material-ui/core";
 import { Typography } from "@material-ui/core";
 import parser from "html-react-parser";
 import CoinChart from "../components/CoinChart";
 import { LinearProgress } from "@material-ui/core";
+import { doc, setDoc } from "firebase/firestore";
+import { db } from "../firebase";
+import { useNavigate } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -35,13 +38,12 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     flexDirection: "column",
     [theme.breakpoints.down("md")]: {
-      flexDirection: "row",
-      justifyContent: "space-around",
+      flexDirection: "column",
+      alignItems: "center",
     },
     [theme.breakpoints.down("sm")]: {
       width: "100%",
       flexDirection: "column",
-
       alignItems: "center",
     },
     [theme.breakpoints.down("xs")]: {
@@ -56,11 +58,13 @@ const useStyles = makeStyles((theme) => ({
 
 function CoinPage() {
   const classes = useStyles();
+  const navigate = useNavigate();
+
   const { id } = useParams();
   const [coin, setCoin] = useState();
   const [loading, setLoading] = useState(false);
 
-  const { currency, symbol } = CryptoState();
+  const { currency, symbol, user, watchlist, setAlert } = CryptoState();
 
   const getSingleCoin = (e) => {
     setLoading(true);
@@ -72,6 +76,7 @@ function CoinPage() {
       })
       .catch((err) => {
         console.log(err);
+        navigate(`*`);
       });
   };
 
@@ -92,6 +97,44 @@ function CoinPage() {
     );
   }
 
+  const inWatchlist = watchlist.includes(coin?.id);
+
+  const addToWatchList = async () => {
+    const coinRef = await doc(db, "watchlist", user.uid);
+
+    try {
+      await setDoc(coinRef, {
+        coins: watchlist ? [...watchlist, coin.id] : [coin.id],
+      });
+
+      setAlert({
+        open: true,
+        message: `${coin.name} added to your watchlist`,
+        type: "success",
+      });
+    } catch (error) {}
+  };
+
+  const removeFromWatchlist = async () => {
+    const coinRef = await doc(db, "watchlist", user.uid);
+
+    try {
+      await setDoc(
+        coinRef,
+        {
+          coins: watchlist.filter((watch) => watch !== coin?.id),
+        },
+        { merge: "true" }
+      );
+
+      setAlert({
+        open: true,
+        message: `${coin.name} remove from your watchlist`,
+        type: "success",
+      });
+    } catch (error) {}
+  };
+
   return (
     <div className={classes.container}>
       <div className={classes.sidebar}>
@@ -106,26 +149,27 @@ function CoinPage() {
               Rank: {coin?.market_cap_rank}
             </Typography>
           </span>
+          <span className={classes.coinBasic}></span>
           <span className={classes.coinBasic}>
             <Typography variant="h5" className={classes.description}>
-              Current Price:{" "}
-              {coin?.market_data.current_price[currency.toLowerCase()]
-                .toString()
-                .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}{" "}
-              {symbol}
-            </Typography>
-          </span>
-          <span className={classes.coinBasic}>
-            <Typography variant="h5" className={classes.description}>
-              Market Cap:{" "}
+              Market Cap: {symbol}
               {coin?.market_data.market_cap[currency.toLowerCase()]
                 .toString()
                 .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
                 .slice(0, -8)}
               {"M "}
-              {symbol}
             </Typography>
           </span>
+
+          {user && (
+            <Button
+              variant="outlined"
+              style={{ width: "100%", height: 40, backgroundColor: "pink" }}
+              onClick={inWatchlist ? removeFromWatchlist : addToWatchList}
+            >
+              {inWatchlist ? "Remove from watchlist" : "Add to watchlist"}
+            </Button>
+          )}
         </div>
       </div>
       <CoinChart coin={coin} />
