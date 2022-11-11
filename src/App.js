@@ -27,7 +27,7 @@ function App() {
     <BrowserRouter>
       <div className={classes.app}>
         <Routes>
-          <Route path="/" element={<Homepage />} />
+          <Route path="/" element={<WelcomePage />} />
           <Route element={<MainPageLayout />}>
             <Route path="/coinList" element={<CoinListPage />} />
             <Route path="/homepage" element={<Homepage />} />
