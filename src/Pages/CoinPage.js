@@ -54,7 +54,7 @@ const useStyles = makeStyles((theme) => ({
       alignItems: "center",
     },
     [theme.breakpoints.down("xs")]: {
-      alignItems: "start",
+      alignItems: "center",
     },
   },
   coinBasic: {
