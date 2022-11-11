@@ -14,7 +14,7 @@ import { chartDays } from "../service/Service";
 
 const useStyle = makeStyles((theme) => ({
   container: {
-    width: "75%",
+    width: "90%",
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
@@ -26,7 +26,7 @@ const useStyle = makeStyles((theme) => ({
   },
   selectButton: {
     width: "15%",
-    border: "1px solid pink",
+    border: "1px solid #FFE227",
     borderRadius: 5,
     padding: 10,
     cursor: "pointer",
@@ -34,7 +34,7 @@ const useStyle = makeStyles((theme) => ({
     alignItems: "center",
 
     "&:hover": {
-      backgroundColor: "pink",
+      backgroundColor: "#FFE227",
       color: "black",
     },
   },
@@ -59,11 +59,26 @@ const useStyle = makeStyles((theme) => ({
   },
   basicContainer: {
     display: "flex",
+    alignItems: "center",
     [theme.breakpoints.down("sm")]: {
       width: "100%",
       justifyContent: "center",
       marginBottom: 20,
     },
+  },
+  red: {
+    backgroundColor: "#FF4B25",
+    marginLeft: 10,
+    color: "black",
+    padding: 5,
+    borderRadius: 5,
+  },
+  green: {
+    backgroundColor: "#00FF19",
+    marginLeft: 10,
+    color: "black",
+    padding: 5,
+    borderRadius: 5,
   },
 }));
 
@@ -101,6 +116,25 @@ function CoinChart({ coin }) {
     getHistoricalChart(coin?.id, days, currency);
   }, [currency, days, coin?.id]);
 
+  //Below for animation of graph/chart
+  const totalDuration = 5000;
+  const delayBetweenPoints = totalDuration / histData.length;
+
+  const animation = {
+    x: {
+      easing: "linear",
+      duration: delayBetweenPoints,
+      from: NaN,
+      delay(ctx) {
+        if (ctx.type !== "data" || ctx.xStarted) {
+          return 0;
+        }
+        ctx.xStarted = true;
+        return ctx.index * delayBetweenPoints;
+      },
+    },
+  };
+
   return (
     <ThemeProvider theme={darkTheme}>
       <div className={classes.container}>
@@ -115,6 +149,21 @@ function CoinChart({ coin }) {
                 : coin?.market_data.current_price[currency.toLowerCase()]}{" "}
               {currency}
             </Typography>
+            <div
+              className={
+                coin?.market_data?.price_change_percentage_24h > 0
+                  ? classes.green
+                  : classes.red
+              }
+            >
+              {Service.isProfit(coin?.market_data?.price_change_percentage_24h)
+                ? "+"
+                : ""}
+              {parseFloat(
+                coin?.market_data?.price_change_percentage_24h
+              ).toFixed(2)}
+              %
+            </div>
           </div>
 
           <div className={classes.buttonContainer}>
@@ -124,7 +173,7 @@ function CoinChart({ coin }) {
                 onClick={() => setDays(e.value)}
                 className={classes.selectButton}
                 style={{
-                  backgroundColor: e.value === days ? "pink" : "",
+                  backgroundColor: e.value === days ? "#FFE227" : "",
                   color: e.value === days ? "black" : "",
                 }}
               >
@@ -148,15 +197,36 @@ function CoinChart({ coin }) {
                   {
                     data: histData.map((chartData) => chartData[1]),
                     label: `Price of ${coin?.name} in the last ${days} days in ${currency}`,
-                    borderColor: "#C53BA4",
+                    borderColor: "#FFE227",
                     borderWidth: 2,
                     pointBorderColor: "rgba(0,0,0,0)",
                     pointBackgroundColor: "rgba(0,0,0,0)",
                     pointHoverBorderColor: "#5AC53B",
                     pointBorderWidth: 4,
                     pointHitRadius: 6,
+                    fill: true,
+                    backgroundColor: "rgba(243, 251, 0, 0.02)",
                   },
                 ],
+              }}
+              options={{
+                animation,
+                scales: {
+                  x: {
+                    display: true,
+                    title: {
+                      display: true,
+                      text: "Time",
+                    },
+                  },
+                  y: {
+                    display: true,
+                    title: {
+                      display: true,
+                      text: "Price",
+                    },
+                  },
+                },
               }}
             />
           </>
