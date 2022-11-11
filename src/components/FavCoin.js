@@ -17,8 +17,21 @@ const useStyles = makeStyles((theme) => ({
     padding: 50,
   },
   right: {
-    width: "50%",
     padding: 50,
+
+    width: "50%",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  favCoinLeft: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "flex-start",
+    [theme.breakpoints.down("md")]: {
+      alignItems: "center",
+      padding: 0,
+    },
   },
 }));
 
@@ -37,13 +50,7 @@ function FavCoin() {
           }}
         >
           {" "}
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "flex-start",
-            }}
-          >
+          <div className={classes.favCoinLeft}>
             <Typography
               variant="h2"
               style={{
@@ -84,7 +91,7 @@ function FavCoin() {
         </div>
       </div>
       <div className={classes.right}>
-        <img src={CoinPic} alt="coin pic" height={400} />
+        <img src={CoinPic} alt="coin pic" height={350} />
       </div>
     </div>
   );

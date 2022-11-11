@@ -19,7 +19,7 @@ function Footer() {
   });
   return (
     <ThemeProvider theme={darkTheme}>
-      <Grid container justifyContent="center" style={{ minHeight: "150px" }}>
+      {/* <Grid container justifyContent="center" style={{ minHeight: "150px" }}>
         <Grid
           container
           item
@@ -59,7 +59,7 @@ function Footer() {
             </Typography>
           </Grid>
         </Grid>
-      </Grid>
+      </Grid> */}
       <AppBar
         position="static"
         elevation={0}

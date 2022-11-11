@@ -55,7 +55,7 @@ function ScrollHorizontal() {
 
   const responsive = {
     0: { items: 1 },
-    730: { items: 2 },
+    824: { items: 2 },
     1150: { items: 3 },
     1600: { items: 4 },
   };

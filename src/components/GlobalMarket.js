@@ -11,7 +11,6 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
-    cursor: "pointer",
     padding: 30,
     paddingLeft: 90,
     paddingRight: 90,
