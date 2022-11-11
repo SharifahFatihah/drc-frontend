@@ -25,7 +25,7 @@ const useStyle = makeStyles(() => ({
     color: "#FF4B25",
   },
   green: {
-    color: "#00FF19",
+    color: "#15981B",
   },
 }));
 
