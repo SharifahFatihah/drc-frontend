@@ -117,7 +117,7 @@ function CoinChart({ coin }) {
   }, [currency, days, coin?.id]);
 
   //Below for animation of graph/chart
-  const totalDuration = 5000;
+  const totalDuration = 2500;
   const delayBetweenPoints = totalDuration / histData.length;
 
   const animation = {
@@ -140,7 +140,7 @@ function CoinChart({ coin }) {
       <div className={classes.container}>
         <div className={classes.chartContainer}>
           <div className={classes.basicContainer}>
-            <Typography variant="h2" className={classes.description}>
+            <Typography variant="h4">
               {symbol}
               {coin?.market_data.current_price[currency.toLowerCase()] > 1
                 ? coin?.market_data.current_price[currency.toLowerCase()]
