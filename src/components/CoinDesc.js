@@ -21,7 +21,7 @@ function CoinDesc({ coin }) {
         className={classes.description}
         style={{ fontFamily: "Inter" }}
       >
-        {parser(`${coin?.description.en.split(". ").slice(0, 5).join(". ")}`)}
+        {parser(`${coin?.description.en.split(". ").slice(0, 6).join(". ")}`)}
       </Typography>
     </div>
   );
