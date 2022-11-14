@@ -10,6 +10,7 @@ import { AppBar, makeStyles } from "@material-ui/core";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { CryptoState } from "../../CryptoContext";
 import { auth } from "../../firebase";
+import { Link } from "react-router-dom";
 
 const useStyle = makeStyles((theme) => ({
   paper: {
@@ -112,14 +113,84 @@ export default function AuthModal() {
             </div>
 
             <Box className={classes.google}>
-              <span>OR</span>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  gap: "30px",
+                }}
+              >
+                <div
+                  style={{
+                    width: "150px",
+                  }}
+                >
+                  <hr></hr>
+                </div>
+
+                <p
+                  style={{
+                    fontSize: "15px",
+                  }}
+                >
+                  or continue with
+                </p>
+                <div
+                  style={{
+                    width: "150px",
+                  }}
+                >
+                  <hr></hr>
+                </div>
+              </div>
               <Button
                 variant="contained"
                 onClick={signInWithGoogle}
-                style={{ backgroundColor: "Blue" }}
+                style={{
+                  backgroundColor: "grey",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  marginLeft: "200px",
+                  marginRight: "200px",
+                  marginBottom: "10px",
+                }}
               >
                 Sign In With Google
               </Button>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                }}
+              >
+                {" "}
+                {value == 0 ? (
+                  <p>
+                    Don't have an account?{" "}
+                    <a
+                      onClick={() => {
+                        setValue(1);
+                      }}
+                      style={{ cursor: "pointer" }}
+                    >
+                      Sign Up
+                    </a>
+                  </p>
+                ) : (
+                  <p>
+                    Already have an account?{" "}
+                    <a
+                      onClick={() => {
+                        setValue(0);
+                      }}
+                      style={{ cursor: "pointer" }}
+                    >
+Login                    </a>
+                  </p>
+                )}
+              </div>
             </Box>
           </AppBar>
         </div>
