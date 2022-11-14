@@ -99,7 +99,7 @@ function Header() {
       <div
         className={classes.navButton}
         onClick={() => {
-          navigate("/");
+          navigate("/coinList");
         }}
       >
         Coins

@@ -49,10 +49,17 @@ export default function HeaderMenu({ selectMenu, isMobile }) {
           "aria-labelledby": "basic-button",
         }}
       >
-        <MenuItem onClick={handleClose}>Portfoilio</MenuItem>
         <MenuItem
           onClick={() => {
             navigate("/");
+            handleClose();
+          }}
+        >
+          Portfoilio
+        </MenuItem>
+        <MenuItem
+          onClick={() => {
+            navigate("/coinList");
             handleClose();
           }}
         >
