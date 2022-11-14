@@ -9,11 +9,12 @@ import Service from "../service/Service";
 import { CryptoState } from "../CryptoContext";
 import AliceCarousel from "react-alice-carousel";
 import { useNavigate } from "react-router-dom";
+import SimpleChart from "./SimpleChart";
 
 const useStyle = makeStyles(() => ({
   scrollh: {
     height: "50%",
-    width: "70%",
+    width: "90%",
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
@@ -67,6 +68,7 @@ function ScrollHorizontal() {
         onClick={() => navigate(`/coins/${coin.id}`)}
         style={{
           display: "flex",
+          flexDirection: "column",
           alignItems: "center",
           cursor: "pointer",
           padding: 30,
@@ -75,23 +77,56 @@ function ScrollHorizontal() {
           background: "rgba(79, 58, 84, 0.52)",
         }}
       >
-        <img src={coin?.image} alt={coin.name} height="100" />
+        <div style={{ display: "flex", alignItems: "" }}>
+          <img src={coin?.image} alt={coin.name} height="70" />
+          <div style={{ marginLeft: 10 }}>
+            <Typography
+              variant="h4"
+              style={{ fontWeight: "bold", fontFamily: "VT323" }}
+            >
+              {coin?.symbol.toUpperCase()}
+            </Typography>
+            <Typography variant="h6" style={{ fontFamily: "VT323" }}>
+              {coin?.name}
+            </Typography>
+          </div>
+        </div>
+
         <div
           style={{
             display: "flex",
             flexDirection: "column",
-            marginLeft: 20,
+            marginLeft: 10,
+            marginTop: 10,
           }}
         >
-          <Typography variant="h6" style={{ fontWeight: "bold" }}>
-            {coin?.symbol.toUpperCase()}
-          </Typography>
-          <Typography>
-            {symbol}
-            {coin?.current_price > 1
-              ? Service.addCommas(coin?.current_price)
-              : coin?.current_price}
-          </Typography>
+          {" "}
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-around",
+            }}
+          >
+            <Typography variant="h4" style={{ fontFamily: "VT323" }}>
+              {symbol}
+              {coin?.current_price > 1
+                ? Service.addCommas(coin?.current_price)
+                : coin?.current_price}
+            </Typography>
+            <div
+              style={{
+                padding: 5,
+                borderRadius: 5,
+                backgroundColor:
+                  coin?.price_change_percentage_24h > 0 ? "green" : "red",
+              }}
+            >
+              {Service.isProfit(coin?.price_change_percentage_24h) ? "+" : ""}
+              {parseFloat(coin?.price_change_percentage_24h).toFixed(2)}%
+            </div>
+          </div>
+          <SimpleChart coin={coin} />
         </div>
       </div>
     );
