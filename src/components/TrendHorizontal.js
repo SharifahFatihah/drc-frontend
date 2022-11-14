@@ -9,6 +9,7 @@ import Service from "../service/Service";
 import { CryptoState } from "../CryptoContext";
 import AliceCarousel from "react-alice-carousel";
 import { useNavigate } from "react-router-dom";
+import SimpleChart from "./SimpleChart";
 
 const useStyle = makeStyles(() => ({
   scrollh: {
@@ -87,6 +88,7 @@ function TrendHorizontal() {
           <Typography variant="h6" style={{ fontWeight: "bold" }}>
             {coin?.item?.symbol.toUpperCase()}
           </Typography>
+          {/* {<SimpleChart coin={coin?.item} />}{" "} */}
         </div>
       </div>
     );

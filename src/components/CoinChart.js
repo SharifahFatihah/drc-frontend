@@ -134,7 +134,6 @@ function CoinChart({ coin }) {
       },
     },
   };
-
   return (
     <ThemeProvider theme={darkTheme}>
       <div className={classes.container}>
@@ -186,7 +185,7 @@ function CoinChart({ coin }) {
           <CircularProgress />
         ) : (
           <>
-            <Line //can be further config (styles)
+            <Line
               data={{
                 labels: histData.map((chartData) => {
                   let date = new Date(chartData[0]);
@@ -210,6 +209,7 @@ function CoinChart({ coin }) {
                 ],
               }}
               options={{
+                responsive: true,
                 animation,
                 scales: {
                   x: {

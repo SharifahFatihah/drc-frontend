@@ -10,6 +10,7 @@ import { doc, setDoc } from "firebase/firestore";
 import { db } from "../firebase";
 import { useNavigate } from "react-router-dom";
 import CoinDesc from "../components/CoinDesc";
+import CoinStats from "../components/CoinStats";
 import favouriteIcon from "../asset/favouriteicon.png";
 import unfavouriteIcon from "../asset/unfavouriteicon.png";
 import githubIcon from "../asset/github.png";
@@ -165,7 +166,6 @@ function CoinPage() {
       });
     } catch (error) {}
   };
-  console.log(coin);
 
   return (
     <div className={classes.container}>
@@ -349,6 +349,7 @@ function CoinPage() {
       <div className={classes.mainbar}>
         <CoinChart coin={coin} />
         <CoinDesc coin={coin} />
+        <CoinStats coin={coin} />
       </div>
     </div>
   );
