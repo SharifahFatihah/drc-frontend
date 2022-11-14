@@ -14,7 +14,7 @@ import SimpleChart from "./SimpleChart";
 const useStyle = makeStyles(() => ({
   scrollh: {
     height: "50%",
-    width: "90%",
+    width: "70%",
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
@@ -23,8 +23,7 @@ const useStyle = makeStyles(() => ({
     boxShadow: "0px 0px 105px 45px 0px 0px 105px 45px ",
   },
 }));
-
-function ScrollHorizontal() {
+function TrendHorizontal() {
   const classes = useStyle();
   const navigate = useNavigate();
 
@@ -32,8 +31,8 @@ function ScrollHorizontal() {
 
   const [trending, setTrending] = useState([]);
 
-  const getTrendingCoins = (e) => {
-    Service.getTrendingCoins(e)
+  const getTrendingCoins2 = () => {
+    Service.getTrendingCoins2()
       .then((response) => {
         setTrending(response.data);
       })
@@ -43,8 +42,8 @@ function ScrollHorizontal() {
   };
 
   useEffect(() => {
-    getTrendingCoins(currency);
-  }, [currency]);
+    getTrendingCoins2();
+  }, []);
 
   if (trending.length === 0) {
     return (
@@ -56,77 +55,40 @@ function ScrollHorizontal() {
 
   const responsive = {
     0: { items: 1 },
-    824: { items: 2 },
+    730: { items: 2 },
     1150: { items: 3 },
     1600: { items: 4 },
   };
 
-  const items = trending.map((coin) => {
+  console.log(trending?.coins);
+
+  const items = trending?.coins.map((coin) => {
     return (
       <div
         className={classes.scrollElement}
-        onClick={() => navigate(`/coins/${coin.id}`)}
+        onClick={() => navigate(`/coins/${coin?.item?.id}`)}
         style={{
           display: "flex",
-          flexDirection: "column",
           alignItems: "center",
           cursor: "pointer",
           padding: 30,
           margin: 15,
-          borderRadius: "15px",
+          borderRadius: "50px",
           background: "rgba(79, 58, 84, 0.52)",
         }}
       >
-        <div style={{ display: "flex", alignItems: "" }}>
-          <img src={coin?.image} alt={coin.name} height="70" />
-          <div style={{ marginLeft: 10 }}>
-            <Typography
-              variant="h4"
-              style={{ fontWeight: "bold", fontFamily: "VT323" }}
-            >
-              {coin?.symbol.toUpperCase()}
-            </Typography>
-            <Typography variant="h6" style={{ fontFamily: "VT323" }}>
-              {coin?.name}
-            </Typography>
-          </div>
-        </div>
-
+        <img src={coin?.item?.large} alt={coin?.item?.name} height="100" />
         <div
           style={{
             display: "flex",
             flexDirection: "column",
-            marginLeft: 10,
-            marginTop: 10,
+            marginLeft: 20,
           }}
         >
-          {" "}
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-around",
-            }}
-          >
-            <Typography variant="h4" style={{ fontFamily: "VT323" }}>
-              {symbol}
-              {coin?.current_price > 1
-                ? Service.addCommas(coin?.current_price)
-                : coin?.current_price}
-            </Typography>
-            <div
-              style={{
-                padding: 5,
-                borderRadius: 5,
-                backgroundColor:
-                  coin?.price_change_percentage_24h > 0 ? "green" : "red",
-              }}
-            >
-              {Service.isProfit(coin?.price_change_percentage_24h) ? "+" : ""}
-              {parseFloat(coin?.price_change_percentage_24h).toFixed(2)}%
-            </div>
-          </div>
-          <SimpleChart coin={coin} />
+          <Typography variant="h6" style={{ fontWeight: "bold" }}>
+            {coin?.item?.symbol.toUpperCase()}
+          </Typography>
+          {/* {<SimpleChart coin={coin?.item} />}{" "} */}
         </div>
       </div>
     );
@@ -148,4 +110,4 @@ function ScrollHorizontal() {
   );
 }
 
-export default ScrollHorizontal;
+export default TrendHorizontal;

@@ -21,7 +21,7 @@ const useStyle = makeStyles((theme) => ({
     padding: 40,
     [theme.breakpoints.down("md")]: {
       width: "100%",
-      padding: "20",
+      padding: "0",
     },
   },
   selectButton: {
@@ -134,7 +134,6 @@ function CoinChart({ coin }) {
       },
     },
   };
-
   return (
     <ThemeProvider theme={darkTheme}>
       <div className={classes.container}>
@@ -186,7 +185,7 @@ function CoinChart({ coin }) {
           <CircularProgress />
         ) : (
           <>
-            <Line //can be further config (styles)
+            <Line
               data={{
                 labels: histData.map((chartData) => {
                   let date = new Date(chartData[0]);
@@ -199,10 +198,10 @@ function CoinChart({ coin }) {
                     label: `Price of ${coin?.name} in the last ${days} days in ${currency}`,
                     borderColor: "#FFE227",
                     borderWidth: 2,
+
                     pointBorderColor: "rgba(0,0,0,0)",
                     pointBackgroundColor: "rgba(0,0,0,0)",
                     pointHoverBorderColor: "#5AC53B",
-                    pointBorderWidth: 4,
                     pointHitRadius: 6,
                     fill: true,
                     backgroundColor: "rgba(243, 251, 0, 0.02)",
@@ -210,6 +209,7 @@ function CoinChart({ coin }) {
                 ],
               }}
               options={{
+                responsive: true,
                 animation,
                 scales: {
                   x: {
