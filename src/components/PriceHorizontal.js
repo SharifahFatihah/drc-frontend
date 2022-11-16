@@ -6,7 +6,7 @@ import AliceCarousel from "react-alice-carousel";
 import { useNavigate } from "react-router-dom";
 import { LinearProgress } from "@material-ui/core";
 
-const useStyle = makeStyles(() => ({
+const useStyle = makeStyles((theme) => ({
   priceh: {
     height: "35px",
     width: "100%",
@@ -15,6 +15,15 @@ const useStyle = makeStyles(() => ({
     justifyContent: "center",
     backgroundColor: "#FFE227",
     color: "black",
+    position: "sticky",
+    top: "70px",
+    zIndex: 2,
+    [theme.breakpoints.down(800)]: {
+      top: "63px",
+    },
+    [theme.breakpoints.down("xs")]: {
+      top: "55px",
+    },
   },
   scrollElement: {
     display: "flex",

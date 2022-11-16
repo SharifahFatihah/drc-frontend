@@ -3,8 +3,11 @@ import { createUserWithEmailAndPassword } from "firebase/auth";
 import React, { useState } from "react";
 import { CryptoState } from "../../CryptoContext";
 import { auth } from "../../firebase";
+import LogoIcon from "../../asset/logoicon.png";
+import LogoWord from "../../asset/logoword.png";
 
 function Signup({ handleClose }) {
+  const [username, setName] = useState();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -50,8 +53,42 @@ function Signup({ handleClose }) {
     <div>
       <Box
         p={3}
-        style={{ display: "flex", flexDirection: "column", gap: "20px" }}
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          gap: "20px",
+          marginLeft: "200px",
+          marginRight: "200px",
+          marginTop: "50px",
+          marginBottom: "10px",
+        }}
       >
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <img src={LogoIcon} width="40" />
+          <img src={LogoWord} width="200" />
+        </div>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+          }}
+        >
+          <h1> Create Account</h1>
+        </div>
+        <TextField
+          variant="outlined"
+          type="username"
+          label="Enter Name"
+          value={username}
+          onChange={(e) => setName(e.target.value)}
+          fullWidth
+        />
         <TextField
           variant="outlined"
           type="email"

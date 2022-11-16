@@ -23,7 +23,6 @@ const useStyles = makeStyles((theme) => ({
   title: {
     flex: 1,
     color: "#fcc7f4",
-    //fontFamily: "", //add later when font decided
     fontWeight: "bold",
     alignItems: "start",
   },
@@ -48,7 +47,7 @@ function Header() {
   const navigate = useNavigate();
   const [isMobile, setIsMobile] = useState(false);
 
-  const { currency, setCurrency, user } = CryptoState();
+  const { currency, setCurrency, user, setOpen } = CryptoState();
 
   const darkTheme = createTheme({
     palette: {
@@ -91,7 +90,7 @@ function Header() {
       <div
         className={classes.navButton}
         onClick={() => {
-          navigate("/");
+          user ? navigate("/portfolio") : setOpen(true);
         }}
       >
         Portfolio
@@ -121,12 +120,14 @@ function Header() {
         <Container>
           <Toolbar>
             <Typography className={classes.title}>
-              <img
-                src={LogoIcon}
-                height="30"
-                onClick={() => navigate("/homepage")}
-                style={{ cursor: "pointer" }}
-              />
+              {isMobile && (
+                <img
+                  src={LogoIcon}
+                  height="30"
+                  onClick={() => navigate("/homepage")}
+                  style={{ cursor: "pointer" }}
+                />
+              )}
               {!isMobile && (
                 <img
                   src={LogoWord}
