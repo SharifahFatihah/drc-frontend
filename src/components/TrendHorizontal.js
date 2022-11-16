@@ -14,7 +14,7 @@ import SimpleChart from "./SimpleChart";
 const useStyle = makeStyles(() => ({
   scrollh: {
     height: "50%",
-    width: "70%",
+    width: "90%",
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
@@ -57,7 +57,7 @@ function TrendHorizontal() {
     0: { items: 1 },
     730: { items: 2 },
     1150: { items: 3 },
-    1600: { items: 4 },
+    1845: { items: 4 },
   };
 
   console.log(trending?.coins);
@@ -68,28 +68,55 @@ function TrendHorizontal() {
         className={classes.scrollElement}
         onClick={() => navigate(`/coins/${coin?.item?.id}`)}
         style={{
-          display: "flex",
+          // display: "flex",
+          flexDirection: "column",
           alignItems: "center",
           cursor: "pointer",
           padding: 30,
           margin: 15,
-          borderRadius: "50px",
+          borderRadius: "15px",
           background: "rgba(79, 58, 84, 0.52)",
         }}
       >
-        <img src={coin?.item?.large} alt={coin?.item?.name} height="100" />
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            marginLeft: 20,
-          }}
-        >
-          <Typography variant="h6" style={{ fontWeight: "bold" }}>
-            {coin?.item?.symbol.toUpperCase()}
-          </Typography>
-          {/* {<SimpleChart coin={coin?.item} />}{" "} */}
-        </div>
+        <div style={{ display: "flex", alignItems: "" }}>
+          <img src={coin?.item?.large} alt={coin?.item?.name} height="70" />
+          <div
+            style={{
+              marginLeft: 10,
+            }}
+          >
+            <Typography variant="h4" style={{ fontWeight: "bold" }}>
+              {coin?.item?.symbol.toUpperCase()}
+            </Typography>
+            <Typography variant="h6" style={{ fontFamily: "VT323" }}>
+              {coin?.item?.name}
+            </Typography>
+            </div>
+            </div>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-around",
+              }}
+            >
+              {console.log(coin)}
+
+              <div
+                style={{
+                  fontWeight: "bolder",
+                }}
+              >
+                {coin?.item?.price_btc?.toString().slice(0, 8)}
+                {" BTC "}
+              </div>
+            </div>
+
+            <Typography variant="h6" style={{ fontFamily: "VT323" }}>
+              {<SimpleChart coin={coin?.item} />}{" "}
+            </Typography>
+          
+        
       </div>
     );
   });

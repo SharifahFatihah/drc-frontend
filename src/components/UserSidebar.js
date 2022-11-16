@@ -2,10 +2,11 @@ import * as React from "react";
 import Drawer from "@mui/material/Drawer";
 import Button from "@mui/material/Button";
 import { CryptoState } from "../CryptoContext";
-import { Avatar } from "@mui/material";
+import { Avatar, dividerClasses } from "@mui/material";
 import { makeStyles } from "@material-ui/core";
 import { signOut } from "firebase/auth";
 import { auth } from "../firebase";
+import { ImportContactsSharp } from "@material-ui/icons";
 
 const useStyles = makeStyles({
   container: {
@@ -14,6 +15,7 @@ const useStyles = makeStyles({
     height: "100%",
     display: "flex",
     flexDirection: "column",
+    background: "black",
   },
   profile: {
     flex: 1,
@@ -23,15 +25,20 @@ const useStyles = makeStyles({
     gap: "20px",
     height: "92%",
   },
+
   watchlist: {
     flex: 1,
     width: "100%",
     padding: 15,
     display: "flex",
     flexDirection: "column",
-    alignItems: "center",
+    alignItems: "flex-start",
     gap: 12,
     overFlowY: "scroll",
+    fontFamily: "VT323",
+    fontSize: 25,
+    color: "white",
+    fontWeight: "bolder",
   },
 });
 
@@ -93,13 +100,14 @@ export default function UserSidebar() {
                     height: 200,
                     width: 200,
                     cursor: "pointer",
-                    backgroundColor: "purple",
+                    backgroundColor: "yellow",
                   }}
                 />{" "}
                 <span
                   style={{
                     width: "100%",
                     fontSize: 25,
+                    color: "white",
                     textAlign: "center",
                     fontWeight: "bolder",
                     wordWrap: "break-word",
@@ -108,15 +116,51 @@ export default function UserSidebar() {
                   {" "}
                   {user.displayName || user.email}
                 </span>
+                <div
+                  style={{
+                    color: "white",
+                    fontWeight: "bolder",
+                    wordWrap: "break-word",
+                    fontSize: 20,
+                  }}
+                >
+                  Assets
+                </div>
+                <div
+                  style={{
+                    width: "240px",
+                  }}
+                >
+                  <hr></hr>
+                </div>
                 <div className={classes.watchlist}>
                   {coins.map((coin) => {
                     if (watchlist.includes(coin.id))
-                      return <span>{coin.name}</span>;
+                      return (
+                        <div style={{ display: "flex", alignItems: "center" }}>
+                         <div style={{marginRight:20}}><img src={coin.image} height="25" />
+                          </div> 
+                          {coin.name}
+                        </div>
+                      );
                   })}
                 </div>
               </div>
-              <Button variant="contained" onClick={logout}>
-                Logout
+              <Button
+                onClick={logout}
+                style={{
+                  background: "yellow",
+                  marginRight:80,
+                  marginLeft:80,
+                  display:"flex",
+                  alignItems:"center",
+                  // outlineStyle:"outside",
+                  // outlineColor: "black",
+                  // outlineWidth: "thick",
+                  
+                }}
+              >
+                <a style={{ color: "black", fontWeight: "bolder" }}>Logout</a>
               </Button>
             </div>
           </Drawer>
