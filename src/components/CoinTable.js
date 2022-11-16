@@ -30,8 +30,7 @@ function CoinTable() {
   return (
     <ThemeProvider theme={darkTheme}>
       <Container style={{ textAlign: "center" }}>
-       
-         <TextField 
+        <TextField
           label="Search"
           variant="outlined"
           onChange={(e) => setSearch(e.target.value)}

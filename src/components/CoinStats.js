@@ -7,6 +7,8 @@ const useStyles = makeStyles((theme) => ({
   container: {
     display: "flex",
     alignItems: "center",
+    justifyContent: "center",
+    marginTop: 40,
     [theme.breakpoints.down(1495)]: {
       flexDirection: "column",
       alignItems: "center",
@@ -16,8 +18,6 @@ const useStyles = makeStyles((theme) => ({
 
 function CoinStats({ coin }) {
   const classes = useStyles();
-
-  console.log(coin);
 
   return (
     <div className={classes.container}>

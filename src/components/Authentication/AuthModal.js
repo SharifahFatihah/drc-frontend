@@ -72,7 +72,10 @@ export default function AuthModal() {
     <div>
       <Button
         variant="contained"
-        onClick={handleOpen}
+        onClick={() => {
+          handleOpen();
+          setValue(0);
+        }}
         style={{
           backgroundColor: "#FFE227",
           color: "black",
@@ -186,7 +189,8 @@ export default function AuthModal() {
                       }}
                       style={{ cursor: "pointer" }}
                     >
-Login                    </a>
+                      Login{" "}
+                    </a>
                   </p>
                 )}
               </div>
