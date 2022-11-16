@@ -1,8 +1,6 @@
-import { Container, Typography, makeStyles } from "@material-ui/core";
+import { Button, Container, Typography, makeStyles } from "@material-ui/core";
 
-import PriceHorizontal from "./PriceHorizontal";
 import React from "react";
-import ScrollHorizontal from "./ScrollHorizontal";
 
 const useStyle = makeStyles(() => ({
   banner: {
@@ -13,7 +11,7 @@ const useStyle = makeStyles(() => ({
     justifyContent: "center",
   },
   bannerContent: {
-    background: "radial-gradient(circle, #430046c4, transparent)",
+    background: "rgba(79, 58, 84, 0.52)",
     margin: "0",
     height: 800,
     paddingTop: 25,
@@ -40,29 +38,40 @@ function Banner() {
           <Typography
             variant="h1"
             style={{
-              fontWeight: "bold",
               marginBottom: 5,
               paddingRight: 20,
               paddingLeft: 20,
-              fontFamily: "",
+              fontFamily: "VT323",
               color: "white",
             }}
           >
-            TEST!
+            KA-CHING!
           </Typography>
           <Typography
-            variant="subtitle1"
+            variant="h6"
             style={{
-              fontWeight: "bold",
               marginBottom: 15,
               paddingRight: 20,
               paddingLeft: 20,
-              fontFamily: "",
+              fontFamily: "VT323",
               color: "white",
             }}
           >
-            Happy Testing~
+            Lorem Ipsum has been the industry's standard dummy text ever since
+            the 1500s, when an unknown printer took a galley of type and
+            scrambled it to make a type specimen book.
           </Typography>
+          <Button
+            variant="contained"
+            style={{
+              backgroundColor: "#FFE227",
+              color: "black",
+              fontFamily: "VT323",
+              fontSize: 20,
+            }}
+          >
+            Get Started!
+          </Button>
         </div>
       </Container>
     </div>
