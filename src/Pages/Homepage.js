@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import Banner from "../components/Banner";
 import Kiki from "../asset/kiki.mp3";
 import Sound from "react-sound";
 import Trending from "../components/Trending";
 import GlobalMarket from "../components/GlobalMarket";
+import FavCoin from "../components/FavCoin";
 
 function Homepage() {
   return (
@@ -16,6 +17,7 @@ function Homepage() {
       <Banner />
       <Trending />
       <GlobalMarket />
+      <FavCoin />
     </div>
   );
 }

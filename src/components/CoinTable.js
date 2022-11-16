@@ -30,9 +30,6 @@ function CoinTable() {
   return (
     <ThemeProvider theme={darkTheme}>
       <Container style={{ textAlign: "center" }}>
-        <Typography variant="h4" style={{ margin: 20 }}>
-          Crypto Coins
-        </Typography>
         <TextField
           label="Search"
           variant="outlined"
