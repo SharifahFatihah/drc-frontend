@@ -51,11 +51,11 @@ export default function HeaderMenu({ selectMenu, isMobile }) {
       >
         <MenuItem
           onClick={() => {
-            navigate("/");
+            navigate("/portfolio");
             handleClose();
           }}
         >
-          Portfoilio
+          Portfolio
         </MenuItem>
         <MenuItem
           onClick={() => {

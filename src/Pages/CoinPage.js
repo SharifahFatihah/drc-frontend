@@ -93,7 +93,7 @@ function CoinPage() {
   const [coin, setCoin] = useState();
   const [loading, setLoading] = useState(false);
 
-  const { currency, symbol, user, watchlist, setAlert, open, setOpen } =
+  const { currency, symbol, user, watchlist, setAlert, setOpen } =
     CryptoState();
 
   const handleOpen = () => setOpen(true);
@@ -274,6 +274,8 @@ function CoinPage() {
             <a
               href={coin?.links?.homepage[0]}
               style={{ color: "black", fontFamily: "VT323", fontSize: 20 }}
+              target="_blank"
+              rel="noopener noreferrer"
             >
               Visit Website
             </a>
@@ -294,6 +296,8 @@ function CoinPage() {
                 <a
                   href={coin?.links?.repos_url?.github[0]}
                   style={{ display: "flex" }}
+                  target="_blank"
+                  rel="noopener noreferrer"
                 >
                   <img src={githubIcon} alt="github icon" height={20} />
                 </a>
@@ -314,6 +318,8 @@ function CoinPage() {
                 <a
                   href={coin?.links?.subreddit_url}
                   style={{ display: "flex" }}
+                  target="_blank"
+                  rel="noopener noreferrer"
                 >
                   <img src={redditIcon} alt="reddit icon" height={20} />
                 </a>
@@ -334,6 +340,8 @@ function CoinPage() {
                 <a
                   href={coin?.links?.announcement_url[0]}
                   style={{ display: "flex" }}
+                  target="_blank"
+                  rel="noopener noreferrer"
                 >
                   <img
                     src={announcementIcon}

@@ -77,7 +77,7 @@ function ScrollHorizontal() {
           background: "rgba(79, 58, 84, 0.52)",
         }}
       >
-        <div style={{ display: "flex", alignItems: "" }}>
+        <div style={{ display: "flex", alignItems: "flex-start" }}>
           <img src={coin?.image} alt={coin.name} height="70" />
           <div style={{ marginLeft: 10 }}>
             <Typography
@@ -105,7 +105,7 @@ function ScrollHorizontal() {
             style={{
               display: "flex",
               alignItems: "center",
-              justifyContent: "space-around",
+              justifyContent: "space-between",
             }}
           >
             <Typography variant="h4" style={{ fontFamily: "VT323" }}>

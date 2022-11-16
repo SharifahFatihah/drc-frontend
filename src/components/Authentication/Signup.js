@@ -7,7 +7,7 @@ import LogoIcon from "../../asset/logoicon.png";
 import LogoWord from "../../asset/logoword.png";
 
 function Signup({ handleClose }) {
-   const [username, setName] = useState();
+  const [username, setName] = useState();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
