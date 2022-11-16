@@ -36,8 +36,6 @@ function GlobalMarket() {
 
   const { globalInfo, currency, symbol } = CryptoState();
 
-  console.log(globalInfo);
-
   return (
     <div
       style={{
