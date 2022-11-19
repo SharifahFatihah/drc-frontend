@@ -44,15 +44,14 @@ export default function HoldingModal({ coin }) {
       await setDoc(
         coinRef,
         {
-          coins: watchlist.filter((watch) => watch !== coin?.id),
+          coins: watchlist.map((watch) =>
+            watch.id === coin?.id
+              ? { id: coin.id, holding: newHolding2 }
+              : { id: coin.id, holding: watch.holding }
+          ),
         },
         { merge: "true" }
       );
-      await setDoc(coinRef, {
-        coins: watchlist
-          ? [...watchlist, { id: coin.id, holding: newHolding2 }]
-          : [{ id: coin.id, holding: newHolding2 }],
-      });
 
       setAlert({
         open: true,

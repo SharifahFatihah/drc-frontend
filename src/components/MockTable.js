@@ -166,7 +166,7 @@ export default function EnhancedTable({ coins }) {
       await setDoc(
         coinRef,
         {
-          coins: watchlist.filter((watch) => watch !== usercoin?.id),
+          coins: watchlist.filter((watch) => watch.id !== usercoin?.id),
         },
         { merge: "true" }
       );

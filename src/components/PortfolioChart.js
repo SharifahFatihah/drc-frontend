@@ -1,6 +1,6 @@
 import { makeStyles, Tooltip, Typography } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
-import { Bar, Line } from "react-chartjs-2";
+import { Bar, Doughnut, Line } from "react-chartjs-2";
 import { CryptoState } from "../CryptoContext";
 import Service from "../service/Service";
 import CoinChart from "./CoinChart";
@@ -57,8 +57,6 @@ function PortfolioChart({ days }) {
     );
   }, [coinHistData2, watchlist]);
 
-  console.log("coinhistdata2", coinHistData2);
-
   const coinsd = coinHistData2?.map((e) => {
     const priceData = e.hist_data?.map((chartData) => chartData[1]);
 
@@ -87,7 +85,10 @@ function PortfolioChart({ days }) {
         variance += (num - median) * (num - median);
       });
       variance /= num;
-      return { sum: sumx, sd_return: Math.sqrt(variance) };
+      return {
+        sum: sumx,
+        sd_return: e?.coin?.holding * e?.coin?.holding * variance,
+      };
     };
 
     const sdPrice = (arr = e.price_data) => {
@@ -100,16 +101,39 @@ function PortfolioChart({ days }) {
         variance += (num - median) * (num - median);
       });
       variance /= num;
-      return { sum: sumx, sd_price: variance };
+      return {
+        sum: sumx,
+        sd_price: e?.coin?.holding * e?.coin?.holding * variance,
+      };
     };
 
     return { ...e, stats_return: sdReturn(), stats_price: sdPrice() };
   });
 
+  const portfolioPriceChart = () => {
+    const dateData = coinsd2[0]?.hist_data.map((e) => e[0]);
+
+    const arrPrice = coinsd2?.map((e) =>
+      e?.hist_data.map((v) => v[1] * e.coin.holding)
+    );
+
+    const avgPrice = (...arrays) => {
+      const n = arrays.reduce((max, xs) => Math.max(max, xs.length), 0);
+      const result = Array.from({ length: n });
+      return result.map((_, i) =>
+        arrays.map((xs) => xs[i] || 0).reduce((sum, x) => sum + x, 0)
+      );
+    };
+
+    return { time: dateData, avg_return: avgPrice(...arrPrice) };
+  };
+
   const portfolioReturnChart = () => {
     const dateData = coinsd2[0]?.hist_return_data[0];
 
-    const arrReturn = coinsd2.map((e) => e?.hist_return_data[1]);
+    const arrReturn = coinsd2.map((e) =>
+      e?.hist_return_data[1].map((v) => v * e.coin.holding)
+    );
 
     const avgReturn = (...arrays) => {
       const n = arrays.reduce((max, xs) => Math.max(max, xs.length), 0);
@@ -128,7 +152,19 @@ function PortfolioChart({ days }) {
 
     const n_denomenator = coinsd2[0]?.price_data?.length;
 
-    const pricesd =
+    const price_sum_var =
+      pricestat &&
+      pricestat
+        .map((stat) => stat.sd_price)
+        ?.reduce((acc, val) => acc + val, 0);
+
+    const return_sum_var =
+      returnstat &&
+      returnstat
+        .map((stat) => stat.sd_return)
+        ?.reduce((acc, val) => acc + val, 0);
+
+    const price_sum_cov =
       pricestat &&
       pricestat
         .map((v, i, a) =>
@@ -138,7 +174,7 @@ function PortfolioChart({ days }) {
         )
         .reduce((p, v) => p + v, 0);
 
-    const returnsd =
+    const return_sum_cov =
       returnstat &&
       returnstat
         .map((v, i, a) =>
@@ -149,8 +185,8 @@ function PortfolioChart({ days }) {
         .reduce((p, v) => p + v, 0);
 
     return {
-      price_sd: Math.sqrt(pricesd),
-      return_sd: Math.sqrt(Math.abs(returnsd)),
+      price_sd: Math.sqrt(price_sum_cov + price_sum_var),
+      return_sd: Math.sqrt(return_sum_cov + return_sum_var),
     };
   };
 
@@ -183,6 +219,18 @@ function PortfolioChart({ days }) {
     };
   });
 
+  const doughnutCoin = () => {
+    const sumArr = coinsd2.map((e) => e.coin.holding);
+    const sum = sumArr.reduce((acc, val) => acc + val, 0);
+    const holdingArr = coinsd2.map((e) => {
+      return { name: e.coin.name, holding: e.coin.holding, total_holding: sum };
+    });
+
+    return holdingArr;
+  };
+
+  console.log("doughnut", doughnutCoin());
+
   const totalDuration = 2500;
   const delayBetweenPoints = totalDuration / 250;
 
@@ -201,9 +249,18 @@ function PortfolioChart({ days }) {
     },
   };
 
+  const random_rgba = () => {
+    var o = Math.round,
+      r = Math.random,
+      s = 255;
+    return "rgba(" + o(r() * s) + "," + o(r() * s) + "," + o(r() * s) + ",1";
+  };
+
   const colours = portfolioReturnChart()?.avg_return?.map((value) =>
     value < 0 ? "red" : "green"
   );
+
+  const colourDoughnut = doughnutCoin().map((e) => random_rgba());
 
   return (
     <div className={classes.container}>
@@ -234,6 +291,40 @@ function PortfolioChart({ days }) {
           plugins: {
             legend: {
               display: true,
+            },
+          },
+          scales: { y: { display: true } },
+        }}
+      />
+      <Typography variant="h2" style={{ fontFamily: "VT323" }}>
+        Historical Price
+      </Typography>
+      <Line
+        data={{
+          labels: portfolioPriceChart()?.time?.map((e) => {
+            let date = new Date(e);
+            let time = `${date.getHours()}:${date.getMinutes()} `;
+            return days === 1 ? time : date.toLocaleDateString();
+          }),
+          datasets: [
+            {
+              data: portfolioPriceChart()?.avg_return.map((e) => e),
+              label: `test`,
+              borderColor: "yellow",
+              borderWidth: 2,
+              pointBorderColor: "rgba(0,0,0,0)",
+              pointBackgroundColor: "rgba(0,0,0,0)",
+              pointHoverBorderColor: "#5AC53B",
+              pointHitRadius: 6,
+              yAxisID: "y",
+            },
+          ],
+        }}
+        options={{
+          animation: { duration: 3000, easing: "easeInOutCubic" },
+          plugins: {
+            legend: {
+              display: false,
             },
           },
           scales: { y: { display: true } },
@@ -271,6 +362,24 @@ function PortfolioChart({ days }) {
             },
           },
           scales: { y: { display: true } },
+        }}
+      />
+      <Typography variant="h2" style={{ fontFamily: "VT323" }}>
+        Coin Weightage{" "}
+      </Typography>
+      <Doughnut
+        data={{
+          labels: doughnutCoin()?.map((e) => e.name),
+          datasets: [
+            {
+              data: doughnutCoin()?.map(
+                (e) => (e.holding / e.total_holding) * 100
+              ),
+              borderWidth: 0,
+              backgroundColor: colourDoughnut,
+              radius: "60%",
+            },
+          ],
         }}
       />
     </div>
