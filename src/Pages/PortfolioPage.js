@@ -84,7 +84,7 @@ function PortfolioPage() {
   const [userCoin3, setUserCoin3] = useState();
   const [period, setPeriod] = useState("price_change_percentage_24h");
   const [days, setDays] = useState(1);
-  const [userCoins, setUserCoins] = useState();
+  const [userState, setUserState] = useState(user);
 
   const [coinAlert, setCoinAlert] = useState([]);
 
@@ -103,7 +103,7 @@ function PortfolioPage() {
     ).then((z) => {
       setUserCoin(z.filter((y) => !!y));
     });
-  }, [watchlist]);
+  }, [watchlist, user]);
 
   useEffect(() => {
     userCoin.map((e) => setUserCoin2((userCoin2) => [...userCoin2, e.data]));
@@ -117,6 +117,10 @@ function PortfolioPage() {
     );
     setUserCoin3([...new Map(userCoin2.map((m) => [m.id, m])).values()]);
   }, [userCoin2, watchlist]);
+
+  useEffect(() => {
+    setUserState(user);
+  }, [user]);
 
   const avgPriceChange =
     userCoin2.length > 0 &&
@@ -172,29 +176,30 @@ function PortfolioPage() {
             </Typography>
           </div>
         </div>
-        {userCoin3?.map((coin) => {
-          return (
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                padding: 10,
-              }}
-            >
-              <div style={{ marginRight: 10 }}>
-                <img src={coin?.image?.thumb} height="20" />
-              </div>
-              <div>{coin?.name}</div>
+        {userState &&
+          userCoin3?.map((coin) => {
+            return (
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  padding: 10,
+                }}
+              >
+                <div style={{ marginRight: 10 }}>
+                  <img src={coin?.image?.thumb} height="20" />
+                </div>
+                <div>{coin?.name}</div>
 
-              <HoldingModal coin={coin} />
-              <div>{coin.holding}</div>
-            </div>
-          );
-        })}
+                <HoldingModal coin={coin} />
+                <div>{coin.holding}</div>
+              </div>
+            );
+          })}
       </div>
       <div className={classes.mainbar}>
-        {userCoin2.length == 0 ? (
+        {!userState || userCoin2.length == 0 ? (
           <div
             style={{
               display: "flex",

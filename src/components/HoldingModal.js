@@ -47,7 +47,7 @@ export default function HoldingModal({ coin }) {
           coins: watchlist.map((watch) =>
             watch.id === coin?.id
               ? { id: coin.id, holding: newHolding2 }
-              : { id: coin.id, holding: watch.holding }
+              : { id: watch.id, holding: watch.holding }
           ),
         },
         { merge: "true" }
