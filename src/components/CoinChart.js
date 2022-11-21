@@ -116,7 +116,6 @@ function CoinChart({ coin }) {
     getHistoricalChart(coin?.id, days, currency);
   }, [currency, days, coin?.id]);
 
-  //Below for animation of graph/chart
   const totalDuration = 2500;
   const delayBetweenPoints = totalDuration / histData.length;
 
