@@ -12,6 +12,7 @@ const TrendingCoins = (currency) =>
   `https://api.coingecko.com/api/v3/coins/markets?vs_currency=${currency}&order=gecko_desc&per_page=10&page=1&sparkline=false&price_change_percentage=24h`;
 
 const GlobalInfo = () => `https://api.coingecko.com/api/v3/global`;
+const TrendingCoins2 = () => `https://api.coingecko.com/api/v3/search/trending`;
 
 export const chartDays = [
   { label: "24H", value: 1 },
@@ -39,7 +40,9 @@ class Service {
   getGlobalInfo = () => {
     return axios.get(GlobalInfo());
   };
-
+  getTrendingCoins2 = () => {
+    return axios.get(TrendingCoins2());
+  };
   handleSearch = (e, search) => {
     return e.filter(
       (f) =>
