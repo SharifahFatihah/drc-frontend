@@ -5,6 +5,7 @@ import currentAssetIcon from "../asset/currentasseticon.png";
 import Service from "../service/Service";
 import { useNavigate } from "react-router-dom";
 import PortfolioChart from "../components/PortfolioChart";
+import Portfolioinfo from "../components/Portfolioinfo";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -91,13 +92,7 @@ function PortfolioPage() {
     userCoin2.map(
       (e) =>
         e.market_data.market_cap_change_percentage_24h < -5 &&
-        setCoinAlert((coinAlert) => [
-          ...coinAlert,
-          {
-            id: e.id,
-            priceChange: e.market_data.market_cap_change_percentage_24h,
-          },
-        ])
+        setCoinAlert((coinAlert) => [...coinAlert, e])
     );
   }, [userCoin2]);
 
@@ -139,6 +134,12 @@ function PortfolioPage() {
         {userCoins}
       </div>
       <div className={classes.mainbar}>
+        <Portfolioinfo
+          avgPriceChange={avgPriceChange}
+          topPerformCoin={topPerformCoin}
+          Worst={worstPerformCoin}
+          alert={coinAlert}
+        />
         <PortfolioChart />
       </div>
     </div>
