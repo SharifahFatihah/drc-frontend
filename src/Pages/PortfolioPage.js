@@ -16,7 +16,9 @@ import { useNavigate } from "react-router-dom";
 import PortfolioChart from "../components/PortfolioChart";
 import { chartDays } from "../service/Service";
 import HoldingModal from "../components/HoldingModal";
-import { RowingOutlined } from "@material-ui/icons";
+import DeleteIcon from "../asset/deleteicon.png";
+import { doc, setDoc } from "firebase/firestore";
+import { db } from "../firebase";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -95,6 +97,7 @@ function PortfolioPage() {
   const [period, setPeriod] = useState("price_change_percentage_24h");
   const [days, setDays] = useState(1);
   const [userState, setUserState] = useState(user);
+  const [isMobile, setIsMobile] = useState(false);
 
   const [coinAlert, setCoinAlert] = useState([]);
 
@@ -103,6 +106,18 @@ function PortfolioPage() {
   const navigate = useNavigate();
 
   const classes = useStyles();
+
+  const handleResize = () => {
+    if (window.innerWidth < 1280) {
+      setIsMobile(true);
+    } else {
+      setIsMobile(false);
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener("resize", handleResize);
+  });
 
   useEffect(() => {
     Promise.all(
@@ -126,7 +141,8 @@ function PortfolioPage() {
       })
     );
     setUserCoin3([...new Map(userCoin2.map((m) => [m.id, m])).values()]);
-  }, [userCoin2, watchlist]);
+  }, [userCoin2]);
+  console.log("usercoin3", userCoin3);
 
   useEffect(() => {
     setUserState(user);
@@ -165,9 +181,30 @@ function PortfolioPage() {
           },
         ])
     );
+    console.log("watchlist1", watchlist);
   }, [userCoin2]);
 
   console.log("usercoin2", userCoin2);
+
+  const removeFromWatchlist = async (usercoin) => {
+    const coinRef = await doc(db, "watchlist", user.uid);
+
+    try {
+      await setDoc(
+        coinRef,
+        {
+          coins: watchlist.filter((watch) => watch.id !== usercoin?.id),
+        },
+        { merge: "true" }
+      );
+
+      setAlert({
+        open: true,
+        message: `${usercoin.name} remove from your watchlist`,
+        type: "success",
+      });
+    } catch (error) {}
+  };
 
   // console.log("alerts", coinAlert);
   // console.log("worst", worstPerformCoin);
@@ -188,78 +225,113 @@ function PortfolioPage() {
         </div>
 
         {userState && (
-          <div style={{ width: "90%" }}>
+          <div style={{ marginTop: 20, width: "90%" }}>
             <Paper
               sx={{
                 width: "100%",
                 overflow: "hidden",
               }}
-              style={{ backgroundColor: "transparent" }}
+              style={{ backgroundColor: "rgba(100,100,100,0.0)" }}
             >
               <TableContainer
                 component={Paper}
                 style={{ backgroundColor: "transparent", color: "white" }}
               >
-                <div style={{ overflow: "auto", height: "350px" }}>
+                <div
+                  style={{
+                    overflow: "auto",
+                    height: isMobile ? "250px" : "650px",
+                  }}
+                >
                   <Table sx={{ minWidth: 650 }}>
                     <TableBody>
-                      {userCoin3?.map((row) => (
-                        <TableRow
-                          key={row.name}
-                          sx={{
-                            "&:last-child td, &:last-child th": { border: 0 },
-                          }}
-                        >
-                          {" "}
-                          <TableCell
-                            component="th"
-                            scope="row"
-                            style={{ color: "white" }}
-                          >
-                            <div
-                              style={{ display: "flex", alignItems: "center" }}
+                      {userCoin3?.map((row) => {
+                        if (
+                          watchlist.includes(
+                            watchlist.find((watch) => watch.id === row.id)
+                          )
+                        ) {
+                          return (
+                            <TableRow
+                              key={row.name}
+                              sx={{
+                                "&:last-child td, &:last-child th": {
+                                  border: 0,
+                                },
+                              }}
                             >
-                              <div style={{ marginRight: 10 }}>
-                                <img src={row?.image?.thumb} height="20" />
-                              </div>
-                              <div>{row.name}</div>
-                            </div>
-                          </TableCell>
-                          <TableCell align="right" style={{ color: "white" }}>
-                            <div>
-                              <div>
-                                {symbol}
-                                {row.holding *
-                                  row.market_data.current_price[
-                                    currency.toLowerCase()
-                                  ] >=
-                                1
-                                  ? (
-                                      row.holding *
+                              {" "}
+                              <TableCell
+                                component="th"
+                                scope="row"
+                                style={{ color: "white" }}
+                              >
+                                <div
+                                  style={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                  }}
+                                >
+                                  <div style={{ marginRight: 10 }}>
+                                    <img src={row?.image?.thumb} height="20" />
+                                  </div>
+                                  <div>{row.name}</div>
+                                </div>
+                              </TableCell>
+                              <TableCell
+                                align="right"
+                                style={{ color: "white" }}
+                              >
+                                <div>
+                                  <div>
+                                    {symbol}
+                                    {row.holding *
                                       row.market_data.current_price[
                                         currency.toLowerCase()
-                                      ]
-                                    ).toFixed(2)
-                                  : (
-                                      row.holding *
-                                      row.market_data.current_price[
-                                        currency.toLowerCase()
-                                      ]
-                                    ).toPrecision(4)}
-                              </div>
-                              <div>
-                                {row.holding >= 1
-                                  ? row.holding.toFixed(2)
-                                  : row?.holding.toPrecision(4)}{" "}
-                                {row.symbol?.toUpperCase()}
-                              </div>
-                            </div>
-                          </TableCell>
-                          <TableCell align="right" style={{ color: "white" }}>
-                            <HoldingModal coin={row} />
-                          </TableCell>
-                        </TableRow>
-                      ))}
+                                      ] >=
+                                    1
+                                      ? (
+                                          row.holding *
+                                          row.market_data.current_price[
+                                            currency.toLowerCase()
+                                          ]
+                                        ).toFixed(2)
+                                      : (
+                                          row.holding *
+                                          row.market_data.current_price[
+                                            currency.toLowerCase()
+                                          ]
+                                        ).toPrecision(4)}
+                                  </div>
+                                  <div>
+                                    {row.holding >= 1
+                                      ? row.holding.toFixed(2)
+                                      : row?.holding.toPrecision(4)}{" "}
+                                    {row.symbol?.toUpperCase()}
+                                  </div>
+                                </div>
+                              </TableCell>
+                              <TableCell align="right">
+                                <div
+                                  style={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    justifyContent: "flex-end",
+                                  }}
+                                >
+                                  <HoldingModal coin={row} />
+                                  <img
+                                    src={DeleteIcon}
+                                    height={20}
+                                    onClick={() => removeFromWatchlist(row)}
+                                    style={{ cursor: "pointer" }}
+                                  />
+                                </div>
+                              </TableCell>
+                            </TableRow>
+                          );
+                        }
+                      })}
                     </TableBody>
                   </Table>
                 </div>

@@ -17,7 +17,7 @@ const useStyle = makeStyles((theme) => ({
     color: "black",
     position: "sticky",
     top: "70px",
-    zIndex: 2,
+    zIndex: 100,
     [theme.breakpoints.down(800)]: {
       top: "63px",
     },
