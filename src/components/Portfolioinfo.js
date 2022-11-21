@@ -1,4 +1,4 @@
-import { makeStyles, Typography } from "@material-ui/core";
+import { makeStyles, TableContainer, Typography } from "@material-ui/core";
 import React from "react";
 import { CryptoState } from "../CryptoContext";
 import bestperformanceicon from "../asset/bestperformanceicon.png";
@@ -11,23 +11,23 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     flexDirection: "column",
     alignItems: "flex-start",
-    padding: 5,
     paddingLeft: 20,
-    paddingRight: 70,
+    paddingRight: 20,
+
+    width: "24%",
     margin: 15,
     borderRadius: "15px",
     background: "rgba(79, 58, 84, 0.52)",
     minHeight: "185px",
-    overflow: "scroll",
     height: "100px",
   },
   infoContainer: {
     display: "flex",
     flexDirection: "column",
     alignItems: "flex-start",
-    padding: 5,
     paddingLeft: 20,
-    paddingRight: 70,
+    paddingRight: 20,
+    width: "24%",
     margin: 15,
     borderRadius: "15px",
     background: "rgba(79, 58, 84, 0.52)",
@@ -35,6 +35,8 @@ const useStyles = makeStyles((theme) => ({
   },
   marketContainer: {
     marginTop: 40,
+    width: "90%",
+
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
@@ -49,12 +51,15 @@ const useStyles = makeStyles((theme) => ({
 function Portfolioinfo({ avgPriceChange, topPerformCoin, Worst, alert }) {
   const classes = useStyles();
   const { currency, symbol } = CryptoState();
+
   const alerts = alert?.map((coin) => (
     <div style={{ display: "flex", alignItems: "center", padding: 5 }}>
       <img src={coin?.image?.small} height="30" style={{ marginRight: 10 }} />
       <Typography>{coin?.name}</Typography>
     </div>
   ));
+
+  console.log("alerts", alert);
 
   return (
     <div
@@ -63,6 +68,7 @@ function Portfolioinfo({ avgPriceChange, topPerformCoin, Worst, alert }) {
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
+        width: "100%",
       }}
     >
       <div className={classes.marketContainer}>
@@ -137,7 +143,7 @@ function Portfolioinfo({ avgPriceChange, topPerformCoin, Worst, alert }) {
           </div>
         </div>
         <div className={classes.alertContainer}>
-          <div style={{ position: "sticky" }}>
+          <div>
             <img
               src={bell}
               alt="alert Icon"
@@ -148,7 +154,9 @@ function Portfolioinfo({ avgPriceChange, topPerformCoin, Worst, alert }) {
               Alert Coin
             </Typography>
           </div>
-          {alerts}
+          <div style={{ width: "100%", overflowY: "scroll", height: "100px" }}>
+            {alerts}
+          </div>
         </div>
       </div>
     </div>
