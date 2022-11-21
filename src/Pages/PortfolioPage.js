@@ -1,4 +1,13 @@
-import { makeStyles, Typography } from "@material-ui/core";
+import {
+  makeStyles,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableRow,
+  Typography,
+} from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import { CryptoState } from "../CryptoContext";
 import currentAssetIcon from "../asset/currentasseticon.png";
@@ -7,6 +16,7 @@ import { useNavigate } from "react-router-dom";
 import PortfolioChart from "../components/PortfolioChart";
 import { chartDays } from "../service/Service";
 import HoldingModal from "../components/HoldingModal";
+import { RowingOutlined } from "@material-ui/icons";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -176,27 +186,87 @@ function PortfolioPage() {
             </Typography>
           </div>
         </div>
-        {userState &&
-          userCoin3?.map((coin) => {
-            return (
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  padding: 10,
-                }}
-              >
-                <div style={{ marginRight: 10 }}>
-                  <img src={coin?.image?.thumb} height="20" />
-                </div>
-                <div>{coin?.name}</div>
 
-                <HoldingModal coin={coin} />
-                <div>{coin.holding}</div>
-              </div>
-            );
-          })}
+        {userState && (
+          <div style={{ width: "90%" }}>
+            <Paper
+              sx={{
+                width: "100%",
+                overflow: "hidden",
+              }}
+              style={{ backgroundColor: "transparent" }}
+            >
+              <TableContainer
+                component={Paper}
+                style={{ backgroundColor: "transparent", color: "white" }}
+              >
+                <div style={{ overflow: "auto", height: "350px" }}>
+                  <Table sx={{ minWidth: 650 }}>
+                    <TableBody>
+                      {userCoin3?.map((row) => (
+                        <TableRow
+                          key={row.name}
+                          sx={{
+                            "&:last-child td, &:last-child th": { border: 0 },
+                          }}
+                        >
+                          {" "}
+                          <TableCell
+                            component="th"
+                            scope="row"
+                            style={{ color: "white" }}
+                          >
+                            <div
+                              style={{ display: "flex", alignItems: "center" }}
+                            >
+                              <div style={{ marginRight: 10 }}>
+                                <img src={row?.image?.thumb} height="20" />
+                              </div>
+                              <div>{row.name}</div>
+                            </div>
+                          </TableCell>
+                          <TableCell align="right" style={{ color: "white" }}>
+                            <div>
+                              <div>
+                                {symbol}
+                                {row.holding *
+                                  row.market_data.current_price[
+                                    currency.toLowerCase()
+                                  ] >=
+                                1
+                                  ? (
+                                      row.holding *
+                                      row.market_data.current_price[
+                                        currency.toLowerCase()
+                                      ]
+                                    ).toFixed(2)
+                                  : (
+                                      row.holding *
+                                      row.market_data.current_price[
+                                        currency.toLowerCase()
+                                      ]
+                                    ).toPrecision(4)}
+                              </div>
+                              <div>
+                                {row.holding >= 1
+                                  ? row.holding.toFixed(2)
+                                  : row?.holding.toPrecision(4)}{" "}
+                                {row.symbol?.toUpperCase()}
+                              </div>
+                            </div>
+                          </TableCell>
+                          <TableCell align="right" style={{ color: "white" }}>
+                            <HoldingModal coin={row} />
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </div>
+              </TableContainer>
+            </Paper>
+          </div>
+        )}
       </div>
       <div className={classes.mainbar}>
         {!userState || userCoin2.length == 0 ? (

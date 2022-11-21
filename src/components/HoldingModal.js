@@ -12,6 +12,7 @@ import {
 import { CryptoState } from "../CryptoContext";
 import { doc, setDoc } from "firebase/firestore";
 import { db } from "../firebase";
+import EditIcon from "../asset/editicon.png";
 
 const useStyle = makeStyles((theme) => ({
   paper: {
@@ -31,7 +32,7 @@ export default function HoldingModal({ coin }) {
   const { currency, setAlert, watchlist, user } = CryptoState();
 
   const [openHolding, setOpenHolding] = React.useState(false);
-  const [newHolding, setNewHolding] = React.useState(0);
+  const [newHolding, setNewHolding] = React.useState();
   const [newHolding2, setNewHolding2] = React.useState(0);
 
   const handleOpen = () => setOpenHolding(true);
@@ -67,16 +68,16 @@ export default function HoldingModal({ coin }) {
         message: "Please fill in the required information",
         type: "error",
       });
-    }
-    if (newHolding < 0) {
+    } else if (newHolding <= 0) {
       setAlert({
         open: true,
         message: "Invalid Input",
         type: "error",
       });
+    } else {
+      setHoldingWatchlist();
+      handleClose();
     }
-    setHoldingWatchlist();
-    handleClose();
   };
 
   const classes = useStyle();
@@ -94,25 +95,13 @@ export default function HoldingModal({ coin }) {
     );
   }, [newHolding]);
 
-  console.log("coin", coin);
-
   const holdingPlaceHolder = `Enter Holding amount in ${currency}`;
   return (
     <>
       {" "}
       <ThemeProvider theme={darkTheme}>
-        <Button
-          variant="contained"
-          onClick={handleOpen}
-          style={{
-            backgroundColor: "#FFE227",
-            color: "black",
-            fontFamily: "VT323",
-            fontSize: 10,
-            padding: 0,
-          }}
-        >
-          Edit
+        <Button onClick={handleOpen}>
+          <img src={EditIcon} height={20} />
         </Button>
         <Modal open={openHolding} onClose={handleClose}>
           <div className={classes.paper}>

@@ -102,7 +102,7 @@ function EnhancedTableHead(props) {
             key={headCell.id}
             align={headCell.numeric ? "right" : "left"}
             sortDirection={orderBy === headCell.id ? order : false}
-            style={{ backgroundColor: "#bcbcbc", color: "black" }}
+            style={{ backgroundColor: "#FFE227", color: "black" }}
           >
             <TableSortLabel
               active={orderBy === headCell.id}

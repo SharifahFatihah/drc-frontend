@@ -118,7 +118,7 @@ function PortfolioChart({ days }) {
     );
 
     const avgPrice = (...arrays) => {
-      const n = arrays.reduce((max, xs) => Math.max(max, xs.length), 0);
+      const n = arrays.reduce((max, xs) => Math.min(max, xs.length), 1000);
       const result = Array.from({ length: n });
       return result.map((_, i) =>
         arrays.map((xs) => xs[i] || 0).reduce((sum, x) => sum + x, 0)
@@ -271,31 +271,7 @@ function PortfolioChart({ days }) {
           alignItems: "flex-start",
           marginBottom: 20,
         }}
-      >
-        <Typography variant="h2" style={{ fontFamily: "VT323" }}>
-          Relative Price of Portfolio Coins
-        </Typography>
-      </div>
-
-      <Line
-        data={{
-          labels: coinHistData2[0]?.hist_data?.map((chartData) => {
-            let date = new Date(chartData[0]);
-            let time = `${date.getHours()}:${date.getMinutes()} `;
-            return days === 1 ? time : date.toLocaleDateString();
-          }),
-          datasets: coinChart,
-        }}
-        options={{
-          animation,
-          plugins: {
-            legend: {
-              display: true,
-            },
-          },
-          scales: { y: { display: true } },
-        }}
-      />
+      ></div>
       <Typography variant="h2" style={{ fontFamily: "VT323" }}>
         Historical Price
       </Typography>
@@ -330,6 +306,29 @@ function PortfolioChart({ days }) {
           scales: { y: { display: true } },
         }}
       />
+      <Typography variant="h2" style={{ fontFamily: "VT323" }}>
+        Relative Price of Portfolio Coins
+      </Typography>
+      <Line
+        data={{
+          labels: coinHistData2[0]?.hist_data?.map((chartData) => {
+            let date = new Date(chartData[0]);
+            let time = `${date.getHours()}:${date.getMinutes()} `;
+            return days === 1 ? time : date.toLocaleDateString();
+          }),
+          datasets: coinChart,
+        }}
+        options={{
+          animation,
+          plugins: {
+            legend: {
+              display: true,
+            },
+          },
+          scales: { y: { display: true } },
+        }}
+      />
+
       <Typography variant="h2" style={{ fontFamily: "VT323" }}>
         Historical Returns
       </Typography>
