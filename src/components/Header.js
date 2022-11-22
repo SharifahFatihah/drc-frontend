@@ -45,7 +45,7 @@ const useStyles = makeStyles((theme) => ({
 function Header() {
   const classes = useStyles();
   const navigate = useNavigate();
-  // const [isMobile, setIsMobile] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
   const { currency, setCurrency, user, setOpen } = CryptoState();
 
