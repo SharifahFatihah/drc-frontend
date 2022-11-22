@@ -10,7 +10,6 @@ import { AppBar, makeStyles } from "@material-ui/core";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { CryptoState } from "../../CryptoContext";
 import { auth } from "../../firebase";
-import { Link } from "react-router-dom";
 
 const useStyle = makeStyles((theme) => ({
   paper: {

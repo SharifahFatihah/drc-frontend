@@ -60,7 +60,6 @@ function TrendHorizontal() {
     1845: { items: 4 },
   };
 
-  console.log(coins[0]);
 
   const items = trending?.coins.map((coin) => {
     if (coin.item.market_cap_rank > 250) {
@@ -132,6 +131,7 @@ function TrendHorizontal() {
           background: "rgba(79, 58, 84, 0.52)",
         }}
       >
+
         <div style={{ display: "flex", alignItems: "" }}>
           <img src={coin?.item?.large} alt={coin?.item?.name} height="70" />
           <div
@@ -147,10 +147,35 @@ function TrendHorizontal() {
             </Typography>
           </div>
         </div>
+
         <div
           style={{
             display: "flex",
             alignItems: "center",
+
+            justifyContent: "space-between",
+          }}
+        >
+          <div style={{ display: "flex", marginBottom: 20 }}>
+            <img src={coin?.item?.large} alt={coin?.item?.name} height="70" />
+            <div style={{ marginLeft: 10 }}>
+              <Typography variant="h4" style={{ fontWeight: "bold" }}>
+                {coin?.item?.symbol.toUpperCase()}
+              </Typography>
+              <Typography
+                variant="h6"
+                style={{
+                  fontFamily: "VT323",
+                }}
+              >
+                {coin?.item?.name}
+              </Typography>
+            </div>
+          </div>
+          <div
+            style={{
+              fontWeight: "bolder",
+              fontSize: 20,
             justifyContent: "space-around",
           }}
         >

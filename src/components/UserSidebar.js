@@ -135,11 +135,16 @@ export default function UserSidebar() {
                 </div>
                 <div className={classes.watchlist}>
                   {coins.map((coin) => {
-                    if (watchlist.includes(coin.id))
+                    if (
+                      watchlist.includes(
+                        watchlist.find((e) => e.id === coin.id)
+                      )
+                    )
                       return (
                         <div style={{ display: "flex", alignItems: "center" }}>
-                         <div style={{marginRight:20}}><img src={coin.image} height="25" />
-                          </div> 
+                          <div style={{ marginRight: 20 }}>
+                            <img src={coin.image} height="25" />
+                          </div>
                           {coin.name}
                         </div>
                       );
@@ -150,14 +155,13 @@ export default function UserSidebar() {
                 onClick={logout}
                 style={{
                   background: "yellow",
-                  marginRight:80,
-                  marginLeft:80,
-                  display:"flex",
-                  alignItems:"center",
+                  marginRight: 80,
+                  marginLeft: 80,
+                  display: "flex",
+                  alignItems: "center",
                   // outlineStyle:"outside",
                   // outlineColor: "black",
                   // outlineWidth: "thick",
-                  
                 }}
               >
                 <a style={{ color: "black", fontWeight: "bolder" }}>Logout</a>
