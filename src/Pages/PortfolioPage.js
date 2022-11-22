@@ -14,9 +14,10 @@ import currentAssetIcon from "../asset/currentasseticon.png";
 import Service from "../service/Service";
 import { useNavigate } from "react-router-dom";
 import PortfolioChart from "../components/PortfolioChart";
+
 import { chartDays } from "../service/Service";
 import HoldingModal from "../components/HoldingModal";
-import { RowingOutlined } from "@material-ui/icons";
+
 import Portfolioinfo from "../components/Portfolioinfo";
 
 const useStyles = makeStyles((theme) => ({
@@ -270,6 +271,7 @@ function PortfolioPage() {
           Worst={worstPerformCoin}
           alert={coinAlert}
         />
+
         {!userState || userCoin2.length == 0 ? (
           <div
             style={{
@@ -311,6 +313,7 @@ function PortfolioPage() {
             <PortfolioChart days={days} />
           </div>
         )}
+
       </div>
     </div>
   );

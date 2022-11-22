@@ -1,4 +1,5 @@
 import { makeStyles, TableContainer, Typography } from "@material-ui/core";
+
 import React from "react";
 import { CryptoState } from "../CryptoContext";
 import bestperformanceicon from "../asset/bestperformanceicon.png";
@@ -11,14 +12,19 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     flexDirection: "column",
     alignItems: "flex-start",
+
     paddingLeft: 20,
     paddingRight: 20,
 
     width: "24%",
+
     margin: 15,
     borderRadius: "15px",
     background: "rgba(79, 58, 84, 0.52)",
     minHeight: "185px",
+
+    overflow: "scroll",
+
     height: "100px",
   },
   infoContainer: {
@@ -28,6 +34,7 @@ const useStyles = makeStyles((theme) => ({
     paddingLeft: 20,
     paddingRight: 20,
     width: "24%",
+
     margin: 15,
     borderRadius: "15px",
     background: "rgba(79, 58, 84, 0.52)",
@@ -35,8 +42,6 @@ const useStyles = makeStyles((theme) => ({
   },
   marketContainer: {
     marginTop: 40,
-    width: "90%",
-
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
@@ -59,7 +64,6 @@ function Portfolioinfo({ avgPriceChange, topPerformCoin, Worst, alert }) {
     </div>
   ));
 
-  console.log("alerts", alert);
 
   return (
     <div
@@ -69,6 +73,7 @@ function Portfolioinfo({ avgPriceChange, topPerformCoin, Worst, alert }) {
         flexDirection: "column",
         alignItems: "center",
         width: "100%",
+
       }}
     >
       <div className={classes.marketContainer}>
@@ -143,7 +148,8 @@ function Portfolioinfo({ avgPriceChange, topPerformCoin, Worst, alert }) {
           </div>
         </div>
         <div className={classes.alertContainer}>
-          <div>
+
+          <div style={{ position: "sticky" }}>
             <img
               src={bell}
               alt="alert Icon"
@@ -157,6 +163,7 @@ function Portfolioinfo({ avgPriceChange, topPerformCoin, Worst, alert }) {
           <div style={{ width: "100%", overflowY: "scroll", height: "100px" }}>
             {alerts}
           </div>
+
         </div>
       </div>
     </div>
