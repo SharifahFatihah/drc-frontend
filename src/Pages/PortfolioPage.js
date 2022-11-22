@@ -352,7 +352,7 @@ function PortfolioPage() {
             }}
           >
             {" "}
-            Youre Portfolio is empty
+            Your portfolio is empty.
           </div>
         ) : (
           <div style={{ width: "100%", paddingTop: 40 }}>
