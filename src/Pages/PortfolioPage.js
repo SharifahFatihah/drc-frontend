@@ -1,5 +1,4 @@
 import {
-  makeStyles,
   Paper,
   Table,
   TableBody,
@@ -7,18 +6,20 @@ import {
   TableContainer,
   TableRow,
   Typography,
+  makeStyles,
 } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
-import { CryptoState } from "../CryptoContext";
-import currentAssetIcon from "../asset/currentasseticon.png";
-import Service from "../service/Service";
-import { useNavigate } from "react-router-dom";
-import PortfolioChart from "../components/PortfolioChart";
-import { chartDays } from "../service/Service";
-import HoldingModal from "../components/HoldingModal";
-import DeleteIcon from "../asset/deleteicon.png";
 import { doc, setDoc } from "firebase/firestore";
+
+import { CryptoState } from "../CryptoContext";
+import DeleteIcon from "../asset/deleteicon.png";
+import HoldingModal from "../components/HoldingModal";
+import PortfolioChart from "../components/PortfolioChart";
+import Service from "../service/Service";
+import { chartDays } from "../service/Service";
+import currentAssetIcon from "../asset/currentasseticon.png";
 import { db } from "../firebase";
+import { useNavigate } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   container: {
