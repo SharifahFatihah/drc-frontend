@@ -236,6 +236,7 @@ function CoinPage() {
               {" Million "}
             </Typography>
           </span>
+          <span className={classes.coinBasic}></span>
           <span className={classes.coinBasic}>
             <Typography variant="h5" className={classes.description}>
               Circulating Supply:{" "}
