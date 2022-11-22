@@ -90,7 +90,7 @@ function CoinStats({ coin }) {
             opacity: "0.8",
           }}
         >
-          <Tooltip title="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ex erat, egestas eget purus at, rutrum sagittis dui. In in tortor nunc.">
+          <Tooltip title="The measurement of developer's contribution activity on coin. ">
             <img src={infoicon} height="13" />
           </Tooltip>
         </div>
@@ -141,7 +141,7 @@ function CoinStats({ coin }) {
             opacity: "0.8",
           }}
         >
-          <Tooltip title="The ability of the coin to be converted into cash without impacting the price and vice versa.">
+          <Tooltip title="The ease of the coin to be converted into cash without impacting the price and vice versa.">
             <img src={infoicon} height="13" />
           </Tooltip>
         </div>
