@@ -20,6 +20,7 @@ import HoldingModal from "../components/HoldingModal";
 import DeleteIcon from "../asset/deleteicon.png";
 import { doc, setDoc } from "firebase/firestore";
 import { db } from "../firebase";
+import Portfolioinfo from "../components/Portfolioinfo";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -177,11 +178,7 @@ function PortfolioPage() {
       (e) =>
         e.market_data.price_change_percentage_24h < -5 &&
         setCoinAlert((coinAlert) => [
-          ...coinAlert,
-          {
-            id: e.id,
-            priceChange: e.market_data.price_change_percentage_24h,
-          },
+          ...coinAlert,e
         ])
     );
     console.log("watchlist1", watchlist);
@@ -445,6 +442,12 @@ function PortfolioPage() {
                 })}
               </div>
             </div>
+            <Portfolioinfo
+              avgPriceChange={avgPriceChange}
+              topPerformCoin={topPerformCoin}
+              Worst={worstPerformCoin}
+              alert={coinAlert}
+            />
             <PortfolioChart days={days} />
           </div>
         )}
