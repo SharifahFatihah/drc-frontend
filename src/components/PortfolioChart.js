@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react";
 import { Bar, Doughnut, Line } from "react-chartjs-2";
 import { CryptoState } from "../CryptoContext";
 import Service from "../service/Service";
-
 import CoinChart from "./CoinChart";
 import infoicon from "../asset/infoicon.png";
 
@@ -273,17 +272,13 @@ function PortfolioChart({ days }) {
           alignItems: "flex-start",
           marginBottom: 20,
         }}
-      >
-        <Typography variant="h2" style={{ fontFamily: "VT323" }}>
-          Relative Price of Portfolio Coins {""}
-          <Tooltip title="Lorem ipsum">
-            <img src={infoicon} height="13" style={{ marginBottom: "25px" }} />
-          </Tooltip>
-        </Typography>
-      </div>
+      ></div>
 
       <Typography variant="h2" style={{ fontFamily: "VT323" }}>
-        Historical Price
+        Historical Price{" "}
+        <Tooltip title="The price of coin in the past .">
+          <img src={infoicon} height="13" style={{ marginBottom: "25px" }} />
+        </Tooltip>
       </Typography>
       {portfolioPriceChart().avg_return.length === 0 ? null : (
         <Line
@@ -318,6 +313,12 @@ function PortfolioChart({ days }) {
           }}
         />
       )}
+      <Typography variant="h2" style={{ fontFamily: "VT323" }}>
+        Relative Price of Portfolio Coins {""}
+        <Tooltip title="Lorem ipsum">
+          <img src={infoicon} height="13" style={{ marginBottom: "25px" }} />
+        </Tooltip>
+      </Typography>
       <Line
         data={{
           labels: coinHistData2[0]?.hist_data?.map((chartData) => {
@@ -339,7 +340,10 @@ function PortfolioChart({ days }) {
       />
 
       <Typography variant="h2" style={{ fontFamily: "VT323" }}>
-        Historical Returns
+        Historical Returns{" "}
+        <Tooltip title="The rate of return and performance of coin in the past">
+          <img src={infoicon} height="13" style={{ marginBottom: "25px" }} />
+        </Tooltip>
       </Typography>
       <Bar
         data={{
@@ -374,6 +378,9 @@ function PortfolioChart({ days }) {
       />
       <Typography variant="h2" style={{ fontFamily: "VT323" }}>
         Coin Weightage{" "}
+        <Tooltip title="Coin Weightage">
+          <img src={infoicon} height="13" style={{ marginBottom: "25px" }} />
+        </Tooltip>
       </Typography>
       <Doughnut
         data={{
