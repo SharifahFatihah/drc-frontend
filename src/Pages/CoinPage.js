@@ -16,6 +16,7 @@ import unfavouriteIcon from "../asset/unfavouriteicon.png";
 import githubIcon from "../asset/github.png";
 import redditIcon from "../asset/reddit.png";
 import announcementIcon from "../asset/announcement.png";
+import CoinConverter from "../components/CoinConverter";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -129,14 +130,18 @@ function CoinPage() {
     );
   }
 
-  const inWatchlist = watchlist.includes(coin?.id);
+  const inWatchlist = watchlist.includes(
+    watchlist.find((e) => e.id === coin?.id)
+  );
 
   const addToWatchList = async () => {
     const coinRef = await doc(db, "watchlist", user.uid);
 
     try {
       await setDoc(coinRef, {
-        coins: watchlist ? [...watchlist, coin.id] : [coin.id],
+        coins: watchlist
+          ? [...watchlist, { id: coin.id, holding: 1 }]
+          : [{ id: coin.id, holding: 1 }],
       });
 
       setAlert({
@@ -353,6 +358,8 @@ function CoinPage() {
               </Button>
             )}
           </div>
+
+          <CoinConverter coin={coin} />
         </div>
       </div>
       <div className={classes.mainbar}>

@@ -15,7 +15,17 @@ import { visuallyHidden } from "@mui/utils";
 import Service from "../service/Service";
 import { CryptoState } from "../CryptoContext";
 import { useNavigate } from "react-router-dom";
-import { Typography } from "@material-ui/core";
+import FavouriteIcon from "../asset/favouriteicon.png";
+import UnFavouriteIcon from "../asset/unfavouriteicon.png";
+import {
+  createTheme,
+  LinearProgress,
+  makeStyles,
+  ThemeProvider,
+  Typography,
+} from "@material-ui/core";
+import { doc, setDoc } from "firebase/firestore";
+import { db } from "../firebase";
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -70,6 +80,12 @@ const headCells = [
     disablePadding: false,
     label: "Market Cap",
   },
+  {
+    id: "in_watchlist",
+    numeric: true,
+    disablePadding: false,
+    label: <img src={FavouriteIcon} height={30} />,
+  },
 ];
 
 function EnhancedTableHead(props) {
@@ -86,6 +102,7 @@ function EnhancedTableHead(props) {
             key={headCell.id}
             align={headCell.numeric ? "right" : "left"}
             sortDirection={orderBy === headCell.id ? order : false}
+            style={{ backgroundColor: "#FFE227", color: "black" }}
           >
             <TableSortLabel
               active={orderBy === headCell.id}
@@ -122,7 +139,54 @@ export default function EnhancedTable({ coins }) {
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(coins?.length);
 
-  const { currency, symbol } = CryptoState();
+  const { symbol, watchlist, setAlert, user, setOpen } = CryptoState();
+
+  const addToWatchList = async (usercoin) => {
+    const coinRef = await doc(db, "watchlist", user.uid);
+
+    try {
+      await setDoc(coinRef, {
+        coins: watchlist
+          ? [...watchlist, { id: usercoin.id, holding: 1 }]
+          : [{ id: usercoin.id, holding: 1 }],
+      });
+
+      setAlert({
+        open: true,
+        message: `${usercoin.name} added to your watchlist`,
+        type: "success",
+      });
+    } catch (error) {}
+  };
+
+  const removeFromWatchlist = async (usercoin) => {
+    const coinRef = await doc(db, "watchlist", user.uid);
+
+    try {
+      await setDoc(
+        coinRef,
+        {
+          coins: watchlist.filter((watch) => watch.id !== usercoin?.id),
+        },
+        { merge: "true" }
+      );
+
+      setAlert({
+        open: true,
+        message: `${usercoin.name} remove from your watchlist`,
+        type: "success",
+      });
+    } catch (error) {}
+  };
+
+  React.useEffect(() => {
+    coins.map((v) =>
+      watchlist.includes(watchlist.find((e) => e.id === v.id))
+        ? (v.in_watchlist = true)
+        : (v.in_watchlist = false)
+    );
+  }, [watchlist]);
+
   const navigate = useNavigate();
 
   const handleRequestSort = (event, property) => {
@@ -130,11 +194,11 @@ export default function EnhancedTable({ coins }) {
     setOrder(isAsc ? "desc" : "asc");
     setOrderBy(property);
   };
-
   const handleClick = () => {};
   const handleChangeDense = (event) => {
     setDense(event.target.checked);
   };
+  const handleOpen = () => setOpen(true);
 
   const isSelected = (name) => selected.indexOf(name) !== -1;
 
@@ -144,13 +208,17 @@ export default function EnhancedTable({ coins }) {
   React.useEffect(() => {
     setRowsPerPage(coins?.length);
   }, [coins]);
+
   return (
     <Box sx={{ width: "100%" }}>
-      <Paper sx={{ width: "100%", mb: 2 }} style={{}}>
+      <Paper
+        sx={{ width: "100%", mb: 2 }}
+        style={{ backgroundColor: "#212121", borderRadius: "15px" }}
+      >
         <Paper elevation={7} />
         <TableContainer
           sx={{ maxHeight: 640 }}
-          style={{ borderRadius: "25px" }}
+          style={{ borderRadius: "15px" }}
         >
           <Table
             sx={{ minWidth: 750 }}
@@ -172,6 +240,9 @@ export default function EnhancedTable({ coins }) {
                 .map((row, index) => {
                   const isItemSelected = isSelected(row.name);
                   const labelId = `enhanced-table-checkbox-${index}`;
+                  const inWatchlist = watchlist.includes(
+                    watchlist.find((e) => e.id === row?.id)
+                  );
 
                   return (
                     <TableRow
@@ -202,15 +273,18 @@ export default function EnhancedTable({ coins }) {
                         <div
                           style={{ display: "flex", flexDirection: "column" }}
                         >
-                          <Typography variant="h6">
+                          <Typography variant="h6" style={{ color: "white" }}>
                             {row.symbol.toUpperCase()}
                           </Typography>
-                          <Typography variant="subtitle2">
+                          <Typography
+                            variant="subtitle2"
+                            style={{ color: "white" }}
+                          >
                             {row.name}
                           </Typography>
                         </div>
                       </TableCell>
-                      <TableCell align="right">
+                      <TableCell align="right" style={{ color: "white" }}>
                         {symbol}
                         {row.current_price > 1
                           ? Service.addCommas(row.current_price)
@@ -230,10 +304,50 @@ export default function EnhancedTable({ coins }) {
                         {parseFloat(row.price_change_percentage_24h).toFixed(2)}
                         {"%"}
                       </TableCell>
-                      <TableCell align="right">
+                      <TableCell align="right" style={{ color: "white" }}>
                         {symbol}
                         {Service.addCommas(row.market_cap).slice(0, -8)}
                         {" Million"}
+                      </TableCell>
+                      <TableCell align="right">
+                        {user ? (
+                          inWatchlist ? (
+                            <img
+                              src={FavouriteIcon}
+                              height="30rem"
+                              onClick={() => {
+                                inWatchlist
+                                  ? removeFromWatchlist(row)
+                                  : addToWatchList(row);
+                              }}
+                              style={{ cursor: "pointer" }}
+                            />
+                          ) : (
+                            <img
+                              src={UnFavouriteIcon}
+                              height="30rem"
+                              onClick={() => {
+                                inWatchlist
+                                  ? removeFromWatchlist(row)
+                                  : addToWatchList(row);
+                              }}
+                              style={{ cursor: "pointer" }}
+                            />
+                          )
+                        ) : (
+                          <img
+                            src={UnFavouriteIcon}
+                            height="30rem"
+                            onClick={() =>
+                              setAlert({
+                                open: true,
+                                message: `Please login to add coins to portfolio`,
+                                type: "error",
+                              })
+                            }
+                            style={{ cursor: "pointer" }}
+                          />
+                        )}
                       </TableCell>
                     </TableRow>
                   );
