@@ -1,4 +1,5 @@
 import {
+  Button,
   makeStyles,
   Paper,
   Table,
@@ -271,12 +272,12 @@ function PortfolioPage() {
             >
               <TableContainer
                 component={Paper}
-                style={{ backgroundColor: "transparent", color: "white" }}
+                style={{ backgroundColor: "transparent", color: "black" }}
               >
                 <div
                   style={{
                     overflow: "auto",
-                    height: isMobile ? "250px" : "650px",
+                    maxHeight: isMobile ? "250px" : "550px",
                   }}
                 >
                   <Table sx={{ minWidth: 650 }}>
@@ -377,6 +378,29 @@ function PortfolioPage() {
             </Paper>
           </div>
         )}
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-around",
+            margin: 20,
+          }}
+        >
+          <Button
+            variant="contained"
+            style={{
+              backgroundColor: "yellow",
+              color: "black",
+              fontFamily: "VT323",
+              fontSize: "25px",
+            }}
+            onClick={() => {
+              navigate("/coinList");
+            }}
+          >
+            Add New Coin
+          </Button>
+        </div>
       </div>
       <div className={classes.mainbar}>
         {!userState || userCoin2.length == 0 ? (
