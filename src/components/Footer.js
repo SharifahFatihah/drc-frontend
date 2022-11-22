@@ -9,6 +9,7 @@ import {
   ThemeProvider,
 } from "@material-ui/core";
 import { Security, Info } from "@material-ui/icons";
+import footerpixel from "../asset/pixelated_footer.png";
 
 function Footer() {
   const darkTheme = createTheme({
@@ -19,6 +20,13 @@ function Footer() {
   });
   return (
     <ThemeProvider theme={darkTheme}>
+      <img
+        src={footerpixel}
+        style={{
+          position: "relative",
+          bottom: "-10px",
+        }}
+      ></img>
       {/* <Grid container justifyContent="center" style={{ minHeight: "150px" }}>
         <Grid
           container
@@ -66,8 +74,12 @@ function Footer() {
         component="footer"
         color="default"
       >
-        <Toolbar style={{ justifyContent: "center" }}>
-          <Typography variant="caption">©1956 Ka-Ching!, Inc.</Typography>
+        <Toolbar
+          style={{ justifyContent: "center", backgroundColor: "#6B0D74" }}
+        >
+          <Typography variant="caption">
+            ©2022 Ka-Ching! All rights reserved.
+          </Typography>
         </Toolbar>
       </AppBar>
     </ThemeProvider>

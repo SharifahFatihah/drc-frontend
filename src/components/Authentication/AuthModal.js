@@ -89,6 +89,7 @@ export default function AuthModal() {
         }}
         style={{
           backgroundColor: "#FFE227",
+          border: "5px solid white",
           color: "black",
           fontFamily: "VT323",
           fontSize: 16,
