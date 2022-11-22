@@ -34,7 +34,7 @@ function CoinTable() {
           label="Search"
           variant="outlined"
           onChange={(e) => setSearch(e.target.value)}
-          style={{ marginBottom: 20 }}
+          style={{ marginBottom: 20, width: "100%" }}
         />
 
         <MockTable
