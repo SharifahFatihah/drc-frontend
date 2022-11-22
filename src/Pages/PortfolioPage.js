@@ -14,6 +14,7 @@ import currentAssetIcon from "../asset/currentasseticon.png";
 import Service from "../service/Service";
 import { useNavigate } from "react-router-dom";
 import PortfolioChart from "../components/PortfolioChart";
+
 import { chartDays } from "../service/Service";
 import HoldingModal from "../components/HoldingModal";
 import DeleteIcon from "../asset/deleteicon.png";
@@ -180,61 +181,7 @@ function PortfolioPage() {
     );
   }, [userCoin2]);
 
-  
-
-  const removeFromWatchlist = async (usercoin) => {
-    const coinRef = await doc(db, "watchlist", user.uid);
-
-    try {
-      await setDoc(
-        coinRef,
-        {
-          coins: watchlist.filter((watch) => watch.id !== usercoin?.id),
-        },
-        { merge: "true" }
-      );
-
-      setAlert({
-        open: true,
-        message: `${usercoin.name} remove from your watchlist`,
-        type: "success",
-      });
-    } catch (error) {}
-  };
-
-  const setHoldingWatchlist = async (coin) => {
-    const coinRef = await doc(db, "watchlist", user.uid);
-
-    try {
-      await setDoc(
-        coinRef,
-        {
-          coins: watchlist.map((watch) =>
-            watch.id === coin?.id
-              ? { id: coin.id, holding: 0 }
-              : { id: watch.id, holding: watch.holding }
-          ),
-        },
-        { merge: "true" }
-      );
-    } catch (error) {}
-
-    try {
-      await setDoc(
-        coinRef,
-        {
-          coins: watchlist.filter((watch) => watch.id !== coin?.id),
-        },
-        { merge: "true" }
-      );
-
-      setAlert({
-        open: true,
-        message: `${coin.name} remove from your watchlist`,
-        type: "success",
-      });
-    } catch (error) {}
-  };
+  console.log("usercoin2", userCoin2);
 
   // console.log("alerts", coinAlert);
   // console.log("worst", worstPerformCoin);
@@ -379,6 +326,7 @@ function PortfolioPage() {
           Worst={worstPerformCoin}
           alert={coinAlert}
         />
+
         {!userState || userCoin2.length == 0 ? (
           <div
             style={{
