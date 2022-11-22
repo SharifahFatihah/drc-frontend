@@ -13,11 +13,15 @@ function CoinConverter({ coin }) {
   const [fiat, setFiat] = useState("");
   const [crypto, setCrypto] = useState("");
 
-  const { currency } = CryptoState();
+  const { symbol, currency } = CryptoState();
 
   return (
     <ThemeProvider theme={darkTheme}>
-      {coin?.name}
+      <div style={{ display: "flex", alignItems: "center" }}>
+        <img src={coin?.image?.small} height={20} />
+        {coin?.name}
+      </div>
+
       <TextField
         variant="outlined"
         defaultValue=""
@@ -32,7 +36,10 @@ function CoinConverter({ coin }) {
         }}
         fullWidth
       />
-      <div>{currency}</div>
+      <div>
+        {symbol}
+        {currency}
+      </div>
       <TextField
         variant="outlined"
         defaultValue=""

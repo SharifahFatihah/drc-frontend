@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react";
 import { Bar, Doughnut, Line } from "react-chartjs-2";
 import { CryptoState } from "../CryptoContext";
 import Service from "../service/Service";
-import CoinChart from "./CoinChart";
 
 const useStyle = makeStyles((theme) => ({
   container: {
@@ -41,13 +40,13 @@ function PortfolioChart({ days }) {
           );
       })
     );
-  }, [days]);
+  }, [watchlist, days]);
 
   useEffect(() => {
     setCoinHistData2([
       ...new Map(coinHistData.map((m) => [m.coin.id, m])).values(),
     ]);
-  }, [coinHistData]);
+  }, [coinHistData, watchlist]);
 
   useEffect(() => {
     watchlist.map((e) =>
@@ -206,17 +205,33 @@ function PortfolioChart({ days }) {
       return "rgba(" + o(r() * s) + "," + o(r() * s) + "," + o(r() * s) + ",1";
     };
 
-    return {
-      data: data2,
-      label: ` ${e.coin.id}`,
-      borderColor: random_rgba(),
-      borderWidth: 2,
-      pointBorderColor: "rgba(0,0,0,0)",
-      pointBackgroundColor: "rgba(0,0,0,0)",
-      pointHoverBorderColor: "#5AC53B",
-      pointHitRadius: 6,
-      yAxisID: "y",
-    };
+    if (
+      watchlist.includes(watchlist.find((watch) => watch.id === e?.coin?.id))
+    ) {
+      return {
+        data: data2,
+        label: ` ${e.coin.id}`,
+        borderColor: random_rgba(),
+        borderWidth: 2,
+        pointBorderColor: "rgba(0,0,0,0)",
+        pointBackgroundColor: "rgba(0,0,0,0)",
+        pointHoverBorderColor: "#5AC53B",
+        pointHitRadius: 6,
+        yAxisID: "y",
+      };
+    } else {
+      return {
+        data: [],
+        label: ``,
+        borderColor: "rgba(0,0,0,0.0)",
+        borderWidth: 2,
+        pointBorderColor: "rgba(0,0,0,0)",
+        pointBackgroundColor: "rgba(0,0,0,0)",
+        pointHoverBorderColor: "#5AC53B",
+        pointHitRadius: 6,
+        yAxisID: "y",
+      };
+    }
   });
 
   const doughnutCoin = () => {
@@ -275,37 +290,40 @@ function PortfolioChart({ days }) {
       <Typography variant="h2" style={{ fontFamily: "VT323" }}>
         Historical Price
       </Typography>
-      <Line
-        data={{
-          labels: portfolioPriceChart()?.time?.map((e) => {
-            let date = new Date(e);
-            let time = `${date.getHours()}:${date.getMinutes()} `;
-            return days === 1 ? time : date.toLocaleDateString();
-          }),
-          datasets: [
-            {
-              data: portfolioPriceChart()?.avg_return.map((e) => e),
-              label: `test`,
-              borderColor: "yellow",
-              borderWidth: 2,
-              pointBorderColor: "rgba(0,0,0,0)",
-              pointBackgroundColor: "rgba(0,0,0,0)",
-              pointHoverBorderColor: "#5AC53B",
-              pointHitRadius: 6,
-              yAxisID: "y",
+      {portfolioPriceChart().avg_return.length === 0 ? null : (
+        <Line
+          data={{
+            labels: portfolioPriceChart()?.time?.map((e) => {
+              let date = new Date(e);
+              let time = `${date.getHours()}:${date.getMinutes()} `;
+              return days === 1 ? time : date.toLocaleDateString();
+            }),
+            datasets: [
+              {
+                data: portfolioPriceChart()?.avg_return.map((e) => e),
+                label: `test`,
+                borderColor: "yellow",
+                borderWidth: 2,
+                pointBorderColor: "rgba(0,0,0,0)",
+                pointBackgroundColor: "rgba(0,0,0,0)",
+                pointHoverBorderColor: "#5AC53B",
+                pointHitRadius: 6,
+                yAxisID: "y",
+              },
+            ],
+          }}
+          options={{
+            animation,
+            plugins: {
+              legend: {
+                display: false,
+              },
             },
-          ],
-        }}
-        options={{
-          animation: { duration: 3000, easing: "easeInOutCubic" },
-          plugins: {
-            legend: {
-              display: false,
-            },
-          },
-          scales: { y: { display: true } },
-        }}
-      />
+            scales: { y: { display: true } },
+          }}
+        />
+      )}
+
       <Typography variant="h2" style={{ fontFamily: "VT323" }}>
         Relative Price of Portfolio Coins
       </Typography>

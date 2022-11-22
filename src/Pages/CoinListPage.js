@@ -18,7 +18,7 @@ function CoinListPage() {
         }}
       >
         <Typography variant="h2" style={{ fontFamily: "VT323" }}>
-          Search youre favourite Coin
+          Search your favourite coin
         </Typography>
       </div>
       <CoinTable />
