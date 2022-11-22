@@ -109,7 +109,6 @@ function EnhancedTableHead(props) {
 EnhancedTableHead.propTypes = {
   numSelected: PropTypes.number.isRequired,
   onRequestSort: PropTypes.func.isRequired,
-  onSelectAllClick: PropTypes.func.isRequired,
   order: PropTypes.oneOf(["asc", "desc"]).isRequired,
   orderBy: PropTypes.string.isRequired,
   rowCount: PropTypes.number.isRequired,
@@ -121,7 +120,7 @@ export default function EnhancedTable({ coins }) {
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
-  const [rowsPerPage, setRowsPerPage] = React.useState(100);
+  const [rowsPerPage, setRowsPerPage] = React.useState(coins?.length);
 
   const { currency, symbol } = CryptoState();
   const navigate = useNavigate();
@@ -142,9 +141,13 @@ export default function EnhancedTable({ coins }) {
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - coins.length) : 0;
 
+  React.useEffect(() => {
+    setRowsPerPage(coins?.length);
+  }, [coins]);
   return (
     <Box sx={{ width: "100%" }}>
-      <Paper sx={{ width: "100%", mb: 2 }}>
+      <Paper sx={{ width: "100%", mb: 2 }} style={{}}>
+        <Paper elevation={7} />
         <TableContainer
           sx={{ maxHeight: 640 }}
           style={{ borderRadius: "25px" }}
@@ -162,6 +165,7 @@ export default function EnhancedTable({ coins }) {
               onRequestSort={handleRequestSort}
               rowCount={coins.length}
             />
+
             <TableBody>
               {stableSort(coins, getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
@@ -192,13 +196,13 @@ export default function EnhancedTable({ coins }) {
                       >
                         <img
                           src={row.image}
-                          height="20"
-                          style={{ marginRight: "10px" }}
+                          height="25"
+                          style={{ marginRight: "15px" }}
                         />
                         <div
                           style={{ display: "flex", flexDirection: "column" }}
                         >
-                          <Typography variant="h7">
+                          <Typography variant="h6">
                             {row.symbol.toUpperCase()}
                           </Typography>
                           <Typography variant="subtitle2">
@@ -247,6 +251,7 @@ export default function EnhancedTable({ coins }) {
           </Table>
         </TableContainer>
       </Paper>
+
       <FormControlLabel
         control={<Switch checked={dense} onChange={handleChangeDense} />}
         label="Dense padding"

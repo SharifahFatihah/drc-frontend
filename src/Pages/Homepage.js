@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import Banner from "../components/Banner";
-import Memories from "../asset/memories.mp3";
 import Kiki from "../asset/kiki.mp3";
 import Sound from "react-sound";
-import PriceHorizontal from "../components/PriceHorizontal";
-import CoinTable from "../components/CoinTable";
-import MockTable from "../components/MockTable";
+import Trending from "../components/Trending";
+import GlobalMarket from "../components/GlobalMarket";
+import FavCoin from "../components/FavCoin";
 
 function Homepage() {
   return (
@@ -15,9 +14,10 @@ function Homepage() {
         playStatus={Sound.status.PLAYING}
         playFromPosition={0 /* in milliseconds */}
       />
-      <PriceHorizontal />
       <Banner />
-      <CoinTable />
+      <Trending />
+      <GlobalMarket />
+      <FavCoin />
     </div>
   );
 }

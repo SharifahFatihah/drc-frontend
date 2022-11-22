@@ -1,14 +1,20 @@
-import { makeStyles } from "@material-ui/core";
+import {
+  CircularProgress,
+  LinearProgress,
+  makeStyles,
+  Typography,
+} from "@material-ui/core";
 import React, { useState, useEffect } from "react";
 import Service from "../service/Service";
 import { CryptoState } from "../CryptoContext";
 import AliceCarousel from "react-alice-carousel";
 import { useNavigate } from "react-router-dom";
+import SimpleChart from "./SimpleChart";
 
 const useStyle = makeStyles(() => ({
   scrollh: {
     height: "50%",
-    width: "70%",
+    width: "90%",
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
@@ -22,18 +28,14 @@ function ScrollHorizontal() {
   const classes = useStyle();
   const navigate = useNavigate();
 
-  const { currency } = CryptoState();
+  const { currency, symbol } = CryptoState();
 
   const [trending, setTrending] = useState([]);
-  const [loading, setLoading] = useState(false);
 
   const getTrendingCoins = (e) => {
-    setLoading(true);
-
     Service.getTrendingCoins(e)
       .then((response) => {
         setTrending(response.data);
-        setLoading(false);
       })
       .catch((err) => {
         console.log(err);
@@ -41,23 +43,91 @@ function ScrollHorizontal() {
   };
 
   useEffect(() => {
-    setLoading(true);
     getTrendingCoins(currency);
   }, [currency]);
 
-  if (loading) {
-    return <div>Loading...</div>;
+  if (trending.length === 0) {
+    return (
+      <div>
+        <CircularProgress />
+      </div>
+    );
   }
 
-  const responsive = { 0: { items: 2 }, 512: { items: 4 } };
+  const responsive = {
+    0: { items: 1 },
+    824: { items: 2 },
+    1150: { items: 3 },
+    1600: { items: 4 },
+  };
 
   const items = trending.map((coin) => {
     return (
       <div
         className={classes.scrollElement}
         onClick={() => navigate(`/coins/${coin.id}`)}
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          cursor: "pointer",
+          padding: 30,
+          margin: 15,
+          borderRadius: "15px",
+          background: "rgba(79, 58, 84, 0.52)",
+        }}
       >
-        <img src={coin?.image} alt={coin.name} height="150" />
+        <div style={{ display: "flex", alignItems: "flex-start" }}>
+          <img src={coin?.image} alt={coin.name} height="70" />
+          <div style={{ marginLeft: 10 }}>
+            <Typography
+              variant="h4"
+              style={{ fontWeight: "bold", fontFamily: "VT323" }}
+            >
+              {coin?.symbol.toUpperCase()}
+            </Typography>
+            <Typography variant="h6" style={{ fontFamily: "VT323" }}>
+              {coin?.name}
+            </Typography>
+          </div>
+        </div>
+
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            marginLeft: 10,
+            marginTop: 10,
+          }}
+        >
+          {" "}
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+            }}
+          >
+            <Typography variant="h4" style={{ fontFamily: "VT323" }}>
+              {symbol}
+              {coin?.current_price > 1
+                ? Service.addCommas(coin?.current_price)
+                : coin?.current_price}
+            </Typography>
+            <div
+              style={{
+                padding: 5,
+                borderRadius: 5,
+                backgroundColor:
+                  coin?.price_change_percentage_24h > 0 ? "green" : "red",
+              }}
+            >
+              {Service.isProfit(coin?.price_change_percentage_24h) ? "+" : ""}
+              {parseFloat(coin?.price_change_percentage_24h).toFixed(2)}%
+            </div>
+          </div>
+          <SimpleChart coin={coin} />
+        </div>
       </div>
     );
   });
