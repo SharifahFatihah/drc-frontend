@@ -100,10 +100,9 @@ function PortfolioPage() {
   const [days, setDays] = useState(1);
   const [userState, setUserState] = useState(user);
   const [isMobile, setIsMobile] = useState(false);
+  const [avgPriceChange, setAvgPriceChange] = useState(0);
 
   const [coinAlert, setCoinAlert] = useState([]);
-
-  const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
 
@@ -130,8 +129,6 @@ function PortfolioPage() {
     ).then((z) => {
       setUserCoin(z.filter((y) => !!y));
     });
-
-    console.log("render", watchlist);
   }, [watchlist]);
 
   useEffect(() => {
@@ -146,65 +143,61 @@ function PortfolioPage() {
     );
     setUserCoin3([...new Map(userCoin2.map((m) => [m.id, m])).values()]);
   }, [userCoin2]);
-  console.log("usercoin3", userCoin3);
 
   useEffect(() => {
     setUserState(user);
   }, [user]);
 
-  const avgPriceChange =
-    userCoin2.length > 0 &&
-    userCoin2?.reduce((sum, coin) => {
-      return (sum + coin?.market_data[period]) / userCoin2.length;
-    }, 0);
+  useEffect(() => {
+    setAvgPriceChange(
+      userCoin3?.length > 0 &&
+        userCoin3?.reduce((sum, coin) => {
+          if (watchlist?.includes(watchlist?.find((e) => e.id === coin?.id))) {
+            return sum + coin?.market_data[period] * coin?.holding;
+          } else {
+            return sum + 0;
+          }
+        }, 0)
+    );
+  }, [watchlist, userCoin2, userCoin3]);
+
+  console.log("est2", avgPriceChange);
 
   const topPerformCoin =
     userCoin2.length > 0 &&
     userCoin2?.reduce((prev, current) => {
-      return prev?.market_data[period] > current?.market_data[period]
-        ? prev
-        : current;
+      if (
+        watchlist?.includes(
+          watchlist?.find((e) => e.id === prev?.id || e.id === current?.id)
+        )
+      ) {
+        return prev?.market_data[period] > current?.market_data[period]
+          ? prev
+          : current;
+      }
     });
   const worstPerformCoin =
     userCoin2.length > 0 &&
     userCoin2?.reduce((prev, current) => {
-      return prev?.market_data[period] < current?.market_data[period]
-        ? prev
-        : current;
+      if (
+        watchlist?.includes(
+          watchlist?.find((e) => e.id === prev?.id || e.id === current?.id)
+        )
+      ) {
+        return prev?.market_data[period] < current?.market_data[period]
+          ? prev
+          : current;
+      }
     });
 
   useEffect(() => {
-    userCoin2.map(
-      (e) =>
+    userCoin2?.map((e) => {
+      if (!coinAlert?.find(({ id }) => id === e.id)) {
         e.market_data.price_change_percentage_24h < -5 &&
-        setCoinAlert((coinAlert) => [
-          ...coinAlert,e
-        ])
-    );
-    console.log("watchlist1", watchlist);
+          setCoinAlert((coinAlert) => [...coinAlert, e]);
+      }
+    });
   }, [userCoin2]);
-
-  console.log("usercoin2", userCoin2);
-
-  const removeFromWatchlist = async (usercoin) => {
-    const coinRef = await doc(db, "watchlist", user.uid);
-
-    try {
-      await setDoc(
-        coinRef,
-        {
-          coins: watchlist.filter((watch) => watch.id !== usercoin?.id),
-        },
-        { merge: "true" }
-      );
-
-      setAlert({
-        open: true,
-        message: `${usercoin.name} remove from your watchlist`,
-        type: "success",
-      });
-    } catch (error) {}
-  };
 
   const setHoldingWatchlist = async (coin) => {
     const coinRef = await doc(db, "watchlist", user.uid);
@@ -239,12 +232,6 @@ function PortfolioPage() {
       });
     } catch (error) {}
   };
-
-  // console.log("alerts", coinAlert);
-  // console.log("worst", worstPerformCoin);
-  // console.log("top", topPerformCoin);
-  // console.log("avg", avgPriceChange);
-  // console.log("usercoin", userCoin2);
 
   return (
     <div className={classes.container}>
@@ -447,6 +434,7 @@ function PortfolioPage() {
               topPerformCoin={topPerformCoin}
               Worst={worstPerformCoin}
               alert={coinAlert}
+              period={period}
             />
             <PortfolioChart days={days} />
           </div>
