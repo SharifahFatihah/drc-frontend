@@ -16,13 +16,8 @@ import { CryptoState } from "../CryptoContext";
 import HeaderMenu from "./HeaderMenu";
 import LogoIcon from "../asset/logoicon.png";
 import LogoWord from "../asset/logoword.png";
-<<<<<<< HEAD
 import UserSidebar from "./UserSidebar";
 import { useNavigate } from "react-router-dom";
-=======
-import HeaderMenu from "./HeaderMenu";
-import { isMobile } from "react-device-detect";
->>>>>>> b0d7eb329524b02496596aac55ab69bb56f68125
 
 const useStyles = makeStyles((theme) => ({
   title: {
@@ -61,17 +56,17 @@ function Header() {
     },
   });
 
-  // const handleResize = () => {
-  //   if (window.innerWidth < 800) {
-  //     setIsMobile(true);
-  //   } else {
-  //     setIsMobile(false);
-  //   }
-  // };
+  const handleResize = () => {
+    if (window.innerWidth < 800) {
+      setIsMobile(true);
+    } else {
+      setIsMobile(false);
+    }
+  };
 
-  // useEffect(() => {
-  //   window.addEventListener("resize", handleResize);
-  // });
+  useEffect(() => {
+    window.addEventListener("resize", handleResize);
+  });
 
   useEffect(() => {
     if (window.innerWidth < 800) {
