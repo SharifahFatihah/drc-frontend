@@ -1,24 +1,30 @@
 import { Button, makeStyles, Typography } from "@material-ui/core";
 import React from "react";
-import CoinPic from "../asset/coinpic.png";
+import CoinPic from "../asset/fav-coin.gif";
 
 const useStyles = makeStyles((theme) => ({
   container: {
     display: "flex",
     padding: 50,
-
     [theme.breakpoints.down("md")]: {
       flexDirection: "column-reverse",
       alignItems: "center",
+      marginLeft: "0",
+      marginRight: "0",
+      paddingRight: "0",
+      paddingLeft: "0",
     },
   },
   left: {
     width: "50%",
     padding: 50,
+    [theme.breakpoints.down("md")]: {
+      alignItems: "center",
+      padding: "0",
+    },
   },
   right: {
     padding: 50,
-
     width: "50%",
     display: "flex",
     justifyContent: "center",

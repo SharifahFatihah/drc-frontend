@@ -15,7 +15,7 @@ import PortfolioPage from "./Pages/PortfolioPage";
 
 const useStyles = makeStyles(() => ({
   app: {
-    backgroundColor: "#1b0a24",
+    backgroundColor: "#212121",
     color: "white",
     minHeight: "100vh",
   },
