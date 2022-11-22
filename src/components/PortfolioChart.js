@@ -40,13 +40,13 @@ function PortfolioChart({ days }) {
           );
       })
     );
-  }, [days]);
+  }, [watchlist, days]);
 
   useEffect(() => {
     setCoinHistData2([
       ...new Map(coinHistData.map((m) => [m.coin.id, m])).values(),
     ]);
-  }, [coinHistData]);
+  }, [coinHistData, watchlist]);
 
   useEffect(() => {
     watchlist.map((e) =>
@@ -205,17 +205,33 @@ function PortfolioChart({ days }) {
       return "rgba(" + o(r() * s) + "," + o(r() * s) + "," + o(r() * s) + ",1";
     };
 
-    return {
-      data: data2,
-      label: ` ${e.coin.id}`,
-      borderColor: random_rgba(),
-      borderWidth: 2,
-      pointBorderColor: "rgba(0,0,0,0)",
-      pointBackgroundColor: "rgba(0,0,0,0)",
-      pointHoverBorderColor: "#5AC53B",
-      pointHitRadius: 6,
-      yAxisID: "y",
-    };
+    if (
+      watchlist.includes(watchlist.find((watch) => watch.id === e?.coin?.id))
+    ) {
+      return {
+        data: data2,
+        label: ` ${e.coin.id}`,
+        borderColor: random_rgba(),
+        borderWidth: 2,
+        pointBorderColor: "rgba(0,0,0,0)",
+        pointBackgroundColor: "rgba(0,0,0,0)",
+        pointHoverBorderColor: "#5AC53B",
+        pointHitRadius: 6,
+        yAxisID: "y",
+      };
+    } else {
+      return {
+        data: [],
+        label: ``,
+        borderColor: "rgba(0,0,0,0.0)",
+        borderWidth: 2,
+        pointBorderColor: "rgba(0,0,0,0)",
+        pointBackgroundColor: "rgba(0,0,0,0)",
+        pointHoverBorderColor: "#5AC53B",
+        pointHitRadius: 6,
+        yAxisID: "y",
+      };
+    }
   });
 
   const doughnutCoin = () => {
