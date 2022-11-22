@@ -5,12 +5,8 @@ name: CI
 
 on:
   push:
-<<<<<<< HEAD
-    branches: [Nic]
-    #branches:[Afifi]
-=======
-    branches: [main]
->>>>>>> 4716120dc968ca2783aa00743c2964700c1651e2
+    branches: [Afifi]
+    #branches:[Nic]
 
   workflow_dispatch:
 
