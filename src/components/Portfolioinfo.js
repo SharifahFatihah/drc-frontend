@@ -8,25 +8,6 @@ import bell from "../asset/alert-1.png";
 import currentbalance from "../asset/current-balance .png";
 
 const useStyles = makeStyles((theme) => ({
-  alertContainer: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "flex-start",
-
-    paddingLeft: 20,
-    paddingRight: 20,
-
-    width: "24%",
-
-    margin: 15,
-    borderRadius: "15px",
-    background: "rgba(79, 58, 84, 0.52)",
-    minHeight: "185px",
-
-    overflow: "scroll",
-
-    height: "100px",
-  },
   infoContainer: {
     display: "flex",
     flexDirection: "column",
@@ -34,17 +15,21 @@ const useStyles = makeStyles((theme) => ({
     paddingLeft: 20,
     paddingRight: 20,
     width: "24%",
-
     margin: 15,
     borderRadius: "15px",
     background: "rgba(79, 58, 84, 0.52)",
     minHeight: "185px",
+    [theme.breakpoints.down("md")]: {
+      width: "30%",
+      alignItems: "flex-start",
+    },
   },
   marketContainer: {
     marginTop: 40,
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
+    width: "100%",
     [theme.breakpoints.down("md")]: {
       width: "100%",
       flexDirection: "column",
@@ -64,16 +49,13 @@ function Portfolioinfo({ avgPriceChange, topPerformCoin, Worst, alert }) {
     </div>
   ));
 
-
   return (
     <div
       style={{
-        marginTop: 120,
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
         width: "100%",
-
       }}
     >
       <div className={classes.marketContainer}>
@@ -147,9 +129,8 @@ function Portfolioinfo({ avgPriceChange, topPerformCoin, Worst, alert }) {
             {Worst?.market_data?.current_price[currency.toLowerCase()]}
           </div>
         </div>
-        <div className={classes.alertContainer}>
-
-          <div style={{ position: "sticky" }}>
+        <div className={classes.infoContainer}>
+          <div>
             <img
               src={bell}
               alt="alert Icon"
@@ -160,10 +141,9 @@ function Portfolioinfo({ avgPriceChange, topPerformCoin, Worst, alert }) {
               Alert Coin
             </Typography>
           </div>
-          <div style={{ width: "100%", overflowY: "scroll", height: "100px" }}>
+          <div style={{ width: "100%", overflowY: "scroll", maxHeight: "100px" }}>
             {alerts}
           </div>
-
         </div>
       </div>
     </div>

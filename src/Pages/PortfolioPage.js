@@ -14,7 +14,6 @@ import currentAssetIcon from "../asset/currentasseticon.png";
 import Service from "../service/Service";
 import { useNavigate } from "react-router-dom";
 import PortfolioChart from "../components/PortfolioChart";
-
 import { chartDays } from "../service/Service";
 import HoldingModal from "../components/HoldingModal";
 import DeleteIcon from "../asset/deleteicon.png";
@@ -176,12 +175,69 @@ function PortfolioPage() {
   useEffect(() => {
     userCoin2.map(
       (e) =>
-        e.market_data.market_cap_change_percentage_24h < -5 &&
-        setCoinAlert((coinAlert) => [...coinAlert, e])
+        e.market_data.price_change_percentage_24h < -5 &&
+        setCoinAlert((coinAlert) => [
+          ...coinAlert,e
+        ])
     );
+    console.log("watchlist1", watchlist);
   }, [userCoin2]);
 
   console.log("usercoin2", userCoin2);
+
+  const removeFromWatchlist = async (usercoin) => {
+    const coinRef = await doc(db, "watchlist", user.uid);
+
+    try {
+      await setDoc(
+        coinRef,
+        {
+          coins: watchlist.filter((watch) => watch.id !== usercoin?.id),
+        },
+        { merge: "true" }
+      );
+
+      setAlert({
+        open: true,
+        message: `${usercoin.name} remove from your watchlist`,
+        type: "success",
+      });
+    } catch (error) {}
+  };
+
+  const setHoldingWatchlist = async (coin) => {
+    const coinRef = await doc(db, "watchlist", user.uid);
+
+    try {
+      await setDoc(
+        coinRef,
+        {
+          coins: watchlist.map((watch) =>
+            watch.id === coin?.id
+              ? { id: coin.id, holding: 0 }
+              : { id: watch.id, holding: watch.holding }
+          ),
+        },
+        { merge: "true" }
+      );
+    } catch (error) {}
+
+    try {
+      await setDoc(
+        coinRef,
+        {
+          coins: watchlist.filter((watch) => watch.id !== coin?.id),
+        },
+        { merge: "true" }
+      );
+
+      setAlert({
+        open: true,
+        message: `${coin.name} remove from your watchlist`,
+        type: "success",
+      });
+    } catch (error) {}
+  };
 
   // console.log("alerts", coinAlert);
   // console.log("worst", worstPerformCoin);
@@ -320,13 +376,6 @@ function PortfolioPage() {
         )}
       </div>
       <div className={classes.mainbar}>
-        <Portfolioinfo
-          avgPriceChange={avgPriceChange}
-          topPerformCoin={topPerformCoin}
-          Worst={worstPerformCoin}
-          alert={coinAlert}
-        />
-
         {!userState || userCoin2.length == 0 ? (
           <div
             style={{
@@ -365,6 +414,12 @@ function PortfolioPage() {
                 ))}
               </div>
             </div>
+            <Portfolioinfo
+              avgPriceChange={avgPriceChange}
+              topPerformCoin={topPerformCoin}
+              Worst={worstPerformCoin}
+              alert={coinAlert}
+            />
             <PortfolioChart days={days} />
           </div>
         )}
