@@ -423,22 +423,26 @@ function PortfolioPage() {
                 Portfolio
               </Typography>
               <div className={classes.buttonContainer}>
-                {chartDays.map((e) => (
-                  <div
-                    key={e.value}
-                    onClick={() => {
-                      setDays(e.value);
-                      setPeriod(e.api_period);
-                    }}
-                    className={classes.selectButton}
-                    style={{
-                      backgroundColor: e.value === days ? "#FFE227" : "",
-                      color: e.value === days ? "black" : "",
-                    }}
-                  >
-                    {e.label}
-                  </div>
-                ))}
+                {chartDays.map((e) => {
+                  if (e?.value !== 60) {
+                    return (
+                      <div
+                        key={e.value}
+                        onClick={() => {
+                          setDays(e.value);
+                          setPeriod(e.api_period);
+                        }}
+                        className={classes.selectButton}
+                        style={{
+                          backgroundColor: e.value === days ? "#FFE227" : "",
+                          color: e.value === days ? "black" : "",
+                        }}
+                      >
+                        {e.label}
+                      </div>
+                    );
+                  }
+                })}
               </div>
             </div>
             <PortfolioChart days={days} />

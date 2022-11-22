@@ -237,9 +237,9 @@ function PortfolioChart({ days }) {
   });
 
   const doughnutCoin = () => {
-    const sumArr = coinsd2.map((e) => e.coin.holding);
-    const sum = sumArr.reduce((acc, val) => acc + val, 0);
-    const holdingArr = coinsd2.map((e) => {
+    const sumArr = coinsd2?.map((e) => e.coin.holding);
+    const sum = sumArr?.reduce((acc, val) => acc + val, 0);
+    const holdingArr = coinsd2?.map((e) => {
       return { name: e.coin.name, holding: e.coin.holding, total_holding: sum };
     });
 
@@ -312,7 +312,7 @@ function PortfolioChart({ days }) {
             datasets: [
               {
                 data: portfolioPriceChart()?.avg_return.map((e) => e),
-                label: `test`,
+                label: `Portfolio Price`,
                 borderColor: "yellow",
                 borderWidth: 2,
                 pointBorderColor: "rgba(0,0,0,0)",
@@ -405,12 +405,14 @@ function PortfolioChart({ days }) {
       </Typography>
       <Doughnut
         data={{
-          labels: doughnutCoin()?.map((e) => e.name),
+          labels: doughnutCoin() ? doughnutCoin()?.map((e) => e.name) : [],
           datasets: [
             {
-              data: doughnutCoin()?.map(
-                (e) => (e.holding / e.total_holding) * 100
-              ),
+              data: doughnutCoin()
+                ? doughnutCoin()?.map(
+                    (e) => (e.holding / e.total_holding) * 100
+                  )
+                : [],
               borderWidth: 0,
               backgroundColor: colourDoughnut,
               radius: "60%",
