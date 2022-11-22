@@ -18,6 +18,7 @@ import UserSidebar from "./UserSidebar";
 import LogoIcon from "../asset/logoicon.png";
 import LogoWord from "../asset/logoword.png";
 import HeaderMenu from "./HeaderMenu";
+import { isMobile } from "react-device-detect";
 
 const useStyles = makeStyles((theme) => ({
   title: {
@@ -45,7 +46,7 @@ const useStyles = makeStyles((theme) => ({
 function Header() {
   const classes = useStyles();
   const navigate = useNavigate();
-  const [isMobile, setIsMobile] = useState(false);
+  // const [isMobile, setIsMobile] = useState(false);
 
   const { currency, setCurrency, user, setOpen } = CryptoState();
 
@@ -56,17 +57,17 @@ function Header() {
     },
   });
 
-  const handleResize = () => {
-    if (window.innerWidth < 800) {
-      setIsMobile(true);
-    } else {
-      setIsMobile(false);
-    }
-  };
+  // const handleResize = () => {
+  //   if (window.innerWidth < 800) {
+  //     setIsMobile(true);
+  //   } else {
+  //     setIsMobile(false);
+  //   }
+  // };
 
-  useEffect(() => {
-    window.addEventListener("resize", handleResize);
-  });
+  // useEffect(() => {
+  //   window.addEventListener("resize", handleResize);
+  // });
 
   const selectMenu = (
     <Select
