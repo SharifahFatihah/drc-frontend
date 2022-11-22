@@ -5,6 +5,7 @@ import MarketCapIcon from "../asset/marketcapicon.png";
 import Icon24h from "../asset/24hicon.png";
 import DominanceIcon from "../asset/dominanceicon.png";
 import CoinMarketIcon from "../asset/coinmarketicon.png";
+import pixel from "../asset/pixelated_1.png";
 
 const useStyles = makeStyles((theme) => ({
   infoContainer: {
@@ -40,11 +41,23 @@ function GlobalMarket() {
     <div
       style={{
         marginTop: 120,
+        // paddingTop: 120,
+        // paddingBottom: 120,
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
+        backgroundColor: "#6B0D74",
       }}
     >
+      <img
+        src={pixel}
+        style={{
+          position: "relative",
+          transform: "rotate(180deg)",
+          right: "0",
+          top: "0",
+        }}
+      ></img>
       <Typography
         variant="h2"
         style={{
@@ -128,6 +141,14 @@ function GlobalMarket() {
           />
         </div>
       </div>
+      <img
+        src={pixel}
+        style={{
+          position: "relative",
+          right: "0",
+          bottom: "0",
+        }}
+      ></img>
     </div>
   );
 }
