@@ -122,13 +122,15 @@ function PortfolioPage() {
   useEffect(() => {
     Promise.all(
       coins.map(async (coin) => {
-        if (watchlist.includes(watchlist.find((e) => e.id === coin.id)))
+        if (watchlist?.includes(watchlist?.find((e) => e.id === coin.id)))
           return Service.getSingleCoin(coin.id);
       })
     ).then((z) => {
       setUserCoin(z.filter((y) => !!y));
     });
-  }, [watchlist, user]);
+
+    console.log("render", watchlist);
+  }, [watchlist]);
 
   useEffect(() => {
     userCoin.map((e) => setUserCoin2((userCoin2) => [...userCoin2, e.data]));
@@ -201,6 +203,40 @@ function PortfolioPage() {
       setAlert({
         open: true,
         message: `${usercoin.name} remove from your watchlist`,
+        type: "success",
+      });
+    } catch (error) {}
+  };
+
+  const setHoldingWatchlist = async (coin) => {
+    const coinRef = await doc(db, "watchlist", user.uid);
+
+    try {
+      await setDoc(
+        coinRef,
+        {
+          coins: watchlist.map((watch) =>
+            watch.id === coin?.id
+              ? { id: coin.id, holding: 0 }
+              : { id: watch.id, holding: watch.holding }
+          ),
+        },
+        { merge: "true" }
+      );
+    } catch (error) {}
+
+    try {
+      await setDoc(
+        coinRef,
+        {
+          coins: watchlist.filter((watch) => watch.id !== coin?.id),
+        },
+        { merge: "true" }
+      );
+
+      setAlert({
+        open: true,
+        message: `${coin.name} remove from your watchlist`,
         type: "success",
       });
     } catch (error) {}
@@ -323,7 +359,9 @@ function PortfolioPage() {
                                   <img
                                     src={DeleteIcon}
                                     height={20}
-                                    onClick={() => removeFromWatchlist(row)}
+                                    onClick={() => {
+                                      setHoldingWatchlist(row);
+                                    }}
                                     style={{ cursor: "pointer" }}
                                   />
                                 </div>
