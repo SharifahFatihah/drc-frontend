@@ -1,11 +1,7 @@
 import { Button, Container, Typography, makeStyles } from "@material-ui/core";
 
 import React from "react";
-<<<<<<< HEAD
-=======
-import { makeStyles, Container, Typography, Button } from "@material-ui/core";
 import pixel from "../asset/pixelated_1.png";
->>>>>>> 260f3506020f524492e79785d834dd8be3b8b546
 
 const useStyle = makeStyles((theme) => ({
   banner: {
