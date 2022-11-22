@@ -1,7 +1,10 @@
-import { Container, makeStyles, Typography } from "@material-ui/core";
+import { Container, makeStyles, Tooltip, Typography } from "@material-ui/core";
 import { Doughnut } from "react-chartjs-2";
 import React from "react";
-import { Rule } from "@mui/icons-material";
+import { Pin, Rule } from "@mui/icons-material";
+import { hover } from "@testing-library/user-event/dist/hover";
+import { color } from "@mui/system";
+import infoicon from "../asset/infoicon.png";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -28,6 +31,19 @@ function CoinStats({ coin }) {
           alignItems: "center",
         }}
       >
+        {" "}
+        <div
+          style={{
+            width: "88%",
+            display: "flex",
+            justifyContent: "flex-end",
+            opacity: "0.8",
+          }}
+        >
+          <Tooltip title="The activeness of coin in different platforms such as the amount of Reddit active accounts, Telegram users and Twitter followers.">
+            <img src={infoicon} height="13" />
+          </Tooltip>
+        </div>
         <Typography variant="h4" style={{ fontFamily: "VT323" }}>
           Community Score{" "}
         </Typography>
@@ -66,9 +82,22 @@ function CoinStats({ coin }) {
           alignItems: "center",
         }}
       >
+        <div
+          style={{
+            width: "88%",
+            display: "flex",
+            justifyContent: "flex-end",
+            opacity: "0.8",
+          }}
+        >
+          <Tooltip title="The measurement of developer's contribution activity on coin. ">
+            <img src={infoicon} height="13" />
+          </Tooltip>
+        </div>
         <Typography variant="h4" style={{ fontFamily: "VT323" }}>
           Developer Score{" "}
         </Typography>
+
         <Typography variant="h4" style={{ fontFamily: "VT323" }}>
           {coin?.developer_score.toFixed(2)}%
         </Typography>
@@ -104,9 +133,22 @@ function CoinStats({ coin }) {
           alignItems: "center",
         }}
       >
+        <div
+          style={{
+            width: "88%",
+            display: "flex",
+            justifyContent: "flex-end",
+            opacity: "0.8",
+          }}
+        >
+          <Tooltip title="The ease of the coin to be converted into cash without impacting the price and vice versa.">
+            <img src={infoicon} height="13" />
+          </Tooltip>
+        </div>
         <Typography variant="h4" style={{ fontFamily: "VT323" }}>
           Liquidity Score{" "}
         </Typography>
+
         <Typography variant="h4" style={{ fontFamily: "VT323" }}>
           {coin?.liquidity_score.toFixed(2)}%
         </Typography>
