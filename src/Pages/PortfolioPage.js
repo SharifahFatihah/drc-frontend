@@ -1,4 +1,5 @@
 import {
+  Button,
   makeStyles,
   Paper,
   Table,
@@ -19,6 +20,7 @@ import HoldingModal from "../components/HoldingModal";
 import DeleteIcon from "../asset/deleteicon.png";
 import { doc, setDoc } from "firebase/firestore";
 import { db } from "../firebase";
+import Portfolioinfo from "../components/Portfolioinfo";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -98,10 +100,9 @@ function PortfolioPage() {
   const [days, setDays] = useState(1);
   const [userState, setUserState] = useState(user);
   const [isMobile, setIsMobile] = useState(false);
+  const [avgPriceChange, setAvgPriceChange] = useState(0);
 
   const [coinAlert, setCoinAlert] = useState([]);
-
-  const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
 
@@ -128,8 +129,6 @@ function PortfolioPage() {
     ).then((z) => {
       setUserCoin(z.filter((y) => !!y));
     });
-
-    console.log("render", watchlist);
   }, [watchlist]);
 
   useEffect(() => {
@@ -144,69 +143,78 @@ function PortfolioPage() {
     );
     setUserCoin3([...new Map(userCoin2.map((m) => [m.id, m])).values()]);
   }, [userCoin2]);
-  console.log("usercoin3", userCoin3);
 
   useEffect(() => {
     setUserState(user);
   }, [user]);
 
-  const avgPriceChange =
-    userCoin2.length > 0 &&
-    userCoin2?.reduce((sum, coin) => {
-      return (sum + coin?.market_data[period]) / userCoin2.length;
+  useEffect(() => {
+    const totalWeight = userCoin3?.reduce((sum, coin) => {
+      if (watchlist?.includes(watchlist?.find((e) => e.id === coin?.id))) {
+        return (
+          sum +
+          coin.holding *
+            coin?.market_data?.current_price[currency?.toLowerCase()]
+        );
+      } else {
+        return sum + 0;
+      }
     }, 0);
+    setAvgPriceChange(
+      userCoin3?.length > 0 &&
+        userCoin3?.reduce((sum, coin) => {
+          if (watchlist?.includes(watchlist?.find((e) => e.id === coin?.id))) {
+            return (
+              sum +
+              (coin?.market_data[period] *
+                coin?.holding *
+                coin?.market_data?.current_price[currency?.toLowerCase()]) /
+                totalWeight
+            );
+          } else {
+            return sum + 0;
+          }
+        }, 0)
+    );
+  }, [watchlist, userCoin2, userCoin3, period]);
+
+  console.log("est2", avgPriceChange);
 
   const topPerformCoin =
     userCoin2.length > 0 &&
     userCoin2?.reduce((prev, current) => {
-      return prev?.market_data[period] > current?.market_data[period]
-        ? prev
-        : current;
+      if (
+        watchlist?.includes(
+          watchlist?.find((e) => e.id === prev?.id || e.id === current?.id)
+        )
+      ) {
+        return prev?.market_data[period] > current?.market_data[period]
+          ? prev
+          : current;
+      }
     });
   const worstPerformCoin =
     userCoin2.length > 0 &&
     userCoin2?.reduce((prev, current) => {
-      return prev?.market_data[period] < current?.market_data[period]
-        ? prev
-        : current;
+      if (
+        watchlist?.includes(
+          watchlist?.find((e) => e.id === prev?.id || e.id === current?.id)
+        )
+      ) {
+        return prev?.market_data[period] < current?.market_data[period]
+          ? prev
+          : current;
+      }
     });
 
   useEffect(() => {
-    userCoin2.map(
-      (e) =>
+    userCoin2?.map((e) => {
+      if (!coinAlert?.find(({ id }) => id === e.id)) {
         e.market_data.price_change_percentage_24h < -5 &&
-        setCoinAlert((coinAlert) => [
-          ...coinAlert,
-          {
-            id: e.id,
-            priceChange: e.market_data.price_change_percentage_24h,
-          },
-        ])
-    );
-    console.log("watchlist1", watchlist);
+          setCoinAlert((coinAlert) => [...coinAlert, e]);
+      }
+    });
   }, [userCoin2]);
-
-  console.log("usercoin2", userCoin2);
-
-  const removeFromWatchlist = async (usercoin) => {
-    const coinRef = await doc(db, "watchlist", user.uid);
-
-    try {
-      await setDoc(
-        coinRef,
-        {
-          coins: watchlist.filter((watch) => watch.id !== usercoin?.id),
-        },
-        { merge: "true" }
-      );
-
-      setAlert({
-        open: true,
-        message: `${usercoin.name} remove from your watchlist`,
-        type: "success",
-      });
-    } catch (error) {}
-  };
 
   const setHoldingWatchlist = async (coin) => {
     const coinRef = await doc(db, "watchlist", user.uid);
@@ -242,12 +250,6 @@ function PortfolioPage() {
     } catch (error) {}
   };
 
-  // console.log("alerts", coinAlert);
-  // console.log("worst", worstPerformCoin);
-  // console.log("top", topPerformCoin);
-  // console.log("avg", avgPriceChange);
-  // console.log("usercoin", userCoin2);
-
   return (
     <div className={classes.container}>
       <div className={classes.sidebar}>
@@ -271,12 +273,12 @@ function PortfolioPage() {
             >
               <TableContainer
                 component={Paper}
-                style={{ backgroundColor: "transparent", color: "white" }}
+                style={{ backgroundColor: "transparent", color: "black" }}
               >
                 <div
                   style={{
                     overflow: "auto",
-                    height: isMobile ? "250px" : "650px",
+                    maxHeight: isMobile ? "250px" : "550px",
                   }}
                 >
                   <Table sx={{ minWidth: 650 }}>
@@ -377,6 +379,29 @@ function PortfolioPage() {
             </Paper>
           </div>
         )}
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-around",
+            margin: 20,
+          }}
+        >
+          <Button
+            variant="contained"
+            style={{
+              backgroundColor: "yellow",
+              color: "black",
+              fontFamily: "VT323",
+              fontSize: "25px",
+            }}
+            onClick={() => {
+              navigate("/coinList");
+            }}
+          >
+            Add New Coin
+          </Button>
+        </div>
       </div>
       <div className={classes.mainbar}>
         {!userState || userCoin2.length == 0 ? (
@@ -399,24 +424,35 @@ function PortfolioPage() {
                 Portfolio
               </Typography>
               <div className={classes.buttonContainer}>
-                {chartDays.map((e) => (
-                  <div
-                    key={e.value}
-                    onClick={() => {
-                      setDays(e.value);
-                      setPeriod(e.api_period);
-                    }}
-                    className={classes.selectButton}
-                    style={{
-                      backgroundColor: e.value === days ? "#FFE227" : "",
-                      color: e.value === days ? "black" : "",
-                    }}
-                  >
-                    {e.label}
-                  </div>
-                ))}
+                {chartDays.map((e) => {
+                  if (e?.value !== 60) {
+                    return (
+                      <div
+                        key={e.value}
+                        onClick={() => {
+                          setDays(e.value);
+                          setPeriod(e.api_period);
+                        }}
+                        className={classes.selectButton}
+                        style={{
+                          backgroundColor: e.value === days ? "#FFE227" : "",
+                          color: e.value === days ? "black" : "",
+                        }}
+                      >
+                        {e.label}
+                      </div>
+                    );
+                  }
+                })}
               </div>
             </div>
+            <Portfolioinfo
+              avgPriceChange={avgPriceChange}
+              topPerformCoin={topPerformCoin}
+              Worst={worstPerformCoin}
+              alert={coinAlert}
+              period={period}
+            />
             <PortfolioChart days={days} />
           </div>
         )}
