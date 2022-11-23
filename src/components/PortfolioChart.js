@@ -388,58 +388,64 @@ function PortfolioChart({ days }) {
           <img src={infoicon} height="13" style={{ marginBottom: "25px" }} />
         </Tooltip>
       </Typography>
-      <Bar
-        data={{
-          labels: portfolioReturnChart()?.time?.map((e) => {
-            let date = new Date(e);
-            let time = `${date.getHours()}:${date.getMinutes()} `;
-            return days === 1 ? time : date.toLocaleDateString();
-          }),
-          datasets: [
-            {
-              data: portfolioReturnChart()?.avg_return.map((e) => e * 100),
-              label: `test`,
-              borderColor: colours,
-              borderWidth: 2,
-              pointBorderColor: "rgba(0,0,0,0)",
-              pointBackgroundColor: "rgba(0,0,0,0)",
-              pointHoverBorderColor: "#5AC53B",
-              pointHitRadius: 6,
-              yAxisID: "y",
+      {portfolioReturnChart() && (
+        <Bar
+          data={{
+            labels: portfolioReturnChart()?.time?.map((e) => {
+              let date = new Date(e);
+              let time = `${date.getHours()}:${date.getMinutes()} `;
+              return days === 1 ? time : date.toLocaleDateString();
+            }),
+            datasets: [
+              {
+                data: portfolioReturnChart()?.avg_return.map((e) => e * 100),
+                label: `test`,
+                borderColor: colours,
+                borderWidth: 2,
+                pointBorderColor: "rgba(0,0,0,0)",
+                pointBackgroundColor: "rgba(0,0,0,0)",
+                pointHoverBorderColor: "#5AC53B",
+                pointHitRadius: 6,
+                yAxisID: "y",
+              },
+            ],
+          }}
+          options={{
+            animation: { duration: 3000, easing: "easeInOutCubic" },
+            plugins: {
+              legend: {
+                display: false,
+              },
             },
-          ],
-        }}
-        options={{
-          animation: { duration: 3000, easing: "easeInOutCubic" },
-          plugins: {
-            legend: {
-              display: false,
-            },
-          },
-          scales: { y: { display: true } },
-        }}
-      />
+            scales: { y: { display: true } },
+          }}
+        />
+      )}
       <Typography variant="h2" style={{ fontFamily: "VT323" }}>
         Coin Weightage{" "}
         <Tooltip title={weightageTooltip}>
           <img src={infoicon} height="13" style={{ marginBottom: "25px" }} />
         </Tooltip>
       </Typography>
-      <Doughnut
-        data={{
-          labels: doughnutCoin() ? doughnutCoin()?.map((e) => e.name) : [],
-          datasets: [
-            {
-              data: doughnutCoin()
-                ? doughnutCoin()?.map((e) => (e.weight / e.total_weight) * 100)
-                : [],
-              borderWidth: 0,
-              backgroundColor: colourDoughnut,
-              radius: "60%",
-            },
-          ],
-        }}
-      />
+      {doughnutCoin() && (
+        <Doughnut
+          data={{
+            labels: doughnutCoin()?.map((e) => e.name),
+            datasets: [
+              {
+                data: doughnutCoin()
+                  ? doughnutCoin()?.map(
+                      (e) => (e.weight / e.total_weight) * 100
+                    )
+                  : [],
+                borderWidth: 0,
+                backgroundColor: colourDoughnut,
+                radius: "60%",
+              },
+            ],
+          }}
+        />
+      )}
     </div>
   );
 }
