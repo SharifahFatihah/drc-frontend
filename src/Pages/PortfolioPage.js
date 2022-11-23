@@ -149,17 +149,34 @@ function PortfolioPage() {
   }, [user]);
 
   useEffect(() => {
+    const totalWeight = userCoin3?.reduce((sum, coin) => {
+      if (watchlist?.includes(watchlist?.find((e) => e.id === coin?.id))) {
+        return (
+          sum +
+          coin.holding *
+            coin?.market_data?.current_price[currency?.toLowerCase()]
+        );
+      } else {
+        return sum + 0;
+      }
+    }, 0);
     setAvgPriceChange(
       userCoin3?.length > 0 &&
         userCoin3?.reduce((sum, coin) => {
           if (watchlist?.includes(watchlist?.find((e) => e.id === coin?.id))) {
-            return sum + coin?.market_data[period] * coin?.holding;
+            return (
+              sum +
+              (coin?.market_data[period] *
+                coin?.holding *
+                coin?.market_data?.current_price[currency?.toLowerCase()]) /
+                totalWeight
+            );
           } else {
             return sum + 0;
           }
         }, 0)
     );
-  }, [watchlist, userCoin2, userCoin3]);
+  }, [watchlist, userCoin2, userCoin3, period]);
 
   console.log("est2", avgPriceChange);
 
