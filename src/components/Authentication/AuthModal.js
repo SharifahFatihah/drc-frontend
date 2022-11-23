@@ -31,6 +31,18 @@ const useStyle = makeStyles((theme) => ({
     textAlign: "center",
     gap: 20,
   },
+  googleSignIn: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    marginLeft: "0",
+    marginRight: "0",
+    marginBottom: "10px",
+    [theme.breakpoints.down("md")]: {
+      marginLeft: "0",
+      marginRight: "0",
+    },
+  },
 }));
 
 export default function AuthModal() {
@@ -146,21 +158,16 @@ export default function AuthModal() {
                   <hr></hr>
                 </div>
               </div>
-              <Button
-                variant="contained"
-                onClick={signInWithGoogle}
-                style={{
-                  backgroundColor: "grey",
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  marginLeft: "200px",
-                  marginRight: "200px",
-                  marginBottom: "10px",
-                }}
-              >
-                Sign In With Google
-              </Button>
+              <div className={classes.googleSignIn}>
+                <Button
+                  variant="contained"
+                  onClick={signInWithGoogle}
+                  style={{ backgroundColor: "grey" }}
+                >
+                  Sign In With Google
+                </Button>
+              </div>
+
               <div
                 style={{
                   display: "flex",

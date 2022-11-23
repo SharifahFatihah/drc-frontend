@@ -76,6 +76,10 @@ function PortfolioChart({ days }) {
   });
 
   const coinsd2 = coinsd?.map((e) => {
+    const totalWeight = coinsd?.reduce(
+      (sum, coin) => sum + coin?.coin?.holding * coin?.coin?.current_price,
+      0
+    );
     const sdReturn = (arr = e.price_return) => {
       const sum = arr.reduce((acc, val) => acc + val);
       const { length: num } = arr;
@@ -87,8 +91,11 @@ function PortfolioChart({ days }) {
       });
       variance /= num;
       return {
-        sum: sumx,
-        sd_return: e?.coin?.holding * e?.coin?.holding * variance,
+        sum: ((e?.coin?.holding * e.coin?.current_price) / totalWeight) * sumx,
+        sd_return:
+          ((e?.coin?.holding * e.coin?.current_price) / totalWeight) *
+          ((e?.coin?.holding * e.coin?.current_price) / totalWeight) *
+          variance,
       };
     };
 
@@ -103,8 +110,11 @@ function PortfolioChart({ days }) {
       });
       variance /= num;
       return {
-        sum: sumx,
-        sd_price: e?.coin?.holding * e?.coin?.holding * variance,
+        sum: ((e?.coin?.holding * e.coin?.current_price) / totalWeight) * sumx,
+        sd_price:
+          ((e?.coin?.holding * e.coin?.current_price) / totalWeight) *
+          ((e?.coin?.holding * e.coin?.current_price) / totalWeight) *
+          variance,
       };
     };
 
@@ -130,10 +140,16 @@ function PortfolioChart({ days }) {
   };
 
   const portfolioReturnChart = () => {
+    const totalWeight = coinsd?.reduce(
+      (sum, coin) => sum + coin?.coin?.holding * coin?.coin?.current_price,
+      0
+    );
     const dateData = coinsd2[0]?.hist_return_data[0];
 
     const arrReturn = coinsd2.map((e) =>
-      e?.hist_return_data[1].map((v) => v * e.coin.holding)
+      e?.hist_return_data[1].map(
+        (v) => (v * e?.coin?.holding * e?.coin?.current_price) / totalWeight
+      )
     );
 
     const avgReturn = (...arrays) => {
@@ -187,7 +203,7 @@ function PortfolioChart({ days }) {
 
     return {
       price_sd: Math.sqrt(price_sum_cov + price_sum_var),
-      return_sd: Math.sqrt(return_sum_cov + return_sum_var),
+      return_sd: Math.sqrt(return_sum_cov + return_sum_var) * 100,
     };
   };
 
@@ -237,16 +253,22 @@ function PortfolioChart({ days }) {
   });
 
   const doughnutCoin = () => {
-    const sumArr = coinsd2.map((e) => e.coin.holding);
-    const sum = sumArr.reduce((acc, val) => acc + val, 0);
-    const holdingArr = coinsd2.map((e) => {
-      return { name: e.coin.name, holding: e.coin.holding, total_holding: sum };
+    const sumArr = coinsd2?.map(
+      (e) => e?.coin?.holding * e?.coin?.current_price
+    );
+    const sum = sumArr?.reduce((acc, val) => acc + val, 0);
+    const holdingArr = coinsd2?.map((e) => {
+      return {
+        name: e.coin.name,
+        weight: e.coin.holding * e.coin.current_price,
+        total_weight: sum,
+      };
     });
 
     return holdingArr;
   };
 
-  console.log("doughnut", doughnutCoin());
+  console.log("coinsd2", coinsd2);
 
   const totalDuration = 2500;
   const delayBetweenPoints = totalDuration / 250;
@@ -312,7 +334,7 @@ function PortfolioChart({ days }) {
             datasets: [
               {
                 data: portfolioPriceChart()?.avg_return.map((e) => e),
-                label: `test`,
+                label: `Portfolio Price`,
                 borderColor: "yellow",
                 borderWidth: 2,
                 pointBorderColor: "rgba(0,0,0,0)",
@@ -366,58 +388,64 @@ function PortfolioChart({ days }) {
           <img src={infoicon} height="13" style={{ marginBottom: "25px" }} />
         </Tooltip>
       </Typography>
-      <Bar
-        data={{
-          labels: portfolioReturnChart()?.time?.map((e) => {
-            let date = new Date(e);
-            let time = `${date.getHours()}:${date.getMinutes()} `;
-            return days === 1 ? time : date.toLocaleDateString();
-          }),
-          datasets: [
-            {
-              data: portfolioReturnChart()?.avg_return.map((e) => e * 100),
-              label: `test`,
-              borderColor: colours,
-              borderWidth: 2,
-              pointBorderColor: "rgba(0,0,0,0)",
-              pointBackgroundColor: "rgba(0,0,0,0)",
-              pointHoverBorderColor: "#5AC53B",
-              pointHitRadius: 6,
-              yAxisID: "y",
+      {portfolioReturnChart() && (
+        <Bar
+          data={{
+            labels: portfolioReturnChart()?.time?.map((e) => {
+              let date = new Date(e);
+              let time = `${date.getHours()}:${date.getMinutes()} `;
+              return days === 1 ? time : date.toLocaleDateString();
+            }),
+            datasets: [
+              {
+                data: portfolioReturnChart()?.avg_return.map((e) => e * 100),
+                label: `test`,
+                borderColor: colours,
+                borderWidth: 2,
+                pointBorderColor: "rgba(0,0,0,0)",
+                pointBackgroundColor: "rgba(0,0,0,0)",
+                pointHoverBorderColor: "#5AC53B",
+                pointHitRadius: 6,
+                yAxisID: "y",
+              },
+            ],
+          }}
+          options={{
+            animation: { duration: 3000, easing: "easeInOutCubic" },
+            plugins: {
+              legend: {
+                display: false,
+              },
             },
-          ],
-        }}
-        options={{
-          animation: { duration: 3000, easing: "easeInOutCubic" },
-          plugins: {
-            legend: {
-              display: false,
-            },
-          },
-          scales: { y: { display: true } },
-        }}
-      />
+            scales: { y: { display: true } },
+          }}
+        />
+      )}
       <Typography variant="h2" style={{ fontFamily: "VT323" }}>
         Coin Weightage{" "}
         <Tooltip title={weightageTooltip}>
           <img src={infoicon} height="13" style={{ marginBottom: "25px" }} />
         </Tooltip>
       </Typography>
-      <Doughnut
-        data={{
-          labels: doughnutCoin()?.map((e) => e.name),
-          datasets: [
-            {
-              data: doughnutCoin()?.map(
-                (e) => (e.holding / e.total_holding) * 100
-              ),
-              borderWidth: 0,
-              backgroundColor: colourDoughnut,
-              radius: "60%",
-            },
-          ],
-        }}
-      />
+      {doughnutCoin() && (
+        <Doughnut
+          data={{
+            labels: doughnutCoin()?.map((e) => e.name),
+            datasets: [
+              {
+                data: doughnutCoin()
+                  ? doughnutCoin()?.map(
+                      (e) => (e.weight / e.total_weight) * 100
+                    )
+                  : [],
+                borderWidth: 0,
+                backgroundColor: colourDoughnut,
+                radius: "60%",
+              },
+            ],
+          }}
+        />
+      )}
     </div>
   );
 }

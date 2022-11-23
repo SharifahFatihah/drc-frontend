@@ -16,7 +16,6 @@ const useStyle = makeStyles((theme) => ({
   bannerContent: {
     margin: "0",
     height: 800,
-    paddingTop: 25,
     display: "flex",
     flexDirection: "column",
     alignItems: "flex-start",
