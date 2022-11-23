@@ -1,4 +1,15 @@
-import { makeStyles, Tooltip, Typography } from "@material-ui/core";
+import {
+  makeStyles,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Tooltip,
+  Typography,
+} from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import { Bar, Doughnut, Line } from "react-chartjs-2";
 import { CryptoState } from "../CryptoContext";
@@ -67,7 +78,7 @@ const useStyle = makeStyles((theme) => ({
     justifyContent: "center",
   },
   yellow: {
-    backgroundColor: "#FFE27",
+    backgroundColor: "#FFE227",
     marginLeft: 10,
     color: "black",
     padding: 5,
@@ -78,7 +89,7 @@ const useStyle = makeStyles((theme) => ({
   },
 }));
 
-function PortfolioChart({ days, volatilityDesc }) {
+function PortfolioChart({ days, volatilityDesc, timeFrame }) {
   const classes = useStyle();
 
   const { user, setAlert, watchlist, coins, currency, symbol } = CryptoState();
@@ -177,7 +188,12 @@ function PortfolioChart({ days, volatilityDesc }) {
       };
     };
 
-    return { ...e, stats_return: sdReturn(), stats_price: sdPrice() };
+    return {
+      ...e,
+      stats_return: sdReturn(),
+      stats_price: sdPrice(),
+      total_weight: totalWeight,
+    };
   });
 
   const portfolioPriceChart = () => {
@@ -487,7 +503,7 @@ function PortfolioChart({ days, volatilityDesc }) {
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              height: "60%",
+              height: "80%",
             }}
           >
             <div
@@ -528,6 +544,105 @@ function PortfolioChart({ days, volatilityDesc }) {
         </div>
       </div>
       <div className={classes.secondContainer}>
+        <div className={classes.inSecondContainer40}>
+          <TableContainer
+            component={Paper}
+            style={{ backgroundColor: "transparent", color: "black" }}
+          >
+            {" "}
+            <div
+              style={{
+                overflow: "auto",
+                maxHeight: "375px",
+              }}
+            >
+              <Table
+                sx={{ minWidth: 650 }}
+                aria-label="simple table"
+                stickyHeader
+              >
+                <TableHead>
+                  <TableRow>
+                    <TableCell
+                      style={{ color: "black", backgroundColor: "#FFE227" }}
+                    >
+                      Coin
+                    </TableCell>
+                    <TableCell
+                      align="right"
+                      style={{ color: "black", backgroundColor: "#FFE227" }}
+                    >
+                      &sigma; of price ({volatilityDesc})
+                    </TableCell>
+                    <TableCell
+                      align="right"
+                      style={{ color: "black", backgroundColor: "#FFE227" }}
+                    >
+                      &sigma; of return ({volatilityDesc})
+                    </TableCell>
+                  </TableRow>
+                </TableHead>
+
+                <TableBody>
+                  {coinsd2 &&
+                    coinsd2?.map((row) => {
+                      if (
+                        watchlist.includes(
+                          watchlist.find((watch) => watch.id === row.coin.id)
+                        )
+                      ) {
+                        return (
+                          <TableRow
+                            key={row.coin.name}
+                            sx={{
+                              "&:last-child td, &:last-child th": { border: 0 },
+                            }}
+                          >
+                            <TableCell
+                              component="th"
+                              scope="row"
+                              style={{ color: "white" }}
+                            >
+                              <div
+                                style={{
+                                  display: "flex",
+                                  alignItems: "center",
+                                }}
+                              >
+                                <div style={{ marginRight: 10 }}>
+                                  <img src={row?.coin.image} height="20" />
+                                </div>
+                                <div>{row.coin.name}</div>
+                              </div>
+                            </TableCell>
+                            <TableCell align="right" style={{ color: "white" }}>
+                              {Math.sqrt(
+                                row.stats_price.sd_price /
+                                  ((row.coin.holding * row.coin.current_price) /
+                                    row.total_weight)
+                              ).toPrecision(4)}
+                            </TableCell>
+                            <TableCell align="right" style={{ color: "white" }}>
+                              {(
+                                Math.sqrt(
+                                  row.stats_return.sd_return /
+                                    ((row.coin.holding *
+                                      row.coin.current_price) /
+                                      row.total_weight) **
+                                      2
+                                ) * 100
+                              ).toPrecision(4)}
+                              %
+                            </TableCell>
+                          </TableRow>
+                        );
+                      }
+                    })}
+                </TableBody>
+              </Table>
+            </div>
+          </TableContainer>
+        </div>
         <div className={classes.inSecondContainer}>
           <Typography variant="h3" style={{ fontFamily: "VT323" }}>
             Coin Price {""}
@@ -558,18 +673,6 @@ function PortfolioChart({ days, volatilityDesc }) {
               scales: { y: { display: true } },
             }}
           />
-        </div>
-        <div className={classes.inSecondContainer}>
-          <Typography variant="h3" style={{ fontFamily: "VT323" }}>
-            Historical Returns{" "}
-            <Tooltip title={histReturnTooltip}>
-              <img
-                src={infoicon}
-                height="13"
-                style={{ marginBottom: "25px" }}
-              />
-            </Tooltip>
-          </Typography>
         </div>
       </div>
     </div>

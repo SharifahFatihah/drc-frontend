@@ -19,25 +19,25 @@ export const chartDays = [
     label: "24H",
     value: 1,
     api_period: "price_change_percentage_24h",
-    vol: "semi-hourly",
+    vol: "daily",
   },
   {
     label: "30D",
     value: 30,
     api_period: "price_change_percentage_30d",
-    vol: "daily",
+    vol: "monthly",
   },
   {
     label: "2M",
     value: 60,
     api_period: "price_change_percentage_60d",
-    vol: "daily",
+    vol: "monthly",
   },
   {
     label: "1Y",
     value: 365,
     api_period: "price_change_percentage_1y",
-    vol: "monthly",
+    vol: "annual",
   },
 ];
 

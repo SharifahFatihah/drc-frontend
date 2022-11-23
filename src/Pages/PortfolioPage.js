@@ -108,7 +108,7 @@ function PortfolioPage() {
   const [currentPortfolioPrice, setCurrentPortfolioPrice] = useState(0);
   const [timeFrame, setTimeFrame] = useState("24H");
   const [donutCoin, setDonutCoin] = useState([]);
-  const [volatilityDesc, setVolatilityDesc] = useState("semi-hourly");
+  const [volatilityDesc, setVolatilityDesc] = useState("daily");
 
   const [coinAlert, setCoinAlert] = useState([]);
 
@@ -257,8 +257,6 @@ function PortfolioPage() {
 
     setDonutCoin(holdingArr);
   }, [userCoin, userCoin2, userCoin3, watchlist]);
-
-  console.log("donut", donutCoin);
 
   const setHoldingWatchlist = async (coin) => {
     const coinRef = await doc(db, "watchlist", user.uid);
@@ -557,7 +555,11 @@ function PortfolioPage() {
               period={period}
               timeFrame={timeFrame}
             />
-            <PortfolioChart days={days} volatilityDesc={volatilityDesc} />
+            <PortfolioChart
+              days={days}
+              volatilityDesc={volatilityDesc}
+              timeFrame={timeFrame}
+            />
           </div>
         )}
       </div>
