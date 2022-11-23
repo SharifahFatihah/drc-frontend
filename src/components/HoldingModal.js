@@ -25,6 +25,12 @@ const useStyle = makeStyles((theme) => ({
     color: "white",
     boxShadow: 24,
     borderRadius: 10,
+    [theme.breakpoints.down("md")]: {
+      width: "50%",
+    },
+    [theme.breakpoints.down("sm")]: {
+      width: "90%",
+    },
   },
 }));
 

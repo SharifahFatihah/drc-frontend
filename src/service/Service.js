@@ -15,10 +15,30 @@ const GlobalInfo = () => `https://api.coingecko.com/api/v3/global`;
 const TrendingCoins2 = () => `https://api.coingecko.com/api/v3/search/trending`;
 
 export const chartDays = [
-  { label: "24H", value: 1, api_period: "price_change_percentage_24h" },
-  { label: "30D", value: 30, api_period: "price_change_percentage_30d" },
-  { label: "2M", value: 60, api_period: "price_change_percentage_60d" },
-  { label: "1Y", value: 365, api_period: "price_change_percentage_1y" },
+  {
+    label: "24H",
+    value: 1,
+    api_period: "price_change_percentage_24h",
+    vol: "semi-hourly",
+  },
+  {
+    label: "30D",
+    value: 30,
+    api_period: "price_change_percentage_30d",
+    vol: "daily",
+  },
+  {
+    label: "2M",
+    value: 60,
+    api_period: "price_change_percentage_60d",
+    vol: "daily",
+  },
+  {
+    label: "1Y",
+    value: 365,
+    api_period: "price_change_percentage_1y",
+    vol: "monthly",
+  },
 ];
 
 class Service {

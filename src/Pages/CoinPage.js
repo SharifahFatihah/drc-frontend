@@ -236,7 +236,6 @@ function CoinPage() {
               {" Million "}
             </Typography>
           </span>
-          <span className={classes.coinBasic}></span>
           <span className={classes.coinBasic}>
             <Typography variant="h5" className={classes.description}>
               Circulating Supply:{" "}
@@ -251,10 +250,12 @@ function CoinPage() {
             <Typography variant="h5" className={classes.description}>
               Total Supply:{" "}
               {coin?.market_data.total_supply
-                ?.toString()
-                .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                .slice(0, -8)}
-              {" Million "}
+                ? coin?.market_data.total_supply
+                    ?.toString()
+                    .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                    .slice(0, -8)
+                : "-"}
+              {coin?.market_data.total_supply && " Million "}
             </Typography>
           </span>
           <span className={classes.coinBasic}>
