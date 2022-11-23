@@ -101,6 +101,8 @@ function PortfolioPage() {
   const [userState, setUserState] = useState(user);
   const [isMobile, setIsMobile] = useState(false);
   const [avgPriceChange, setAvgPriceChange] = useState(0);
+  const [currentPortfolioPrice, setCurrentPortfolioPrice] = useState(0);
+  const [timeFrame, setTimeFrame] = useState("24H");
 
   const [coinAlert, setCoinAlert] = useState([]);
 
@@ -177,6 +179,23 @@ function PortfolioPage() {
         }, 0)
     );
   }, [watchlist, userCoin2, userCoin3, period]);
+
+  useEffect(() => {
+    setCurrentPortfolioPrice(
+      userCoin3?.length > 0 &&
+        userCoin3?.reduce((sum, coin) => {
+          if (watchlist?.includes(watchlist?.find((e) => e.id === coin?.id))) {
+            return (
+              sum +
+              coin?.market_data?.current_price[currency?.toLowerCase()] *
+                coin?.holding
+            );
+          } else {
+            return sum + 0;
+          }
+        }, 0)
+    );
+  }, [watchlist, userCoin2, userCoin3, currency]);
 
   console.log("est2", avgPriceChange);
 
@@ -258,6 +277,14 @@ function PortfolioPage() {
           <div>
             <Typography variant="h3" style={{ fontFamily: "VT323" }}>
               Current Asset
+            </Typography>
+          </div>
+        </div>
+        <div style={{ display: "flex", alignItems: "center" }}>
+          <div>
+            <Typography variant="h5" style={{ fontFamily: "VT323" }}>
+              Portfolio Price: {symbol}
+              {currentPortfolioPrice ? currentPortfolioPrice?.toFixed(2) : "0"}
             </Typography>
           </div>
         </div>
@@ -432,6 +459,7 @@ function PortfolioPage() {
                         onClick={() => {
                           setDays(e.value);
                           setPeriod(e.api_period);
+                          setTimeFrame(e.label);
                         }}
                         className={classes.selectButton}
                         style={{
@@ -452,6 +480,7 @@ function PortfolioPage() {
               Worst={worstPerformCoin}
               alert={coinAlert}
               period={period}
+              timeFrame={timeFrame}
             />
             <PortfolioChart days={days} />
           </div>

@@ -20,7 +20,7 @@ const useStyle = makeStyles((theme) => ({
     top: "50%",
     left: "50%",
     transform: "translate(-50%, -50%)",
-    width: "50%",
+    width: "25%",
     backgroundColor: "#121212",
     color: "white",
     boxShadow: 24,
@@ -33,6 +33,8 @@ export default function HoldingModal({ coin }) {
 
   const [openHolding, setOpenHolding] = React.useState(false);
   const [newHolding, setNewHolding] = React.useState();
+  const [newHoldingQuantity, setNewHoldingQuantity] = React.useState();
+
   const [newHolding2, setNewHolding2] = React.useState(0);
 
   const handleOpen = () => setOpenHolding(true);
@@ -117,18 +119,86 @@ export default function HoldingModal({ coin }) {
               }}
             >
               {" "}
-              <Box style={{ display: "flex", gap: 10 }}>
-                <Typography>
-                  1 {coin?.name} ={" "}
-                  {coin?.market_data?.current_price[currency.toLowerCase()]}
-                  {currency}
-                </Typography>
+              <Box
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: 20,
+                }}
+              >
+                {" "}
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  <Typography variant="h5" style={{ fontFamily: "VT323" }}>
+                    1 {coin?.name} ={" "}
+                    {coin?.market_data?.current_price[currency.toLowerCase()]}
+                    {currency}
+                  </Typography>
+                </div>
                 <TextField
                   variant="outlined"
+                  defaultValue=""
                   type="number"
                   label={holdingPlaceHolder}
                   value={newHolding}
-                  onChange={(e) => setNewHolding(e.target.value)}
+                  onChange={(e) => {
+                    setNewHoldingQuantity(
+                      e.target.value /
+                        coin?.market_data?.current_price[currency.toLowerCase()]
+                    );
+                    setNewHolding(e.target.value);
+                  }}
+                  fullWidth
+                />
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    gap: "30px",
+                  }}
+                >
+                  <div
+                    style={{
+                      width: "150px",
+                    }}
+                  >
+                    <hr></hr>
+                  </div>
+
+                  <p
+                    style={{
+                      fontSize: "15px",
+                    }}
+                  >
+                    or
+                  </p>
+                  <div
+                    style={{
+                      width: "150px",
+                    }}
+                  >
+                    <hr></hr>
+                  </div>
+                </div>
+                <TextField
+                  variant="outlined"
+                  defaultValue=""
+                  type="number"
+                  label="Enter Coin Quantity"
+                  value={newHoldingQuantity}
+                  onChange={(e) => {
+                    setNewHolding(
+                      e.target.value *
+                        coin?.market_data?.current_price[currency.toLowerCase()]
+                    );
+                    setNewHoldingQuantity(e.target.value);
+                  }}
                   fullWidth
                 />
                 <Button
