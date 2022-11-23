@@ -6,6 +6,7 @@ import bestperformanceicon from "../asset/bestperformanceicon.png";
 import worstperformericon from "../asset/worstperformericon.png";
 import bell from "../asset/alert-1.png";
 import currentbalance from "../asset/current-balance .png";
+import Service from "../service/Service";
 
 const useStyles = makeStyles((theme) => ({
   infoContainer: {
@@ -36,6 +37,12 @@ const useStyles = makeStyles((theme) => ({
       alignItems: "center",
     },
   },
+  red: {
+    color: "#FF4B25",
+  },
+  green: {
+    color: "#00FF19",
+  },
 }));
 
 function Portfolioinfo({
@@ -44,6 +51,7 @@ function Portfolioinfo({
   Worst,
   alert,
   period,
+  timeFrame,
 }) {
   const classes = useStyles();
   const { currency, symbol, watchlist } = CryptoState();
@@ -78,19 +86,29 @@ function Portfolioinfo({
           style={{ display: "flex", alignItems: "flex-start" }}
         >
           <img src={currentbalance} height="30" />
-          <Typography style={{ width: "max-content", padding: 15 }}>
-            Profit Estimation
-          </Typography>
+
+          <Typography>Profit Estimation ({timeFrame})</Typography>
           <Typography
+            variant="h4"
             style={{
-              fontSize: 20,
-              fontWeight: "bolder",
               display: "flex",
               width: "100%",
               justifyContent: "center",
             }}
           >
-            {avgPriceChange ? avgPriceChange?.toFixed(2) : ""} {"%"}
+            {" "}
+            <div
+              className={avgPriceChange > 0 ? classes.green : classes.red}
+              style={{
+                width: "80%",
+                display: "flex",
+                justifyContent: "center",
+                fontFamily: "VT323",
+              }}
+            >
+              {Service.isProfit(avgPriceChange) ? "+" : ""}
+              {avgPriceChange ? avgPriceChange?.toFixed(2) : ""} {"%"}
+            </div>
           </Typography>
         </div>
         <div className={classes.infoContainer}>
@@ -121,7 +139,7 @@ function Portfolioinfo({
                 paddingBottom: 10,
               }}
             >
-              Top Performance Coin
+              Top Performance Coin ({timeFrame})
             </Typography>
           </div>
 
@@ -179,7 +197,7 @@ function Portfolioinfo({
                 paddingBottom: 10,
               }}
             >
-              Worst Performance Coin
+              Worst Performance Coin ({timeFrame})
             </Typography>
           </div>
 
