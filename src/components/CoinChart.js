@@ -325,6 +325,10 @@ function CoinChart({ coin }) {
                         fontFamily: "VT323",
                       },
                     },
+                    theme: {
+                      mode: "dark",
+                      palette: "palette2",
+                    },
                   }}
                   series={[priceData]}
                   type="candlestick"

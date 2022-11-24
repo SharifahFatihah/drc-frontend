@@ -203,7 +203,7 @@ function CoinPage() {
               #{coin?.market_cap_rank}
             </div>
           </Card>
-          {coin?.market_cap_rank > 250 ? (
+          {coin?.market_cap_rank < 250 ? (
             user ? (
               inWatchlist ? (
                 <img
