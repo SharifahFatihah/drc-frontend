@@ -18,9 +18,10 @@ const useStyle = makeStyles((theme) => ({
     left: "50%",
     transform: "translate(-50%, -50%)",
     width: "50%",
-    backgroundColor: theme.palette.background.paper,
+    // height: "800px",
+    backgroundColor: "#1E1D1D",
     color: "white",
-    boxShadow: 24,
+    boxShadow: "inset 1px 1px 5px #FFE227",
     borderRadius: 10,
   },
   google: {
@@ -113,11 +114,27 @@ export default function AuthModal() {
           >
             <Tabs variant="fullWidth" value={value} onChange={handleChange}>
               <Tab
-                style={value === 0 ? { color: "" } : { color: "white" }}
+                style={
+                  value === 0
+                    ? {
+                        color: "black",
+                        backgroundColor: "#FFE227",
+                        fontWeight: "bold",
+                      }
+                    : { color: "white" }
+                }
                 label="Login"
               />
               <Tab
-                style={value === 1 ? { color: "" } : { color: "white" }}
+                style={
+                  value === 1
+                    ? {
+                        color: "black",
+                        backgroundColor: "#FFE227",
+                        fontWeight: "bold",
+                      }
+                    : { color: "white" }
+                }
                 label="Sign Up"
               />
             </Tabs>
@@ -162,7 +179,13 @@ export default function AuthModal() {
                 <Button
                   variant="contained"
                   onClick={signInWithGoogle}
-                  style={{ backgroundColor: "grey" }}
+                  style={{
+                    backgroundColor: "white",
+                    border: "5px solid #FFE227",
+                    color: "black",
+                    fontFamily: "VT323",
+                    fontSize: 20,
+                  }}
                 >
                   Sign In With Google
                 </Button>

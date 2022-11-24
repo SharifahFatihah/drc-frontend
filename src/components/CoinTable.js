@@ -10,6 +10,7 @@ import {
   TextField,
 } from "@material-ui/core";
 import MockTable from "../components/MockTable";
+import SearchIcon from "../asset/search.png";
 
 const useStyle = makeStyles((theme) => ({}));
 
@@ -34,7 +35,7 @@ function CoinTable() {
           label="Search"
           variant="outlined"
           onChange={(e) => setSearch(e.target.value)}
-          style={{ marginBottom: 20, width: "100%" }}
+          style={{ marginBottom: 80, width: "100%" }}
         />
 
         <MockTable
