@@ -199,29 +199,33 @@ function CoinPage() {
               #{coin?.market_cap_rank}
             </div>
           </Card>
-          {user ? (
-            inWatchlist ? (
-              <img
-                src={favouriteIcon}
-                height="30rem"
-                onClick={inWatchlist ? removeFromWatchlist : addToWatchList}
-                style={{ cursor: "pointer" }}
-              />
+          {coin?.market_cap_rank > 250 ? (
+            user ? (
+              inWatchlist ? (
+                <img
+                  src={favouriteIcon}
+                  height="30rem"
+                  onClick={inWatchlist ? removeFromWatchlist : addToWatchList}
+                  style={{ cursor: "pointer" }}
+                />
+              ) : (
+                <img
+                  src={unfavouriteIcon}
+                  height="30rem"
+                  onClick={inWatchlist ? removeFromWatchlist : addToWatchList}
+                  style={{ cursor: "pointer" }}
+                />
+              )
             ) : (
               <img
                 src={unfavouriteIcon}
                 height="30rem"
-                onClick={inWatchlist ? removeFromWatchlist : addToWatchList}
+                onClick={handleOpen}
                 style={{ cursor: "pointer" }}
               />
             )
           ) : (
-            <img
-              src={unfavouriteIcon}
-              height="30rem"
-              onClick={handleOpen}
-              style={{ cursor: "pointer" }}
-            />
+            ""
           )}
         </div>
 

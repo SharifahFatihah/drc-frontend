@@ -38,8 +38,8 @@ export default function HoldingModal({ coin }) {
   const { currency, setAlert, watchlist, user } = CryptoState();
 
   const [openHolding, setOpenHolding] = React.useState(false);
-  const [newHolding, setNewHolding] = React.useState();
-  const [newHoldingQuantity, setNewHoldingQuantity] = React.useState();
+  const [newHolding, setNewHolding] = React.useState("");
+  const [newHoldingQuantity, setNewHoldingQuantity] = React.useState("");
 
   const [newHolding2, setNewHolding2] = React.useState(0);
 
@@ -153,11 +153,13 @@ export default function HoldingModal({ coin }) {
                   label={holdingPlaceHolder}
                   value={newHolding}
                   onChange={(e) => {
+                    setNewHolding(e.target.value);
                     setNewHoldingQuantity(
                       e.target.value /
-                        coin?.market_data?.current_price[currency.toLowerCase()]
+                        coin?.market_data?.current_price[
+                          currency?.toLowerCase()
+                        ]
                     );
-                    setNewHolding(e.target.value);
                   }}
                   fullWidth
                 />
@@ -199,11 +201,11 @@ export default function HoldingModal({ coin }) {
                   label="Enter Coin Quantity"
                   value={newHoldingQuantity}
                   onChange={(e) => {
+                    setNewHoldingQuantity(e.target.value);
                     setNewHolding(
                       e.target.value *
                         coin?.market_data?.current_price[currency.toLowerCase()]
                     );
-                    setNewHoldingQuantity(e.target.value);
                   }}
                   fullWidth
                 />

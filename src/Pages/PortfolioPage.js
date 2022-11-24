@@ -24,6 +24,7 @@ import { db } from "../firebase";
 import Portfolioinfo from "../components/Portfolioinfo";
 import { Doughnut } from "react-chartjs-2";
 import infoicon from "../asset/infoicon.png";
+import DeleteModal from "../components/DeleteModal";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -258,40 +259,6 @@ function PortfolioPage() {
     setDonutCoin(holdingArr);
   }, [userCoin, userCoin2, userCoin3, watchlist]);
 
-  const setHoldingWatchlist = async (coin) => {
-    const coinRef = await doc(db, "watchlist", user.uid);
-
-    try {
-      await setDoc(
-        coinRef,
-        {
-          coins: watchlist.map((watch) =>
-            watch.id === coin?.id
-              ? { id: coin.id, holding: 0 }
-              : { id: watch.id, holding: watch.holding }
-          ),
-        },
-        { merge: "true" }
-      );
-    } catch (error) {}
-
-    try {
-      await setDoc(
-        coinRef,
-        {
-          coins: watchlist.filter((watch) => watch.id !== coin?.id),
-        },
-        { merge: "true" }
-      );
-
-      setAlert({
-        open: true,
-        message: `${coin.name} remove from your watchlist`,
-        type: "success",
-      });
-    } catch (error) {}
-  };
-
   const random_rgba = () => {
     var o = Math.round,
       r = Math.random,
@@ -421,14 +388,7 @@ function PortfolioPage() {
                                   }}
                                 >
                                   <HoldingModal coin={row} />
-                                  <img
-                                    src={DeleteIcon}
-                                    height={20}
-                                    onClick={() => {
-                                      setHoldingWatchlist(row);
-                                    }}
-                                    style={{ cursor: "pointer" }}
-                                  />
+                                  <DeleteModal row={row} />
                                 </div>
                               </TableCell>
                             </TableRow>
