@@ -1,9 +1,19 @@
-import { makeStyles, Tooltip, Typography } from "@material-ui/core";
+import {
+  makeStyles,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Tooltip,
+  Typography,
+} from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import { Bar, Doughnut, Line } from "react-chartjs-2";
 import { CryptoState } from "../CryptoContext";
 import Service from "../service/Service";
-import CoinChart from "./CoinChart";
 import infoicon from "../asset/infoicon.png";
 
 const useStyle = makeStyles((theme) => ({
@@ -18,15 +28,75 @@ const useStyle = makeStyles((theme) => ({
       padding: "0",
     },
   },
+  secondContainer: {
+    display: "flex",
+    width: "100%",
+    [theme.breakpoints.down("md")]: {
+      width: "90%",
+      flexDirection: "column",
+      alignItems: "center",
+    },
+  },
+  inSecondContainer: {
+    display: "flex",
+    flexDirection: "column",
+    justifyItems: "center",
+    margin: 20,
+    width: "60%",
+    [theme.breakpoints.down("md")]: {
+      width: "100%",
+    },
+  },
+  inSecondContainer40: {
+    display: "flex",
+    flexDirection: "column",
+    justifyItems: "center",
+    margin: 20,
+    width: "40%",
+    [theme.breakpoints.down("md")]: {
+      width: "100%",
+    },
+  },
+  red: {
+    backgroundColor: "#FF4B25",
+    marginLeft: 10,
+    color: "black",
+    padding: 5,
+    borderRadius: 5,
+    width: "80%",
+    display: "flex",
+    justifyContent: "center",
+  },
+  green: {
+    backgroundColor: "#00FF19",
+    marginLeft: 10,
+    color: "black",
+    padding: 5,
+    borderRadius: 5,
+    width: "80%",
+    display: "flex",
+    justifyContent: "center",
+  },
+  yellow: {
+    backgroundColor: "#FFE227",
+    marginLeft: 10,
+    color: "black",
+    padding: 5,
+    borderRadius: 5,
+    width: "80%",
+    display: "flex",
+    justifyContent: "center",
+  },
 }));
 
-function PortfolioChart({ days }) {
+function PortfolioChart({ days, volatilityDesc, timeFrame }) {
   const classes = useStyle();
 
   const { user, setAlert, watchlist, coins, currency, symbol } = CryptoState();
 
   const [coinHistData, setCoinHistData] = useState([]);
   const [coinHistData2, setCoinHistData2] = useState([]);
+  const [portfolioVol, setPortfolioVol] = useState(0);
 
   useEffect(() => {
     Promise.all(
@@ -118,7 +188,12 @@ function PortfolioChart({ days }) {
       };
     };
 
-    return { ...e, stats_return: sdReturn(), stats_price: sdPrice() };
+    return {
+      ...e,
+      stats_return: sdReturn(),
+      stats_price: sdPrice(),
+      total_weight: totalWeight,
+    };
   });
 
   const portfolioPriceChart = () => {
@@ -206,6 +281,10 @@ function PortfolioChart({ days }) {
       return_sd: Math.sqrt(return_sum_cov + return_sum_var) * 100,
     };
   };
+
+  useEffect(() => {
+    setPortfolioVol(portfolioVolatility()?.return_sd);
+  }, [watchlist, coinsd2, days]);
 
   console.log("goldmine", portfolioVolatility());
 
@@ -304,148 +383,298 @@ function PortfolioChart({ days }) {
   const histPriceTooltip = `The price of coin in the past ${days} day(s)`;
   const relPriceTooltip = `The price of each coin in your portfolio relative to its highest value for the past ${days} day(s).`;
   const histReturnTooltip = `The 'Sum of Returns' x 'Weightage of each coin' in your portfolio for the past ${days} day(s).`;
-  const weightageTooltip = `The weightage of each coin in your portfolio for the past ${days} day(s).`;
 
   return (
     <div className={classes.container}>
-      <div
-        style={{
-          width: "100%",
-          display: "flex",
-          alignItems: "flex-start",
-          marginBottom: 20,
-        }}
-      ></div>
+      <div className={classes.secondContainer}>
+        <div
+          style={{ display: "flex", flexDirection: "column", width: "100%" }}
+        >
+          <Typography variant="h2" style={{ fontFamily: "VT323" }}>
+            Historical Price{" "}
+            <Tooltip title={histPriceTooltip}>
+              <img
+                src={infoicon}
+                height="13"
+                style={{ marginBottom: "25px" }}
+              />
+            </Tooltip>
+          </Typography>
 
-      <Typography variant="h2" style={{ fontFamily: "VT323" }}>
-        Historical Price{" "}
-        <Tooltip title={histPriceTooltip}>
-          <img src={infoicon} height="13" style={{ marginBottom: "25px" }} />
-        </Tooltip>
-      </Typography>
-      {portfolioPriceChart().avg_return.length === 0 ? null : (
-        <Line
-          data={{
-            labels: portfolioPriceChart()?.time?.map((e) => {
-              let date = new Date(e);
-              let time = `${date.getHours()}:${date.getMinutes()} `;
-              return days === 1 ? time : date.toLocaleDateString();
-            }),
-            datasets: [
-              {
-                data: portfolioPriceChart()?.avg_return.map((e) => e),
-                label: `Portfolio Price`,
-                borderColor: "yellow",
-                borderWidth: 2,
-                pointBorderColor: "rgba(0,0,0,0)",
-                pointBackgroundColor: "rgba(0,0,0,0)",
-                pointHoverBorderColor: "#5AC53B",
-                pointHitRadius: 6,
-                yAxisID: "y",
-              },
-            ],
-          }}
-          options={{
-            animation,
-            plugins: {
-              legend: {
-                display: false,
-              },
-            },
-            scales: { y: { display: true } },
-          }}
-        />
-      )}
-      <Typography variant="h2" style={{ fontFamily: "VT323" }}>
-        Relative Price of Portfolio Coins {""}
-        <Tooltip title={relPriceTooltip}>
-          <img src={infoicon} height="13" style={{ marginBottom: "25px" }} />
-        </Tooltip>
-      </Typography>
-      <Line
-        data={{
-          labels: coinHistData2[0]?.hist_data?.map((chartData) => {
-            let date = new Date(chartData[0]);
-            let time = `${date.getHours()}:${date.getMinutes()} `;
-            return days === 1 ? time : date.toLocaleDateString();
-          }),
-          datasets: coinChart,
-        }}
-        options={{
-          animation,
-          plugins: {
-            legend: {
-              display: true,
-            },
-          },
-          scales: { y: { display: true } },
-        }}
-      />
+          {portfolioPriceChart().avg_return.length === 0 ? null : (
+            <Line
+              data={{
+                labels: portfolioPriceChart()?.time?.map((e) => {
+                  let date = new Date(e);
+                  let time = `${date.getHours()}:${date.getMinutes()} `;
+                  return days === 1 ? time : date.toLocaleDateString();
+                }),
+                datasets: [
+                  {
+                    data: portfolioPriceChart()?.avg_return.map((e) => e),
+                    label: `Portfolio Price`,
+                    borderColor: "yellow",
+                    borderWidth: 2,
+                    pointBorderColor: "rgba(0,0,0,0)",
+                    pointBackgroundColor: "rgba(0,0,0,0)",
+                    pointHoverBorderColor: "#5AC53B",
+                    pointHitRadius: 6,
+                    yAxisID: "y",
+                  },
+                ],
+              }}
+              options={{
+                animation,
+                plugins: {
+                  legend: {
+                    display: false,
+                  },
+                },
+                scales: { y: { display: true } },
+              }}
+            />
+          )}
+        </div>
+      </div>
 
-      <Typography variant="h2" style={{ fontFamily: "VT323" }}>
-        Historical Returns{" "}
-        <Tooltip title={histReturnTooltip}>
-          <img src={infoicon} height="13" style={{ marginBottom: "25px" }} />
-        </Tooltip>
-      </Typography>
-      {portfolioReturnChart() && (
-        <Bar
-          data={{
-            labels: portfolioReturnChart()?.time?.map((e) => {
-              let date = new Date(e);
-              let time = `${date.getHours()}:${date.getMinutes()} `;
-              return days === 1 ? time : date.toLocaleDateString();
-            }),
-            datasets: [
-              {
-                data: portfolioReturnChart()?.avg_return.map((e) => e * 100),
-                label: `test`,
-                borderColor: colours,
-                borderWidth: 2,
-                pointBorderColor: "rgba(0,0,0,0)",
-                pointBackgroundColor: "rgba(0,0,0,0)",
-                pointHoverBorderColor: "#5AC53B",
-                pointHitRadius: 6,
-                yAxisID: "y",
+      <div className={classes.secondContainer}>
+        <div className={classes.inSecondContainer}>
+          <Typography variant="h3" style={{ fontFamily: "VT323" }}>
+            Historical Returns{" "}
+            <Tooltip title={histReturnTooltip}>
+              <img
+                src={infoicon}
+                height="13"
+                style={{ marginBottom: "25px" }}
+              />
+            </Tooltip>
+          </Typography>
+          {portfolioReturnChart() && (
+            <Line
+              data={{
+                labels: portfolioReturnChart()?.time?.map((e) => {
+                  let date = new Date(e);
+                  let time = `${date.getHours()}:${date.getMinutes()} `;
+                  return days === 1 ? time : date.toLocaleDateString();
+                }),
+                datasets: [
+                  {
+                    data: portfolioReturnChart()?.avg_return.map(
+                      (e) => e * 100
+                    ),
+                    label: `test`,
+                    borderColor: "rgba(255, 226, 39, 1)",
+                    borderWidth: 0.5,
+                    pointBorderColor: "rgba(0,0,0,0)",
+                    pointBackgroundColor: "rgba(0,0,0,0)",
+                    pointHoverBorderColor: "#5AC53B",
+                    pointHitRadius: 6,
+                    yAxisID: "y",
+                    fill: true,
+                    backgroundColor: "rgba(255, 226, 39, 0.6)",
+                  },
+                ],
+              }}
+              options={{
+                animation: { duration: 3000, easing: "easeInOutCubic" },
+                plugins: {
+                  legend: {
+                    display: false,
+                  },
+                },
+                scales: { y: { display: true } },
+              }}
+            />
+          )}
+        </div>
+        <div className={classes.inSecondContainer40}>
+          <Typography variant="h3" style={{ fontFamily: "VT323" }}>
+            Volitility {""}
+            <Tooltip title={relPriceTooltip}>
+              <img
+                src={infoicon}
+                height="13"
+                style={{ marginBottom: "25px" }}
+              />
+            </Tooltip>
+          </Typography>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              height: "80%",
+            }}
+          >
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+              }}
+            >
+              <Typography variant="subtitle" style={{ fontFamily: "VT323" }}>
+                {volatilityDesc} volatility of portfolio in the last {days}{" "}
+                day(s)
+              </Typography>
+              <Typography variant="h2" style={{ fontFamily: "VT323" }}>
+                {" "}
+                {portfolioVolatility()?.return_sd.toFixed(2)}%
+              </Typography>
+
+              <div
+                className={
+                  portfolioVolatility()?.return_sd > 3
+                    ? classes.red
+                    : portfolioVolatility()?.return_sd > 2
+                    ? classes.yellow
+                    : classes.green
+                }
+              >
+                <Typography variant="h4" style={{ fontFamily: "VT323" }}>
+                  {portfolioVolatility()?.return_sd > 3
+                    ? "high"
+                    : portfolioVolatility()?.return_sd > 2
+                    ? "moderate"
+                    : "low"}
+                </Typography>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className={classes.secondContainer}>
+        <div className={classes.inSecondContainer40}>
+          <TableContainer
+            component={Paper}
+            style={{ backgroundColor: "transparent", color: "black" }}
+          >
+            {" "}
+            <div
+              style={{
+                overflow: "auto",
+                maxHeight: "375px",
+              }}
+            >
+              <Table
+                sx={{ minWidth: 650 }}
+                aria-label="simple table"
+                stickyHeader
+              >
+                <TableHead>
+                  <TableRow>
+                    <TableCell
+                      style={{ color: "black", backgroundColor: "#FFE227" }}
+                    >
+                      Coin
+                    </TableCell>
+                    <TableCell
+                      align="right"
+                      style={{ color: "black", backgroundColor: "#FFE227" }}
+                    >
+                      &sigma; of price ({volatilityDesc})
+                    </TableCell>
+                    <TableCell
+                      align="right"
+                      style={{ color: "black", backgroundColor: "#FFE227" }}
+                    >
+                      &sigma; of return ({volatilityDesc})
+                    </TableCell>
+                  </TableRow>
+                </TableHead>
+
+                <TableBody>
+                  {coinsd2 &&
+                    coinsd2?.map((row) => {
+                      if (
+                        watchlist.includes(
+                          watchlist.find((watch) => watch.id === row.coin.id)
+                        )
+                      ) {
+                        return (
+                          <TableRow
+                            key={row.coin.name}
+                            sx={{
+                              "&:last-child td, &:last-child th": { border: 0 },
+                            }}
+                          >
+                            <TableCell
+                              component="th"
+                              scope="row"
+                              style={{ color: "white" }}
+                            >
+                              <div
+                                style={{
+                                  display: "flex",
+                                  alignItems: "center",
+                                }}
+                              >
+                                <div style={{ marginRight: 10 }}>
+                                  <img src={row?.coin.image} height="20" />
+                                </div>
+                                <div>{row.coin.name}</div>
+                              </div>
+                            </TableCell>
+                            <TableCell align="right" style={{ color: "white" }}>
+                              {Math.sqrt(
+                                row.stats_price.sd_price /
+                                  ((row.coin.holding * row.coin.current_price) /
+                                    row.total_weight)
+                              ).toPrecision(4)}
+                            </TableCell>
+                            <TableCell align="right" style={{ color: "white" }}>
+                              {(
+                                Math.sqrt(
+                                  row.stats_return.sd_return /
+                                    ((row.coin.holding *
+                                      row.coin.current_price) /
+                                      row.total_weight) **
+                                      2
+                                ) * 100
+                              ).toPrecision(4)}
+                              %
+                            </TableCell>
+                          </TableRow>
+                        );
+                      }
+                    })}
+                </TableBody>
+              </Table>
+            </div>
+          </TableContainer>
+        </div>
+        <div className={classes.inSecondContainer}>
+          <Typography variant="h3" style={{ fontFamily: "VT323" }}>
+            Coin Price {""}
+            <Tooltip title={relPriceTooltip}>
+              <img
+                src={infoicon}
+                height="13"
+                style={{ marginBottom: "25px" }}
+              />
+            </Tooltip>
+          </Typography>
+          <Line
+            data={{
+              labels: coinHistData2[0]?.hist_data?.map((chartData) => {
+                let date = new Date(chartData[0]);
+                let time = `${date.getHours()}:${date.getMinutes()} `;
+                return days === 1 ? time : date.toLocaleDateString();
+              }),
+              datasets: coinChart,
+            }}
+            options={{
+              animation,
+              plugins: {
+                legend: {
+                  display: true,
+                },
               },
-            ],
-          }}
-          options={{
-            animation: { duration: 3000, easing: "easeInOutCubic" },
-            plugins: {
-              legend: {
-                display: false,
-              },
-            },
-            scales: { y: { display: true } },
-          }}
-        />
-      )}
-      <Typography variant="h2" style={{ fontFamily: "VT323" }}>
-        Coin Weightage{" "}
-        <Tooltip title={weightageTooltip}>
-          <img src={infoicon} height="13" style={{ marginBottom: "25px" }} />
-        </Tooltip>
-      </Typography>
-      {doughnutCoin() && (
-        <Doughnut
-          data={{
-            labels: doughnutCoin()?.map((e) => e.name),
-            datasets: [
-              {
-                data: doughnutCoin()
-                  ? doughnutCoin()?.map(
-                      (e) => (e.weight / e.total_weight) * 100
-                    )
-                  : [],
-                borderWidth: 0,
-                backgroundColor: colourDoughnut,
-                radius: "60%",
-              },
-            ],
-          }}
-        />
-      )}
+              scales: { y: { display: true } },
+            }}
+          />
+        </div>
+      </div>
     </div>
   );
 }
