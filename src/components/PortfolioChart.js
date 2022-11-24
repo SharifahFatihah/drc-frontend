@@ -102,14 +102,20 @@ function PortfolioChart({ days, volatilityDesc, timeFrame }) {
     Promise.all(
       coins.map(async (coin) => {
         if (watchlist.includes(watchlist.find((e) => e.id === coin.id)))
-          return Service.getHistoricalChart(coin.id, days, currency).then(
-            async (z) => {
+          return Service.getHistoricalChart(coin.id, days, currency)
+            .then(async (z) => {
               setCoinHistData((coinHistData) => [
                 ...coinHistData,
                 { coin, hist_data: z.data.prices },
               ]);
-            }
-          );
+            })
+            .catch((err) => {
+              setAlert({
+                open: true,
+                message: `API request exceed 50 limit, please wait 1 minute`,
+                type: "error",
+              });
+            });
       })
     );
   }, [watchlist, days]);

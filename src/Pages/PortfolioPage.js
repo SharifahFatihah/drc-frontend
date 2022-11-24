@@ -135,9 +135,17 @@ function PortfolioPage() {
         if (watchlist?.includes(watchlist?.find((e) => e.id === coin.id)))
           return Service.getSingleCoin(coin.id);
       })
-    ).then((z) => {
-      setUserCoin(z.filter((y) => !!y));
-    });
+    )
+      .then((z) => {
+        setUserCoin(z.filter((y) => !!y));
+      })
+      .catch((err) => {
+        setAlert({
+          open: true,
+          message: `API request exceed 50 limit, please wait 1 minute`,
+          type: "error",
+        });
+      });
   }, [watchlist]);
 
   useEffect(() => {
@@ -474,7 +482,7 @@ function PortfolioPage() {
             }}
           >
             {" "}
-            Youre Portfolio is empty
+            Your Portfolio is empty
           </div>
         ) : (
           <div style={{ width: "100%", paddingTop: 40 }}>
