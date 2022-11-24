@@ -1,6 +1,5 @@
 import {
   Button,
-  makeStyles,
   Paper,
   Table,
   TableBody,
@@ -9,22 +8,24 @@ import {
   TableRow,
   Tooltip,
   Typography,
+  makeStyles,
 } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
-import { CryptoState } from "../CryptoContext";
-import currentAssetIcon from "../asset/currentasseticon.png";
-import Service from "../service/Service";
-import { useNavigate } from "react-router-dom";
-import PortfolioChart from "../components/PortfolioChart";
-import { chartDays } from "../service/Service";
-import HoldingModal from "../components/HoldingModal";
-import DeleteIcon from "../asset/deleteicon.png";
 import { doc, setDoc } from "firebase/firestore";
-import { db } from "../firebase";
-import Portfolioinfo from "../components/Portfolioinfo";
-import { Doughnut } from "react-chartjs-2";
-import infoicon from "../asset/infoicon.png";
+
+import { CryptoState } from "../CryptoContext";
+import DeleteIcon from "../asset/deleteicon.png";
 import DeleteModal from "../components/DeleteModal";
+import { Doughnut } from "react-chartjs-2";
+import HoldingModal from "../components/HoldingModal";
+import PortfolioChart from "../components/PortfolioChart";
+import Portfolioinfo from "../components/Portfolioinfo";
+import Service from "../service/Service";
+import { chartDays } from "../service/Service";
+import currentAssetIcon from "../asset/currentasseticon.png";
+import { db } from "../firebase";
+import infoicon from "../asset/infoicon.png";
+import { useNavigate } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -482,7 +483,7 @@ function PortfolioPage() {
             }}
           >
             {" "}
-            Your Portfolio is empty
+            Your portfolio is empty.
           </div>
         ) : (
           <div style={{ width: "100%", paddingTop: 40 }}>
