@@ -363,7 +363,7 @@ function CoinPage() {
               </Button>
             )}
           </div>
-          <div style={{marginTop:20}}>
+          <div style={{ marginTop: 20, width: "90%" }}>
             <CoinConverter coin={coin} />
           </div>
         </div>
