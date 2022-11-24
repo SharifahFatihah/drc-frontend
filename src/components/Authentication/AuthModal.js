@@ -183,9 +183,9 @@ export default function AuthModal() {
                   variant="contained"
                   onClick={signInWithGoogle}
                   style={{
-                    backgroundColor: "white",
+                    backgroundColor: "#212121",
                     border: "5px solid #FFE227",
-                    color: "black",
+                    color: "white",
                     fontFamily: "VT323",
                     fontSize: 20,
                   }}

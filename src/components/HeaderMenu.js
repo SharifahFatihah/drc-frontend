@@ -13,18 +13,17 @@ import UserSidebar from "./UserSidebar";
 import AuthModal from "./Authentication/AuthModal";
 import { CryptoState } from "../CryptoContext";
 import { useNavigate } from "react-router-dom";
+const useStyles = makeStyles((theme) => ({
+  menu: {
+    color: "#424242",
+  },
+}));
 
 export default function HeaderMenu({ selectMenu, isMobile }) {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const navigate = useNavigate();
-  // const classes = useStyles();
+  const classes = useStyles();
   const { user } = CryptoState();
-
-  // const useStyles = makeStyles((theme) => ({
-  //   menu: {
-  //     color: "#424242",
-  //   },
-  // }));
 
   const open = Boolean(anchorEl);
   const handleClick = (event) => {

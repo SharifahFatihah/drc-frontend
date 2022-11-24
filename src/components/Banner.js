@@ -5,8 +5,6 @@ import pixel from "../asset/pixelated_1.png";
 const useStyle = makeStyles((theme) => ({
   banner: {
     backgroundPosition: "center center",
-    background: "rgb(52,0,57)",
-    // backgroundImage: `linear-gradient(180deg, rgba(52,0,57,0.87) 0%, rgba(107,13,116,0.8) 70%, rgba(255,226,39,1) 100%), url(https://www.themasterpicks.com/wp-content/uploads/2020/04/22b22287602523.5dbd29081561d.gif), url(${pixel}) `,
     background:
       "linear-gradient(180deg, rgba(52,0,57,0.87) 0%, rgba(107,13,116,0.8) 70%, rgba(255,226,39,1) 100%), url(https://www.themasterpicks.com/wp-content/uploads/2020/04/22b22287602523.5dbd29081561d.gif)",
     backgroundSize: "contain",
