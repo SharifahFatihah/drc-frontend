@@ -71,6 +71,14 @@ function Signup({ handleClose }) {
           }}
         >
           <img src={LogoIcon} width="40" />
+        </div>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
           <img src={LogoWord} width="200" />
         </div>
         <div
@@ -81,14 +89,15 @@ function Signup({ handleClose }) {
         >
           <h1> Create Account</h1>
         </div>
-        <TextField
-          variant="outlined"
-          type="username"
-          label="Enter Name"
-          value={username}
-          onChange={(e) => setName(e.target.value)}
-          fullWidth
-        />
+        <div
+          style={{
+            display: "flex",
+
+            justifyContent: "center",
+          }}
+        >
+          <span>Enter your details or continue with Google</span>
+        </div>
         <TextField
           variant="outlined"
           type="email"
@@ -115,7 +124,13 @@ function Signup({ handleClose }) {
         />
         <Button
           variant="contained"
-          style={{ backgroundColor: "purple", color: "white" }}
+          style={{
+            backgroundColor: "#FFE227",
+            border: "5px solid white",
+            color: "black",
+            fontFamily: "VT323",
+            fontSize: 20,
+          }}
           onClick={handleSubmit}
         >
           Sign Up
