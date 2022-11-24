@@ -1,9 +1,59 @@
-import { Typography } from "@material-ui/core";
+import { Typography, makeStyles } from "@material-ui/core";
 import React from "react";
 import ScrollHorizontal from "./ScrollHorizontal";
 import TrendHorizontal from "./TrendHorizontal";
+import Pacman from "../asset/all-coins.gif";
+
+const useStyles = makeStyles((theme) => ({
+  container: {
+    display: "flex",
+    padding: 50,
+    [theme.breakpoints.down("md")]: {
+      flexDirection: "column-reverse",
+      alignItems: "center",
+      // marginLeft: "0",
+      // marginRight: "0",
+      // paddingRight: "0",
+      // paddingLeft: "0",
+      padding: 20,
+    },
+  },
+  left: {
+    width: "30%",
+    padding: 50,
+    [theme.breakpoints.down("md")]: {
+      alignItems: "center",
+      justifyContent: "center",
+      width: "100%",
+      padding: 20,
+    },
+  },
+  right: {
+    display: "flex",
+    marginRight: 50,
+    marginTop: 70,
+    width: "70%",
+    justifyContent: "center",
+    alignItems: "center",
+    [theme.breakpoints.down("md")]: {
+      display: "none",
+    },
+  },
+  leftSub: {
+    paddingRight: 20,
+    paddingLeft: 20,
+    fontFamily: "VT323",
+    marginBottom: 30,
+    [theme.breakpoints.down("md")]: {
+      paddingRight: 0,
+      paddingLeft: 0,
+    },
+  },
+}));
 
 function Trending2() {
+  const classes = useStyles();
+
   return (
     <div
       style={{
@@ -13,32 +63,32 @@ function Trending2() {
         alignItems: "center",
       }}
     >
-      <Typography
-        variant="h1"
-        style={{
-          marginBottom: 5,
-          paddingRight: 20,
-          paddingLeft: 20,
-          fontFamily: "VT323",
-          color: "#FFE227",
-          marginBottom: 50,
-        }}
-      >
-        Coins
-      </Typography>
-      <Typography
-        variant="h3"
-        style={{
-          marginBottom: 5,
-          paddingRight: 20,
-          paddingLeft: 20,
-          fontFamily: "VT323",
-          color: "#FFE227",
-          marginBottom: 50,
-        }}
-      >
-        Top trending coins searched by users
-      </Typography>
+      <div className={classes.container}>
+        <div className={classes.left}>
+          <Typography
+            className={classes.leftSub}
+            variant="h1"
+            style={{
+              color: "#FFE227",
+            }}
+          >
+            Coins
+          </Typography>
+          <Typography
+            className={classes.leftSub}
+            variant="h3"
+            style={{
+              color: "white",
+            }}
+          >
+            Top trending coins searched by users
+          </Typography>
+        </div>
+        <div className={classes.right}>
+          <img src={Pacman} alt="pacman eating coins" width={800} />
+        </div>
+      </div>
+
       <TrendHorizontal />
     </div>
   );

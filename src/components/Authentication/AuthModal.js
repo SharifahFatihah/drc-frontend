@@ -18,10 +18,14 @@ const useStyle = makeStyles((theme) => ({
     left: "50%",
     transform: "translate(-50%, -50%)",
     width: "50%",
-    backgroundColor: theme.palette.background.paper,
+    // height: "800px",
+    backgroundColor: "#1E1D1D",
     color: "white",
-    boxShadow: 24,
+    boxShadow: "inset 1px 1px 5px #FFE227",
     borderRadius: 10,
+    [theme.breakpoints.down("sm")]: {
+      width: "80%",
+    },
   },
   google: {
     padding: 24,
@@ -30,6 +34,18 @@ const useStyle = makeStyles((theme) => ({
     flexDirection: "column",
     textAlign: "center",
     gap: 20,
+  },
+  googleSignIn: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    marginLeft: "0",
+    marginRight: "0",
+    marginBottom: "10px",
+    [theme.breakpoints.down("md")]: {
+      marginLeft: "0",
+      marginRight: "0",
+    },
   },
 }));
 
@@ -101,11 +117,27 @@ export default function AuthModal() {
           >
             <Tabs variant="fullWidth" value={value} onChange={handleChange}>
               <Tab
-                style={value === 0 ? { color: "" } : { color: "white" }}
+                style={
+                  value === 0
+                    ? {
+                        color: "black",
+                        backgroundColor: "#FFE227",
+                        fontWeight: "bold",
+                      }
+                    : { color: "white" }
+                }
                 label="Login"
               />
               <Tab
-                style={value === 1 ? { color: "" } : { color: "white" }}
+                style={
+                  value === 1
+                    ? {
+                        color: "black",
+                        backgroundColor: "#FFE227",
+                        fontWeight: "bold",
+                      }
+                    : { color: "white" }
+                }
                 label="Sign Up"
               />
             </Tabs>
@@ -146,21 +178,22 @@ export default function AuthModal() {
                   <hr></hr>
                 </div>
               </div>
-              <Button
-                variant="contained"
-                onClick={signInWithGoogle}
-                style={{
-                  backgroundColor: "grey",
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  marginLeft: "200px",
-                  marginRight: "200px",
-                  marginBottom: "10px",
-                }}
-              >
-                Sign In With Google
-              </Button>
+              <div className={classes.googleSignIn}>
+                <Button
+                  variant="contained"
+                  onClick={signInWithGoogle}
+                  style={{
+                    backgroundColor: "white",
+                    border: "5px solid #FFE227",
+                    color: "black",
+                    fontFamily: "VT323",
+                    fontSize: 20,
+                  }}
+                >
+                  Sign In With Google
+                </Button>
+              </div>
+
               <div
                 style={{
                   display: "flex",

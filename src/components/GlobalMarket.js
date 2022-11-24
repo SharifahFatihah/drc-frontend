@@ -1,10 +1,10 @@
 import { makeStyles, Typography } from "@material-ui/core";
 import React from "react";
 import { CryptoState } from "../CryptoContext";
-import MarketCapIcon from "../asset/marketcapicon.png";
-import Icon24h from "../asset/24hicon.png";
-import DominanceIcon from "../asset/dominanceicon.png";
-import CoinMarketIcon from "../asset/coinmarketicon.png";
+import MarketCapIcon from "../asset/market-cap.png";
+import Icon24h from "../asset/24h.png";
+import DominanceIcon from "../asset/dominance.png";
+import CoinMarketIcon from "../asset/coin-count.png";
 import pixel from "../asset/pixelated_1.png";
 
 const useStyles = makeStyles((theme) => ({
@@ -30,6 +30,18 @@ const useStyles = makeStyles((theme) => ({
       alignItems: "center",
     },
   },
+  marketSub: {
+    paddingRight: 20,
+    paddingLeft: 20,
+    fontFamily: "VT323",
+    color: "white",
+    fontSize: "50px",
+    [theme.breakpoints.down("md")]: {
+      fontSize: "34px",
+      // paddingRight: 0,
+      // paddingLeft: 0,
+    },
+  },
 }));
 
 function GlobalMarket() {
@@ -41,8 +53,6 @@ function GlobalMarket() {
     <div
       style={{
         marginTop: 120,
-        // paddingTop: 120,
-        // paddingBottom: 120,
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
@@ -54,8 +64,7 @@ function GlobalMarket() {
         style={{
           position: "relative",
           transform: "rotate(180deg)",
-          right: "0",
-          top: "0",
+          width: "100%",
         }}
       ></img>
       <Typography
@@ -69,20 +78,12 @@ function GlobalMarket() {
       >
         Global Market
       </Typography>
-      <Typography
-        variant="h5"
-        style={{
-          paddingRight: 20,
-          paddingLeft: 20,
-          fontFamily: "Inter",
-          color: "white",
-        }}
-      >
-        Overview our latest global market data
+      <Typography className={classes.marketSub}>
+        Overview of the latest global market data
       </Typography>
       <div className={classes.marketContainer}>
         <div className={classes.infoContainer}>
-          <Typography>Market Cap</Typography>
+          <Typography style={{ fontWeight: "bold" }}>Market Cap</Typography>
           <Typography>
             {symbol}{" "}
             {Math.round(
@@ -101,7 +102,7 @@ function GlobalMarket() {
           />
         </div>
         <div className={classes.infoContainer}>
-          <Typography>Volume 24h</Typography>
+          <Typography style={{ fontWeight: "bold" }}>Volume 24h</Typography>
           <Typography>
             {symbol}{" "}
             {Math.round(globalInfo?.data?.total_volume[currency.toLowerCase()])
@@ -118,7 +119,7 @@ function GlobalMarket() {
           />
         </div>
         <div className={classes.infoContainer}>
-          <Typography>BTC Dominance</Typography>
+          <Typography style={{ fontWeight: "bold" }}>BTC Dominance</Typography>
           <Typography>
             {globalInfo?.data?.market_cap_percentage?.btc.toFixed(2)}
             {"%"}
@@ -131,7 +132,7 @@ function GlobalMarket() {
           />
         </div>
         <div className={classes.infoContainer}>
-          <Typography>Active Coins</Typography>
+          <Typography style={{ fontWeight: "bold" }}>Active Coins</Typography>
           <Typography>{globalInfo?.data?.active_cryptocurrencies}</Typography>
           <img
             src={CoinMarketIcon}
@@ -145,8 +146,7 @@ function GlobalMarket() {
         src={pixel}
         style={{
           position: "relative",
-          right: "0",
-          bottom: "0",
+          width: "100%",
         }}
       ></img>
     </div>

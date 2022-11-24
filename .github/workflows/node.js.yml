@@ -3,10 +3,9 @@
 
 name: CI
 
-on:
+on:git
   push:
-    branches: [Afifi]
-    #branches:[Nic]
+    branches: [Nic]
 
   workflow_dispatch:
 

@@ -159,12 +159,17 @@ export default function UserSidebar() {
                   marginLeft: 80,
                   display: "flex",
                   alignItems: "center",
-                  // outlineStyle:"outside",
-                  // outlineColor: "black",
-                  // outlineWidth: "thick",
+                  border: "5px solid white",
                 }}
               >
-                <a style={{ color: "black", fontWeight: "bolder" }}>Logout</a>
+                <a
+                  style={{
+                    color: "black",
+                    fontWeight: "bolder",
+                  }}
+                >
+                  Logout
+                </a>
               </Button>
             </div>
           </Drawer>
