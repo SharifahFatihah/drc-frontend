@@ -30,8 +30,11 @@ const useStyles = makeStyles((theme) => ({
     background: "rgba(79, 58, 84, 0.52)",
     minHeight: "185px",
     [theme.breakpoints.down("md")]: {
-      width: "20%",
+      flexDirection: "column",
+      display: "flex",
+      width: "90%",
       alignItems: "center",
+      justifyContent: "space-evenly",
     },
   },
 }));

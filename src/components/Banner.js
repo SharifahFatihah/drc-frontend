@@ -38,8 +38,11 @@ const useStyle = makeStyles((theme) => ({
     alignItems: "flex-start",
     marginLeft: 200,
     [theme.breakpoints.down("md")]: {
-      marginLeft: "0",
-      marginRight: "0",
+      flexDirection: "column",
+      display: "flex",
+      width: "50%",
+      alignItems: "center",
+      justifyContent: "space-evenly",
     },
   },
   description: {
