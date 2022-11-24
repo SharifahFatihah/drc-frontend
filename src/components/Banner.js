@@ -1,5 +1,6 @@
+import { Button, Container, Typography, makeStyles } from "@material-ui/core";
+
 import React from "react";
-import { makeStyles, Container, Typography, Button } from "@material-ui/core";
 import pixel from "../asset/pixelated_1.png";
 
 const useStyle = makeStyles((theme) => ({
@@ -35,8 +36,11 @@ const useStyle = makeStyles((theme) => ({
     alignItems: "flex-start",
     marginLeft: 200,
     [theme.breakpoints.down("md")]: {
-      marginLeft: "0",
-      marginRight: "0",
+      flexDirection: "column",
+      display: "flex",
+      width: "50%",
+      alignItems: "center",
+      justifyContent: "space-evenly",
     },
   },
   description: {
