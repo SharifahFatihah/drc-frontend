@@ -23,6 +23,9 @@ const useStyle = makeStyles((theme) => ({
     color: "white",
     boxShadow: "inset 1px 1px 5px #FFE227",
     borderRadius: 10,
+    [theme.breakpoints.down("sm")]: {
+      width: "80%",
+    },
   },
   google: {
     padding: 24,

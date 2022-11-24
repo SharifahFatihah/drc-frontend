@@ -199,29 +199,33 @@ function CoinPage() {
               #{coin?.market_cap_rank}
             </div>
           </Card>
-          {user ? (
-            inWatchlist ? (
-              <img
-                src={favouriteIcon}
-                height="30rem"
-                onClick={inWatchlist ? removeFromWatchlist : addToWatchList}
-                style={{ cursor: "pointer" }}
-              />
+          {coin?.market_cap_rank > 250 ? (
+            user ? (
+              inWatchlist ? (
+                <img
+                  src={favouriteIcon}
+                  height="30rem"
+                  onClick={inWatchlist ? removeFromWatchlist : addToWatchList}
+                  style={{ cursor: "pointer" }}
+                />
+              ) : (
+                <img
+                  src={unfavouriteIcon}
+                  height="30rem"
+                  onClick={inWatchlist ? removeFromWatchlist : addToWatchList}
+                  style={{ cursor: "pointer" }}
+                />
+              )
             ) : (
               <img
                 src={unfavouriteIcon}
                 height="30rem"
-                onClick={inWatchlist ? removeFromWatchlist : addToWatchList}
+                onClick={handleOpen}
                 style={{ cursor: "pointer" }}
               />
             )
           ) : (
-            <img
-              src={unfavouriteIcon}
-              height="30rem"
-              onClick={handleOpen}
-              style={{ cursor: "pointer" }}
-            />
+            ""
           )}
         </div>
 
@@ -236,7 +240,6 @@ function CoinPage() {
               {" Million "}
             </Typography>
           </span>
-          <span className={classes.coinBasic}></span>
           <span className={classes.coinBasic}>
             <Typography variant="h5" className={classes.description}>
               Circulating Supply:{" "}
@@ -251,10 +254,12 @@ function CoinPage() {
             <Typography variant="h5" className={classes.description}>
               Total Supply:{" "}
               {coin?.market_data.total_supply
-                ?.toString()
-                .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                .slice(0, -8)}
-              {" Million "}
+                ? coin?.market_data.total_supply
+                    ?.toString()
+                    .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                    .slice(0, -8)
+                : "-"}
+              {coin?.market_data.total_supply && " Million "}
             </Typography>
           </span>
           <span className={classes.coinBasic}>
