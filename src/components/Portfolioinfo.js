@@ -21,7 +21,11 @@ const useStyles = makeStyles((theme) => ({
     background: "rgba(79, 58, 84, 0.52)",
     minHeight: "185px",
     [theme.breakpoints.down("md")]: {
-      width: "30%",
+      width: "35%",
+      alignItems: "flex-start",
+    },
+    [theme.breakpoints.down("xs")]: {
+      width: "80%",
       alignItems: "flex-start",
     },
   },
@@ -37,11 +41,25 @@ const useStyles = makeStyles((theme) => ({
       alignItems: "center",
     },
   },
-  red: {
+  redColor: {
     color: "#FF4B25",
   },
-  green: {
+  greenColor: {
     color: "#00FF19",
+  },
+  red: {
+    backgroundColor: "#FF4B25",
+    marginLeft: 10,
+    color: "black",
+    padding: 5,
+    borderRadius: 5,
+  },
+  green: {
+    backgroundColor: "#00FF19",
+    marginLeft: 10,
+    color: "black",
+    padding: 5,
+    borderRadius: 5,
   },
 }));
 
@@ -98,7 +116,9 @@ function Portfolioinfo({
           >
             {" "}
             <div
-              className={avgPriceChange > 0 ? classes.green : classes.red}
+              className={
+                avgPriceChange > 0 ? classes.greenColor : classes.redColor
+              }
               style={{
                 width: "80%",
                 display: "flex",
@@ -123,7 +143,17 @@ function Portfolioinfo({
             <div>
               <img src={bestperformanceicon} alt="best coin Icon" height="30" />
             </div>
-            <div>{topPerformCoin?.market_data[period]?.toFixed(2)}</div>
+            <div
+              className={
+                topPerformCoin?.market_data[period] > 0
+                  ? classes.green
+                  : classes.red
+              }
+            >
+              {" "}
+              {Service.isProfit(topPerformCoin?.market_data[period]) ? "+" : ""}
+              {`${topPerformCoin?.market_data[period]?.toFixed(2)} %`}
+            </div>
           </div>
           <div
             style={{
@@ -180,7 +210,13 @@ function Portfolioinfo({
             <div>
               <img src={worstperformericon} alt="worst coin Icon" height="30" />
             </div>
-            <div>{Worst?.market_data[period]?.toFixed(2)}</div>
+            <div
+              className={
+                Worst?.market_data[period] > 0 ? classes.green : classes.red
+              }
+            >
+              {`${Worst?.market_data[period]?.toFixed(2)} %`}
+            </div>
           </div>
 
           <div
