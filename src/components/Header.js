@@ -116,7 +116,7 @@ function Header() {
 
   return (
     <ThemeProvider theme={darkTheme}>
-      <AppBar style={{ background: "#1b0a24" }} position="sticky">
+      <AppBar style={{ background: "#212121" }} position="sticky">
         <Container>
           <Toolbar>
             <Typography className={classes.title}>

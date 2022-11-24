@@ -6,6 +6,7 @@ import bestperformanceicon from "../asset/bestperformanceicon.png";
 import worstperformericon from "../asset/worstperformericon.png";
 import bell from "../asset/alert-1.png";
 import currentbalance from "../asset/current-balance .png";
+import Service from "../service/Service";
 
 const useStyles = makeStyles((theme) => ({
   infoContainer: {
@@ -20,7 +21,11 @@ const useStyles = makeStyles((theme) => ({
     background: "rgba(79, 58, 84, 0.52)",
     minHeight: "185px",
     [theme.breakpoints.down("md")]: {
-      width: "30%",
+      width: "35%",
+      alignItems: "flex-start",
+    },
+    [theme.breakpoints.down("xs")]: {
+      width: "80%",
       alignItems: "flex-start",
     },
   },
@@ -36,6 +41,26 @@ const useStyles = makeStyles((theme) => ({
       alignItems: "center",
     },
   },
+  redColor: {
+    color: "#FF4B25",
+  },
+  greenColor: {
+    color: "#00FF19",
+  },
+  red: {
+    backgroundColor: "#FF4B25",
+    marginLeft: 10,
+    color: "black",
+    padding: 5,
+    borderRadius: 5,
+  },
+  green: {
+    backgroundColor: "#00FF19",
+    marginLeft: 10,
+    color: "black",
+    padding: 5,
+    borderRadius: 5,
+  },
 }));
 
 function Portfolioinfo({
@@ -44,6 +69,7 @@ function Portfolioinfo({
   Worst,
   alert,
   period,
+  timeFrame,
 }) {
   const classes = useStyles();
   const { currency, symbol, watchlist } = CryptoState();
@@ -78,19 +104,31 @@ function Portfolioinfo({
           style={{ display: "flex", alignItems: "flex-start" }}
         >
           <img src={currentbalance} height="30" />
-          <Typography style={{ width: "max-content", padding: 15 }}>
-            Profit Estimation
-          </Typography>
+
+          <Typography>Profit Estimation ({timeFrame})</Typography>
           <Typography
+            variant="h4"
             style={{
-              fontSize: 20,
-              fontWeight: "bolder",
               display: "flex",
               width: "100%",
               justifyContent: "center",
             }}
           >
-            {avgPriceChange ? avgPriceChange?.toFixed(2) : ""} {"%"}
+            {" "}
+            <div
+              className={
+                avgPriceChange > 0 ? classes.greenColor : classes.redColor
+              }
+              style={{
+                width: "80%",
+                display: "flex",
+                justifyContent: "center",
+                fontFamily: "VT323",
+              }}
+            >
+              {Service.isProfit(avgPriceChange) ? "+" : ""}
+              {avgPriceChange ? avgPriceChange?.toFixed(2) : ""} {"%"}
+            </div>
           </Typography>
         </div>
         <div className={classes.infoContainer}>
@@ -105,7 +143,17 @@ function Portfolioinfo({
             <div>
               <img src={bestperformanceicon} alt="best coin Icon" height="30" />
             </div>
-            <div>{topPerformCoin?.market_data[period]?.toFixed(2)}</div>
+            <div
+              className={
+                topPerformCoin?.market_data[period] > 0
+                  ? classes.green
+                  : classes.red
+              }
+            >
+              {" "}
+              {Service.isProfit(topPerformCoin?.market_data[period]) ? "+" : ""}
+              {`${topPerformCoin?.market_data[period]?.toFixed(2)} %`}
+            </div>
           </div>
           <div
             style={{
@@ -121,7 +169,7 @@ function Portfolioinfo({
                 paddingBottom: 10,
               }}
             >
-              Top Performance Coin
+              Top Performance Coin ({timeFrame})
             </Typography>
           </div>
 
@@ -162,7 +210,13 @@ function Portfolioinfo({
             <div>
               <img src={worstperformericon} alt="worst coin Icon" height="30" />
             </div>
-            <div>{Worst?.market_data[period]?.toFixed(2)}</div>
+            <div
+              className={
+                Worst?.market_data[period] > 0 ? classes.green : classes.red
+              }
+            >
+              {`${Worst?.market_data[period]?.toFixed(2)} %`}
+            </div>
           </div>
 
           <div
@@ -179,7 +233,7 @@ function Portfolioinfo({
                 paddingBottom: 10,
               }}
             >
-              Worst Performance Coin
+              Worst Performance Coin ({timeFrame})
             </Typography>
           </div>
 
