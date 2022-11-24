@@ -84,7 +84,7 @@ function TrendHorizontal() {
           }}
         >
           <div style={{ display: "flex", marginBottom: 20 }}>
-            <img src={coin?.item?.large} alt={coin?.item?.name} height="70" />
+            <img src={coin?.item?.large} alt={coin?.item?.name } height="70" />
             <div style={{ marginLeft: 10 }}>
               <Typography variant="h4" style={{ fontWeight: "bold" }}>
                 {coin?.item?.symbol.toUpperCase()}
