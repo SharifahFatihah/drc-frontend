@@ -55,9 +55,9 @@ function TrendHorizontal() {
 
   const responsive = {
     0: { items: 1 },
-    730: { items: 2 },
+    824: { items: 2 },
     1150: { items: 3 },
-    1845: { items: 4 },
+    1600: { items: 4 },
   };
 
   const items = trending?.coins.map((coin) => {

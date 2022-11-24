@@ -7,6 +7,7 @@ import {
   TableCell,
   TableContainer,
   TableRow,
+  Tooltip,
   Typography,
 } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
@@ -21,6 +22,9 @@ import DeleteIcon from "../asset/deleteicon.png";
 import { doc, setDoc } from "firebase/firestore";
 import { db } from "../firebase";
 import Portfolioinfo from "../components/Portfolioinfo";
+import { Doughnut } from "react-chartjs-2";
+import infoicon from "../asset/infoicon.png";
+import DeleteModal from "../components/DeleteModal";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -86,6 +90,7 @@ const useStyles = makeStyles((theme) => ({
       width: "100%",
       flexDirection: "column",
       justifyContent: "center",
+      padding: 0,
     },
   },
 }));
@@ -101,6 +106,10 @@ function PortfolioPage() {
   const [userState, setUserState] = useState(user);
   const [isMobile, setIsMobile] = useState(false);
   const [avgPriceChange, setAvgPriceChange] = useState(0);
+  const [currentPortfolioPrice, setCurrentPortfolioPrice] = useState(0);
+  const [timeFrame, setTimeFrame] = useState("24H");
+  const [donutCoin, setDonutCoin] = useState([]);
+  const [volatilityDesc, setVolatilityDesc] = useState("daily");
 
   const [coinAlert, setCoinAlert] = useState([]);
 
@@ -178,7 +187,22 @@ function PortfolioPage() {
     );
   }, [watchlist, userCoin2, userCoin3, period]);
 
-  console.log("est2", avgPriceChange);
+  useEffect(() => {
+    setCurrentPortfolioPrice(
+      userCoin3?.length > 0 &&
+        userCoin3?.reduce((sum, coin) => {
+          if (watchlist?.includes(watchlist?.find((e) => e.id === coin?.id))) {
+            return (
+              sum +
+              coin?.market_data?.current_price[currency?.toLowerCase()] *
+                coin?.holding
+            );
+          } else {
+            return sum + 0;
+          }
+        }, 0)
+    );
+  }, [watchlist, userCoin2, userCoin3, currency]);
 
   const topPerformCoin =
     userCoin2.length > 0 &&
@@ -193,6 +217,7 @@ function PortfolioPage() {
           : current;
       }
     });
+
   const worstPerformCoin =
     userCoin2.length > 0 &&
     userCoin2?.reduce((prev, current) => {
@@ -216,39 +241,32 @@ function PortfolioPage() {
     });
   }, [userCoin2]);
 
-  const setHoldingWatchlist = async (coin) => {
-    const coinRef = await doc(db, "watchlist", user.uid);
+  useEffect(() => {
+    const sumArr = userCoin3?.map(
+      (e) => e?.holding * e?.market_data?.current_price[currency?.toLowerCase()]
+    );
+    const sum = sumArr?.reduce((acc, val) => acc + val, 0);
+    const holdingArr = userCoin3?.map((e) => {
+      return {
+        id: e.id,
+        name: e.name,
+        weight:
+          e?.holding * e?.market_data?.current_price[currency?.toLowerCase()],
+        total_weight: sum,
+      };
+    });
 
-    try {
-      await setDoc(
-        coinRef,
-        {
-          coins: watchlist.map((watch) =>
-            watch.id === coin?.id
-              ? { id: coin.id, holding: 0 }
-              : { id: watch.id, holding: watch.holding }
-          ),
-        },
-        { merge: "true" }
-      );
-    } catch (error) {}
+    setDonutCoin(holdingArr);
+  }, [userCoin, userCoin2, userCoin3, watchlist]);
 
-    try {
-      await setDoc(
-        coinRef,
-        {
-          coins: watchlist.filter((watch) => watch.id !== coin?.id),
-        },
-        { merge: "true" }
-      );
-
-      setAlert({
-        open: true,
-        message: `${coin.name} remove from your watchlist`,
-        type: "success",
-      });
-    } catch (error) {}
+  const random_rgba = () => {
+    var o = Math.round,
+      r = Math.random,
+      s = 255;
+    return "rgba(" + o(r() * s) + "," + o(r() * s) + "," + o(r() * s) + ",1";
   };
+  const colourDoughnut = donutCoin?.map((e) => random_rgba());
+  const weightageTooltip = `The weightage of each coin in your portfolio for the past ${days} day(s).`;
 
   return (
     <div className={classes.container}>
@@ -258,6 +276,18 @@ function PortfolioPage() {
           <div>
             <Typography variant="h3" style={{ fontFamily: "VT323" }}>
               Current Asset
+            </Typography>
+          </div>
+        </div>
+        <div style={{ display: "flex", alignItems: "center" }}>
+          <div>
+            <Typography variant="h5" style={{ fontFamily: "VT323" }}>
+              Portfolio Price: {symbol}
+              {user
+                ? currentPortfolioPrice
+                  ? currentPortfolioPrice?.toFixed(2)
+                  : "0"
+                : "0"}
             </Typography>
           </div>
         </div>
@@ -358,14 +388,7 @@ function PortfolioPage() {
                                   }}
                                 >
                                   <HoldingModal coin={row} />
-                                  <img
-                                    src={DeleteIcon}
-                                    height={20}
-                                    onClick={() => {
-                                      setHoldingWatchlist(row);
-                                    }}
-                                    style={{ cursor: "pointer" }}
-                                  />
+                                  <DeleteModal row={row} />
                                 </div>
                               </TableCell>
                             </TableRow>
@@ -402,6 +425,42 @@ function PortfolioPage() {
             Add New Coin
           </Button>
         </div>
+        <Typography variant="h2" style={{ fontFamily: "VT323" }}>
+          Coin Weightage{" "}
+          <Tooltip title={weightageTooltip}>
+            <img src={infoicon} height="13" style={{ marginBottom: "25px" }} />
+          </Tooltip>
+        </Typography>
+        {donutCoin && (
+          <Doughnut
+            data={{
+              labels: donutCoin?.map((e) => {
+                if (
+                  watchlist.includes(
+                    watchlist.find((watch) => watch.id === e?.id)
+                  )
+                ) {
+                  return e.name;
+                } else {
+                  return "deleted";
+                }
+              }),
+              datasets: [
+                {
+                  data: donutCoin
+                    ? donutCoin?.map((e) => (e.weight / e.total_weight) * 100)
+                    : [],
+                  borderWidth: 0,
+                  backgroundColor: colourDoughnut,
+                  radius: "60%",
+                },
+              ],
+            }}
+            option={{
+              animation: { animateRotate: false },
+            }}
+          />
+        )}
       </div>
       <div className={classes.mainbar}>
         {!userState || userCoin2.length == 0 ? (
@@ -432,6 +491,8 @@ function PortfolioPage() {
                         onClick={() => {
                           setDays(e.value);
                           setPeriod(e.api_period);
+                          setTimeFrame(e.label);
+                          setVolatilityDesc(e.vol);
                         }}
                         className={classes.selectButton}
                         style={{
@@ -452,8 +513,13 @@ function PortfolioPage() {
               Worst={worstPerformCoin}
               alert={coinAlert}
               period={period}
+              timeFrame={timeFrame}
             />
-            <PortfolioChart days={days} />
+            <PortfolioChart
+              days={days}
+              volatilityDesc={volatilityDesc}
+              timeFrame={timeFrame}
+            />
           </div>
         )}
       </div>

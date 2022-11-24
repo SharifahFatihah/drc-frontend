@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
     padding: 50,
     [theme.breakpoints.down("md")]: {
       alignItems: "center",
-      padding: "0",
+      padding: 0,
     },
   },
   right: {
@@ -36,7 +36,25 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "flex-start",
     [theme.breakpoints.down("md")]: {
       alignItems: "center",
-      padding: 0,
+      justifyContent: "center",
+    },
+  },
+  favCoinSub: {
+    fontFamily: "VT323",
+    color: "white",
+    marginLeft: 150,
+    marginBottom: 50,
+    fontSize: "50px",
+    [theme.breakpoints.down("md")]: {
+      fontSize: "34px",
+    },
+  },
+  favGif: {
+    height: "500px",
+    [theme.breakpoints.down("md")]: {
+      height: "auto",
+      width: "350px",
+      display: "flex",
     },
   },
 }));
@@ -60,33 +78,24 @@ function FavCoin() {
             <Typography
               variant="h2"
               style={{
-                paddingRight: 20,
-                paddingLeft: 20,
                 fontFamily: "VT323",
                 color: "#FFE227",
                 marginBottom: 50,
+                marginLeft: 150,
               }}
             >
               Favourite Coins
             </Typography>
-            <Typography
-              variant="h3"
-              style={{
-                paddingRight: 20,
-                paddingLeft: 20,
-                fontFamily: "VT323",
-                color: "white",
-                marginBottom: 50,
-              }}
-            >
+            <Typography className={classes.favCoinSub}>
               Save and monitor your favourite coins performance in one place
             </Typography>
             <Button
               variant="contained"
               style={{
-                marginLeft: 25,
+                marginLeft: 150,
                 backgroundColor: "#FFE227",
                 color: "black",
+                border: "5px solid white",
                 fontFamily: "VT323",
                 fontSize: 20,
               }}
@@ -97,7 +106,7 @@ function FavCoin() {
         </div>
       </div>
       <div className={classes.right}>
-        <img src={CoinPic} alt="coin pic" height={350} />
+        <img src={CoinPic} alt="coin pic" className={classes.favGif} />
       </div>
     </div>
   );
