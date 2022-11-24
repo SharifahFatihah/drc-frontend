@@ -55,9 +55,9 @@ function TrendHorizontal() {
 
   const responsive = {
     0: { items: 1 },
-    730: { items: 2 },
+    824: { items: 2 },
     1150: { items: 3 },
-    1845: { items: 4 },
+    1600: { items: 4 },
   };
 
   const items = trending?.coins.map((coin) => {
@@ -84,7 +84,7 @@ function TrendHorizontal() {
           }}
         >
           <div style={{ display: "flex", marginBottom: 20 }}>
-            <img src={coin?.item?.large} alt={coin?.item?.name} height="70" />
+            <img src={coin?.item?.large} alt={coin?.item?.name } height="70" />
             <div style={{ marginLeft: 10 }}>
               <Typography variant="h4" style={{ fontWeight: "bold" }}>
                 {coin?.item?.symbol.toUpperCase()}
@@ -95,7 +95,9 @@ function TrendHorizontal() {
                   fontFamily: "VT323",
                 }}
               >
-                {coin?.item?.name}
+                {coin?.item?.name?.length > 10
+                  ? `${coin?.item?.name.substring(0, 9)}...`
+                  : coin?.item?.name}
               </Typography>
             </div>
           </div>

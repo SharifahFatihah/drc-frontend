@@ -1,6 +1,7 @@
 import { Typography } from "@material-ui/core";
 import React from "react";
 import ScrollHorizontal from "../components/ScrollHorizontal";
+import pixel from "../asset/pixelated_1.png";
 
 function Trending() {
   return (

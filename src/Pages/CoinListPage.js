@@ -17,7 +17,10 @@ function CoinListPage() {
           marginTop: 40,
         }}
       >
-        <Typography variant="h2" style={{ fontFamily: "VT323" }}>
+        <Typography
+          variant="h3"
+          style={{ fontFamily: "VT323", paddingLeft: 20, paddingRight: 20 }}
+        >
           Search your favourite coin
         </Typography>
       </div>

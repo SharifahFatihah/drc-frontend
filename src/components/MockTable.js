@@ -213,7 +213,10 @@ export default function EnhancedTable({ coins }) {
     <Box sx={{ width: "100%" }}>
       <Paper
         sx={{ width: "100%", mb: 2 }}
-        style={{ backgroundColor: "#212121", borderRadius: "15px" }}
+        style={{
+          backgroundColor: "rgba(79, 58, 84, 0.52)",
+          borderRadius: "15px",
+        }}
       >
         <Paper elevation={7} />
         <TableContainer
@@ -294,8 +297,8 @@ export default function EnhancedTable({ coins }) {
                         align="right"
                         style={
                           Service.isProfit(row.price_change_percentage_24h)
-                            ? { color: "green" }
-                            : { color: "red" }
+                            ? { color: "#33FF00" }
+                            : { color: "#FF0000" }
                         }
                       >
                         {Service.isProfit(row.price_change_percentage_24h)
