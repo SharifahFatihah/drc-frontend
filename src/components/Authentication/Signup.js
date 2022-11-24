@@ -1,10 +1,26 @@
-import { Box, Button, TextField } from "@material-ui/core";
+import { Box, Button, TextField,makeStyles } from "@material-ui/core";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import React, { useState } from "react";
 import { CryptoState } from "../../CryptoContext";
 import { auth } from "../../firebase";
 import LogoIcon from "../../asset/logoicon.png";
 import LogoWord from "../../asset/logoword.png";
+
+const useStyles = makeStyles((theme) => ({
+  box: {
+    display: "flex",
+    flexDirection: "column",
+    gap: "20px",
+    marginLeft: "200px",
+    marginRight: "200px",
+    marginTop: "50px",
+    marginBottom: "10px",
+    [theme.breakpoints.down("md")]: {
+      marginLeft: "0",
+      marginRight: "0",
+    },
+  },
+}));
 
 function Signup({ handleClose }) {
   const [username, setName] = useState();
@@ -13,6 +29,7 @@ function Signup({ handleClose }) {
   const [confirmPassword, setConfirmPassword] = useState("");
 
   const { setAlert } = CryptoState();
+const classes = useStyles();
 
   const handleSubmit = async () => {
     if (password !== confirmPassword) {
@@ -51,18 +68,7 @@ function Signup({ handleClose }) {
   };
   return (
     <div>
-      <Box
-        p={3}
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "20px",
-          marginLeft: "200px",
-          marginRight: "200px",
-          marginTop: "50px",
-          marginBottom: "10px",
-        }}
-      >
+      <Box p={3} className={classes.box}>
         <div
           style={{
             display: "flex",
