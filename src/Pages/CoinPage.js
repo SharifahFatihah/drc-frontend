@@ -358,8 +358,9 @@ function CoinPage() {
               </Button>
             )}
           </div>
-
-          <CoinConverter coin={coin} />
+          <div style={{marginTop:20}}>
+            <CoinConverter coin={coin} />
+          </div>
         </div>
       </div>
       <div className={classes.mainbar}>

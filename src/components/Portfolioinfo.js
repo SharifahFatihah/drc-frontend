@@ -11,9 +11,9 @@ const useStyles = makeStyles((theme) => ({
   infoContainer: {
     display: "flex",
     flexDirection: "column",
-    alignItems: "flex-start",
-    paddingLeft: 20,
-    paddingRight: 20,
+    alignItems: "center",
+    justifyContent: "space-evenly",
+    padding: 20,
     width: "24%",
     margin: 15,
     borderRadius: "15px",
@@ -38,16 +38,30 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function Portfolioinfo({ avgPriceChange, topPerformCoin, Worst, alert }) {
+function Portfolioinfo({
+  avgPriceChange,
+  topPerformCoin,
+  Worst,
+  alert,
+  period,
+}) {
   const classes = useStyles();
-  const { currency, symbol } = CryptoState();
+  const { currency, symbol, watchlist } = CryptoState();
 
-  const alerts = alert?.map((coin) => (
-    <div style={{ display: "flex", alignItems: "center", padding: 5 }}>
-      <img src={coin?.image?.small} height="30" style={{ marginRight: 10 }} />
-      <Typography>{coin?.name}</Typography>
-    </div>
-  ));
+  const alerts = alert?.map((coin) => {
+    if (watchlist?.includes(watchlist?.find((watch) => watch.id === coin.id))) {
+      return (
+        <div style={{ display: "flex", alignItems: "center", padding: 5 }}>
+          <img
+            src={coin?.image?.small}
+            height="30"
+            style={{ marginRight: 10 }}
+          />
+          <Typography>{coin?.name}</Typography>
+        </div>
+      );
+    }
+  });
 
   return (
     <div
@@ -63,7 +77,7 @@ function Portfolioinfo({ avgPriceChange, topPerformCoin, Worst, alert }) {
           className={classes.infoContainer}
           style={{ display: "flex", alignItems: "flex-start" }}
         >
-          <img src={currentbalance} height="30" style={{ marginTop: 20 }} />
+          <img src={currentbalance} height="30" />
           <Typography style={{ width: "max-content", padding: 15 }}>
             Profit Estimation
           </Typography>
@@ -80,69 +94,154 @@ function Portfolioinfo({ avgPriceChange, topPerformCoin, Worst, alert }) {
           </Typography>
         </div>
         <div className={classes.infoContainer}>
-          <img
-            src={bestperformanceicon}
-            alt="best coin Icon"
-            height="30"
-            style={{ marginTop: 20 }}
-          />
-          <Typography style={{ width: "max-content", padding: 10 }}>
-            Top Performance Coin
-          </Typography>
-          <div style={{ display: "flex", alignItems: "center" }}>
-            <img
-              src={topPerformCoin?.image?.large}
-              height="30"
-              style={{ marginRight: 10 }}
-            />
-            <Typography>{topPerformCoin?.name}</Typography>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              width: "90%",
+            }}
+          >
+            <div>
+              <img src={bestperformanceicon} alt="best coin Icon" height="30" />
+            </div>
+            <div>{topPerformCoin?.market_data[period]?.toFixed(2)}</div>
           </div>
           <div
-            style={{ display: "flex", justifyContent: "center", width: "100%" }}
+            style={{
+              display: "flex",
+              width: "90%",
+              justifyContent: "flex-start",
+            }}
           >
-            {symbol}
-            {topPerformCoin?.market_data?.current_price[currency.toLowerCase()]}
-          </div>
-        </div>
-        <div className={classes.infoContainer}>
-          <img
-            src={worstperformericon}
-            alt="worst coin Icon"
-            height="30"
-            style={{ marginTop: 20 }}
-          />
-          <Typography style={{ width: "max-content", padding: 10 }}>
-            Worst Performance Coin
-          </Typography>
-          <div style={{ display: "flex", alignItems: "center" }}>
-            <img
-              src={Worst?.image?.large}
-              height="30"
-              style={{ marginRight: 10 }}
-            />
-            <Typography style={{}}>{Worst?.name}</Typography>
-          </div>
-          <div
-            style={{ display: "flex", justifyContent: "center", width: "100%" }}
-          >
-            {symbol}
-            {Worst?.market_data?.current_price[currency.toLowerCase()]}
-          </div>
-        </div>
-        <div className={classes.infoContainer}>
-          <div>
-            <img
-              src={bell}
-              alt="alert Icon"
-              height="30"
-              style={{ marginTop: 20 }}
-            />
-            <Typography style={{ width: "max-content", padding: 10 }}>
-              Alert Coin
+            <Typography
+              style={{
+                width: "max-content",
+                paddingTop: 10,
+                paddingBottom: 10,
+              }}
+            >
+              Top Performance Coin
             </Typography>
           </div>
-          <div style={{ width: "100%", overflowY: "scroll", maxHeight: "100px" }}>
-            {alerts}
+
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              width: "90%",
+            }}
+          >
+            {" "}
+            <div style={{ display: "flex", alignItems: "center" }}>
+              <img
+                src={topPerformCoin?.image?.large}
+                height="30"
+                style={{ marginRight: 10 }}
+              />
+              <Typography>{topPerformCoin?.symbol?.toUpperCase()}</Typography>
+            </div>
+            <div>
+              {symbol}
+              {topPerformCoin?.market_data?.current_price[
+                currency.toLowerCase()
+              ]?.toPrecision(4)}
+            </div>
+          </div>
+        </div>
+        <div className={classes.infoContainer}>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              width: "90%",
+            }}
+          >
+            <div>
+              <img src={worstperformericon} alt="worst coin Icon" height="30" />
+            </div>
+            <div>{Worst?.market_data[period]?.toFixed(2)}</div>
+          </div>
+
+          <div
+            style={{
+              display: "flex",
+              width: "90%",
+              justifyContent: "flex-start",
+            }}
+          >
+            <Typography
+              style={{
+                width: "max-content",
+                paddingTop: 10,
+                paddingBottom: 10,
+              }}
+            >
+              Worst Performance Coin
+            </Typography>
+          </div>
+
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              width: "90%",
+            }}
+          >
+            <div style={{ display: "flex", alignItems: "center" }}>
+              <img
+                src={Worst?.image?.large}
+                height="30"
+                style={{ marginRight: 10 }}
+              />
+              <Typography>{Worst?.symbol?.toUpperCase()}</Typography>
+            </div>
+
+            <div>
+              {symbol}
+              {Worst?.market_data?.current_price[currency.toLowerCase()]}
+            </div>
+          </div>
+        </div>
+        <div className={classes.infoContainer}>
+          <div
+            style={{
+              display: "flex",
+              width: "90%",
+              justifyContent: "flex-start",
+            }}
+          >
+            <img src={bell} alt="alert Icon" height="30" />
+          </div>
+          <div
+            style={{
+              display: "flex",
+              width: "90%",
+              justifyContent: "flex-start",
+            }}
+          >
+            <Typography
+              style={{
+                width: "max-content",
+                paddingTop: 10,
+                paddingBottom: 10,
+              }}
+            >
+              Alert Coin (24h)
+            </Typography>
+          </div>
+
+          <div
+            style={{ width: "100%", overflowY: "scroll", maxHeight: "100px" }}
+          >
+            {alerts.length == 0 ? (
+              <Typography>no major drop in the last 24h</Typography>
+            ) : (
+              alerts
+            )}
           </div>
         </div>
       </div>

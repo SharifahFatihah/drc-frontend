@@ -95,7 +95,9 @@ function TrendHorizontal() {
                   fontFamily: "VT323",
                 }}
               >
-                {coin?.item?.name}
+                {coin?.item?.name?.length > 10
+                  ? `${coin?.item?.name.substring(0, 9)}...`
+                  : coin?.item?.name}
               </Typography>
             </div>
           </div>
