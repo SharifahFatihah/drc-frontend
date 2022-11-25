@@ -15,6 +15,7 @@ function CryptoContext({ children }) {
   const [loading, setLoading] = useState(false);
   const [globalInfo, setGlobalInfo] = useState();
   const [open, setOpen] = useState(false);
+  const [authValue, setAuthValue] = useState(0);
 
   const [alert, setAlert] = useState({
     open: false,
@@ -107,6 +108,8 @@ function CryptoContext({ children }) {
         globalInfo,
         open,
         setOpen,
+        authValue,
+        setAuthValue,
       }}
     >
       {children}

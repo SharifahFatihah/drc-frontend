@@ -1,4 +1,4 @@
-import { Box, Button, TextField,makeStyles } from "@material-ui/core";
+import { Box, Button, TextField, makeStyles } from "@material-ui/core";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import React, { useState } from "react";
 import { CryptoState } from "../../CryptoContext";
@@ -16,8 +16,10 @@ const useStyles = makeStyles((theme) => ({
     marginTop: "50px",
     marginBottom: "10px",
     [theme.breakpoints.down("md")]: {
-      marginLeft: "0",
-      marginRight: "0",
+      margin: "0",
+      height: "30%",
+      // width: "80%",
+      // height: "80%",
     },
   },
 }));
@@ -29,7 +31,7 @@ function Signup({ handleClose }) {
   const [confirmPassword, setConfirmPassword] = useState("");
 
   const { setAlert } = CryptoState();
-const classes = useStyles();
+  const classes = useStyles();
 
   const handleSubmit = async () => {
     if (password !== confirmPassword) {
@@ -69,15 +71,6 @@ const classes = useStyles();
   return (
     <div>
       <Box p={3} className={classes.box}>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <img src={LogoIcon} width="40" />
-        </div>
         <div
           style={{
             display: "flex",
