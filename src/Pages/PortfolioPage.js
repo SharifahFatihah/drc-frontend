@@ -11,10 +11,8 @@ import {
   makeStyles,
 } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
-import { doc, setDoc } from "firebase/firestore";
 
 import { CryptoState } from "../CryptoContext";
-import DeleteIcon from "../asset/deleteicon.png";
 import DeleteModal from "../components/DeleteModal";
 import { Doughnut } from "react-chartjs-2";
 import HoldingModal from "../components/HoldingModal";
@@ -23,7 +21,6 @@ import Portfolioinfo from "../components/Portfolioinfo";
 import Service from "../service/Service";
 import { chartDays } from "../service/Service";
 import currentAssetIcon from "../asset/currentasseticon.png";
-import { db } from "../firebase";
 import infoicon from "../asset/infoicon.png";
 import { useNavigate } from "react-router-dom";
 
@@ -100,10 +97,41 @@ const useStyles = makeStyles((theme) => ({
       padding: 0,
     },
   },
+  red: {
+    backgroundColor: "#FF4B25",
+    marginLeft: 10,
+    color: "black",
+    padding: 5,
+    borderRadius: 5,
+    width: "80%",
+    display: "flex",
+    justifyContent: "center",
+  },
+  green: {
+    backgroundColor: "#00FF19",
+    marginLeft: 10,
+    color: "black",
+    padding: 5,
+    borderRadius: 5,
+    width: "80%",
+    display: "flex",
+    justifyContent: "center",
+  },
+  yellow: {
+    backgroundColor: "#FFE227",
+    marginLeft: 10,
+    color: "black",
+    padding: 5,
+    borderRadius: 5,
+    width: "80%",
+    display: "flex",
+    justifyContent: "center",
+  },
 }));
 
 function PortfolioPage() {
-  const { user, setAlert, watchlist, coins, currency, symbol } = CryptoState();
+  const { user, setAlert, watchlist, coins, currency, symbol, portfolioVol } =
+    CryptoState();
 
   const [userCoin, setUserCoin] = useState([]);
   const [userCoin2, setUserCoin2] = useState([]);
@@ -283,6 +311,7 @@ function PortfolioPage() {
   const colourDoughnut = donutCoin?.map((e) => random_rgba());
   const weightageTooltip = `The weightage of each coin in your portfolio for the past ${days} day(s).`;
 
+  console.log("vol", portfolioVol);
   return (
     <div className={classes.container}>
       <div className={classes.sidebar}>
@@ -466,6 +495,50 @@ function PortfolioPage() {
           >
             Add New Coin
           </Button>
+        </div>
+
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            height: "80%",
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+            }}
+          >
+            <Typography variant="subtitle" style={{ fontFamily: "VT323" }}>
+              {volatilityDesc} volatility of portfolio/{currency?.toUpperCase()}{" "}
+              in the last {days} day(s)
+            </Typography>
+            <Typography variant="h2" style={{ fontFamily: "VT323" }}>
+              {" "}
+              {portfolioVol.toFixed(2)}%
+            </Typography>
+
+            <div
+              className={
+                portfolioVol > 3
+                  ? classes.red
+                  : portfolioVol > 2
+                  ? classes.yellow
+                  : classes.green
+              }
+            >
+              <Typography variant="h4" style={{ fontFamily: "VT323" }}>
+                {portfolioVol > 3
+                  ? "high"
+                  : portfolioVol > 2
+                  ? "moderate"
+                  : "low"}
+              </Typography>
+            </div>
+          </div>
         </div>
         <Typography
           variant="h3"
