@@ -3,7 +3,7 @@
 
 name: CI
 
-on:git
+on:
   push:
     branches: [Nic]
 
