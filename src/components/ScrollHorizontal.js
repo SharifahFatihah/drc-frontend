@@ -28,7 +28,7 @@ function ScrollHorizontal() {
   const classes = useStyle();
   const navigate = useNavigate();
 
-  const { currency, symbol } = CryptoState();
+  const { currency, symbol, setAlert } = CryptoState();
 
   const [trending, setTrending] = useState([]);
 
@@ -38,7 +38,11 @@ function ScrollHorizontal() {
         setTrending(response.data);
       })
       .catch((err) => {
-        console.log(err);
+        setAlert({
+          open: true,
+          message: `${err}`,
+          type: "error",
+        });
       });
   };
 

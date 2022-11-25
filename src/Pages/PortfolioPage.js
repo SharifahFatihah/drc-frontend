@@ -1,6 +1,5 @@
 import {
   Button,
-  makeStyles,
   Paper,
   Table,
   TableBody,
@@ -9,22 +8,21 @@ import {
   TableRow,
   Tooltip,
   Typography,
+  makeStyles,
 } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
+
 import { CryptoState } from "../CryptoContext";
-import currentAssetIcon from "../asset/currentasseticon.png";
-import Service from "../service/Service";
-import { useNavigate } from "react-router-dom";
-import PortfolioChart from "../components/PortfolioChart";
-import { chartDays } from "../service/Service";
-import HoldingModal from "../components/HoldingModal";
-import DeleteIcon from "../asset/deleteicon.png";
-import { doc, setDoc } from "firebase/firestore";
-import { db } from "../firebase";
-import Portfolioinfo from "../components/Portfolioinfo";
-import { Doughnut } from "react-chartjs-2";
-import infoicon from "../asset/infoicon.png";
 import DeleteModal from "../components/DeleteModal";
+import { Doughnut } from "react-chartjs-2";
+import HoldingModal from "../components/HoldingModal";
+import PortfolioChart from "../components/PortfolioChart";
+import Portfolioinfo from "../components/Portfolioinfo";
+import Service from "../service/Service";
+import { chartDays } from "../service/Service";
+import currentAssetIcon from "../asset/currentasseticon.png";
+import infoicon from "../asset/infoicon.png";
+import { useNavigate } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -46,15 +44,18 @@ const useStyles = makeStyles((theme) => ({
   },
   sidebar: {
     width: "30%",
-
     [theme.breakpoints.down("md")]: {
       width: "100%",
+      marginBottom: 0,
+      paddingBottom: 40,
     },
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
-    marginTop: 25,
+    paddingTop: 50,
+    marginBottom: -160,
     whiteSpace: "wrap",
+    boxShadow: "inset -2px 0px 5px rgba(79, 58, 84, 0.52)",
   },
   buttonContainer: {
     display: "flex",
@@ -67,17 +68,20 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   selectButton: {
-    width: "15%",
+    width: "10%",
     border: "1px solid #FFE227",
     borderRadius: 5,
     padding: 10,
     cursor: "pointer",
     marginLeft: 10,
     alignItems: "center",
-
     "&:hover": {
       backgroundColor: "#FFE227",
       color: "black",
+    },
+    [theme.breakpoints.down("sm")]: {
+      width: "20%",
+      alignItems: "center",
     },
   },
   titleContainer: {
@@ -93,10 +97,41 @@ const useStyles = makeStyles((theme) => ({
       padding: 0,
     },
   },
+  red: {
+    backgroundColor: "#FF4B25",
+    marginLeft: 10,
+    color: "black",
+    padding: 5,
+    borderRadius: 5,
+    width: "80%",
+    display: "flex",
+    justifyContent: "center",
+  },
+  green: {
+    backgroundColor: "#00FF19",
+    marginLeft: 10,
+    color: "black",
+    padding: 5,
+    borderRadius: 5,
+    width: "80%",
+    display: "flex",
+    justifyContent: "center",
+  },
+  yellow: {
+    backgroundColor: "#FFE227",
+    marginLeft: 10,
+    color: "black",
+    padding: 5,
+    borderRadius: 5,
+    width: "80%",
+    display: "flex",
+    justifyContent: "center",
+  },
 }));
 
 function PortfolioPage() {
-  const { user, setAlert, watchlist, coins, currency, symbol } = CryptoState();
+  const { user, setAlert, watchlist, coins, currency, symbol, portfolioVol } =
+    CryptoState();
 
   const [userCoin, setUserCoin] = useState([]);
   const [userCoin2, setUserCoin2] = useState([]);
@@ -135,9 +170,17 @@ function PortfolioPage() {
         if (watchlist?.includes(watchlist?.find((e) => e.id === coin.id)))
           return Service.getSingleCoin(coin.id);
       })
-    ).then((z) => {
-      setUserCoin(z.filter((y) => !!y));
-    });
+    )
+      .then((z) => {
+        setUserCoin(z.filter((y) => !!y));
+      })
+      .catch((err) => {
+        setAlert({
+          open: true,
+          message: `API request exceed 50 limit, please wait 1 minute`,
+          type: "error",
+        });
+      });
   }, [watchlist]);
 
   useEffect(() => {
@@ -268,6 +311,7 @@ function PortfolioPage() {
   const colourDoughnut = donutCoin?.map((e) => random_rgba());
   const weightageTooltip = `The weightage of each coin in your portfolio for the past ${days} day(s).`;
 
+  console.log("vol", portfolioVol);
   return (
     <div className={classes.container}>
       <div className={classes.sidebar}>
@@ -279,31 +323,57 @@ function PortfolioPage() {
             </Typography>
           </div>
         </div>
-        <div style={{ display: "flex", alignItems: "center" }}>
-          <div>
-            <Typography variant="h5" style={{ fontFamily: "VT323" }}>
-              Portfolio Price: {symbol}
-              {user
-                ? currentPortfolioPrice
-                  ? currentPortfolioPrice?.toFixed(2)
-                  : "0"
-                : "0"}
-            </Typography>
-          </div>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            flexDirection: "row",
+          }}
+        >
+          <Typography
+            variant="h5"
+            style={{ fontFamily: "VT323", marginTop: 25 }}
+          >
+            Portfolio Price :
+          </Typography>
+          <Typography
+            variant="h4"
+            style={{
+              fontFamily: "VT323",
+              marginTop: 25,
+              marginLeft: 15,
+            }}
+          >
+            {symbol}
+            {user
+              ? currentPortfolioPrice
+                ? currentPortfolioPrice?.toFixed(2)
+                : "0"
+              : "0"}
+          </Typography>
+          {/* </div> */}
         </div>
 
         {userState && (
-          <div style={{ marginTop: 20, width: "90%" }}>
+          <div
+            style={{
+              marginTop: 20,
+              width: "90%",
+              backgroundColor: "rgba(79, 58, 84, 0.52)",
+            }}
+          >
             <Paper
               sx={{
                 width: "100%",
                 overflow: "hidden",
               }}
-              style={{ backgroundColor: "rgba(100,100,100,0.0)" }}
+              style={{
+                borderRadius: "15px",
+              }}
             >
               <TableContainer
                 component={Paper}
-                style={{ backgroundColor: "transparent", color: "black" }}
+                style={{ backgroundColor: "#212121", color: "black" }}
               >
                 <div
                   style={{
@@ -413,10 +483,11 @@ function PortfolioPage() {
           <Button
             variant="contained"
             style={{
-              backgroundColor: "yellow",
+              backgroundColor: "#FFE227",
+              border: "5px solid white",
               color: "black",
               fontFamily: "VT323",
-              fontSize: "25px",
+              fontSize: 20,
             }}
             onClick={() => {
               navigate("/coinList");
@@ -425,7 +496,54 @@ function PortfolioPage() {
             Add New Coin
           </Button>
         </div>
-        <Typography variant="h2" style={{ fontFamily: "VT323" }}>
+
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            height: "80%",
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+            }}
+          >
+            <Typography variant="subtitle" style={{ fontFamily: "VT323" }}>
+              {volatilityDesc} volatility of portfolio/{currency?.toUpperCase()}{" "}
+              in the last {days} day(s)
+            </Typography>
+            <Typography variant="h2" style={{ fontFamily: "VT323" }}>
+              {" "}
+              {portfolioVol.toFixed(2)}%
+            </Typography>
+
+            <div
+              className={
+                portfolioVol > 3
+                  ? classes.red
+                  : portfolioVol > 2
+                  ? classes.yellow
+                  : classes.green
+              }
+            >
+              <Typography variant="h4" style={{ fontFamily: "VT323" }}>
+                {portfolioVol > 3
+                  ? "high"
+                  : portfolioVol > 2
+                  ? "moderate"
+                  : "low"}
+              </Typography>
+            </div>
+          </div>
+        </div>
+        <Typography
+          variant="h3"
+          style={{ fontFamily: "VT323", marginTop: 50, marginBottom: 20 }}
+        >
           Coin Weightage{" "}
           <Tooltip title={weightageTooltip}>
             <img src={infoicon} height="13" style={{ marginBottom: "25px" }} />
@@ -474,17 +592,17 @@ function PortfolioPage() {
             }}
           >
             {" "}
-            Youre Portfolio is empty
+            Your portfolio is empty. Please add coins to start monitoring.
           </div>
         ) : (
           <div style={{ width: "100%", paddingTop: 40 }}>
             <div className={classes.titleContainer}>
-              <Typography variant="h3" style={{ fontFamily: "VT323" }}>
+              <Typography variant="h2" style={{ fontFamily: "VT323" }}>
                 Portfolio
               </Typography>
               <div className={classes.buttonContainer}>
                 {chartDays.map((e) => {
-                  if (e?.value !== 60) {
+                  if (e?.value !== 90) {
                     return (
                       <div
                         key={e.value}

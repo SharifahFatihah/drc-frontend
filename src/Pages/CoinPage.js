@@ -108,7 +108,11 @@ function CoinPage() {
         setLoading(false);
       })
       .catch((err) => {
-        console.log(err);
+        setAlert({
+          open: true,
+          message: `API request exceed 50 limit, please wait 1 minute`,
+          type: "error",
+        });
         navigate(`*`);
       });
   };
@@ -199,7 +203,7 @@ function CoinPage() {
               #{coin?.market_cap_rank}
             </div>
           </Card>
-          {coin?.market_cap_rank > 250 ? (
+          {coin?.market_cap_rank < 250 ? (
             user ? (
               inWatchlist ? (
                 <img
@@ -363,8 +367,9 @@ function CoinPage() {
               </Button>
             )}
           </div>
-
-          <CoinConverter coin={coin} />
+          <div style={{ marginTop: 20, width: "90%" }}>
+            <CoinConverter coin={coin} />
+          </div>
         </div>
       </div>
       <div className={classes.mainbar}>

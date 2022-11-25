@@ -1,23 +1,23 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import {
   AppBar,
   Container,
+  MenuItem,
+  Select,
+  ThemeProvider,
   Toolbar,
   Typography,
-  Select,
-  MenuItem,
-  makeStyles,
   createTheme,
-  ThemeProvider,
+  makeStyles,
 } from "@material-ui/core";
+import React, { useEffect, useState } from "react";
 
-import { CryptoState } from "../CryptoContext";
 import AuthModal from "./Authentication/AuthModal";
-import UserSidebar from "./UserSidebar";
+import { CryptoState } from "../CryptoContext";
+import HeaderMenu from "./HeaderMenu";
 import LogoIcon from "../asset/logoicon.png";
 import LogoWord from "../asset/logoword.png";
-import HeaderMenu from "./HeaderMenu";
+import UserSidebar from "./UserSidebar";
+import { useNavigate } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   title: {
@@ -63,6 +63,18 @@ function Header() {
       setIsMobile(false);
     }
   };
+
+  useEffect(() => {
+    window.addEventListener("resize", handleResize);
+  });
+
+  useEffect(() => {
+    if (window.innerWidth < 800) {
+      setIsMobile(true);
+    } else {
+      setIsMobile(false);
+    }
+  }, []);
 
   useEffect(() => {
     window.addEventListener("resize", handleResize);

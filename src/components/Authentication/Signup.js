@@ -1,10 +1,26 @@
-import { Box, Button, TextField } from "@material-ui/core";
+import { Box, Button, TextField,makeStyles } from "@material-ui/core";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import React, { useState } from "react";
 import { CryptoState } from "../../CryptoContext";
 import { auth } from "../../firebase";
 import LogoIcon from "../../asset/logoicon.png";
 import LogoWord from "../../asset/logoword.png";
+
+const useStyles = makeStyles((theme) => ({
+  box: {
+    display: "flex",
+    flexDirection: "column",
+    gap: "20px",
+    marginLeft: "200px",
+    marginRight: "200px",
+    marginTop: "50px",
+    marginBottom: "10px",
+    [theme.breakpoints.down("md")]: {
+      marginLeft: "0",
+      marginRight: "0",
+    },
+  },
+}));
 
 function Signup({ handleClose }) {
   const [username, setName] = useState();
@@ -13,6 +29,7 @@ function Signup({ handleClose }) {
   const [confirmPassword, setConfirmPassword] = useState("");
 
   const { setAlert } = CryptoState();
+const classes = useStyles();
 
   const handleSubmit = async () => {
     if (password !== confirmPassword) {
@@ -51,18 +68,7 @@ function Signup({ handleClose }) {
   };
   return (
     <div>
-      <Box
-        p={3}
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "20px",
-          marginLeft: "200px",
-          marginRight: "200px",
-          marginTop: "50px",
-          marginBottom: "10px",
-        }}
-      >
+      <Box p={3} className={classes.box}>
         <div
           style={{
             display: "flex",
@@ -71,6 +77,14 @@ function Signup({ handleClose }) {
           }}
         >
           <img src={LogoIcon} width="40" />
+        </div>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
           <img src={LogoWord} width="200" />
         </div>
         <div
@@ -81,14 +95,15 @@ function Signup({ handleClose }) {
         >
           <h1> Create Account</h1>
         </div>
-        <TextField
-          variant="outlined"
-          type="username"
-          label="Enter Name"
-          value={username}
-          onChange={(e) => setName(e.target.value)}
-          fullWidth
-        />
+        <div
+          style={{
+            display: "flex",
+
+            justifyContent: "center",
+          }}
+        >
+          <span>Enter your details or continue with Google</span>
+        </div>
         <TextField
           variant="outlined"
           type="email"
@@ -115,7 +130,13 @@ function Signup({ handleClose }) {
         />
         <Button
           variant="contained"
-          style={{ backgroundColor: "purple", color: "white" }}
+          style={{
+            backgroundColor: "#FFE227",
+            border: "5px solid white",
+            color: "black",
+            fontFamily: "VT323",
+            fontSize: 20,
+          }}
           onClick={handleSubmit}
         >
           Sign Up

@@ -3,16 +3,20 @@ import Button from "@mui/material/Button";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import MenuIcon from "../asset/menu.png";
-import { createTheme, ThemeProvider } from "@material-ui/core";
-import UserSidebar from "./UserSidebar";
-import AuthModal from "./Authentication/AuthModal";
+import { createTheme, makeStyles, ThemeProvider } from "@material-ui/core";
+
 import { CryptoState } from "../CryptoContext";
 import { useNavigate } from "react-router-dom";
+const useStyles = makeStyles((theme) => ({
+  menu: {
+    color: "#424242",
+  },
+}));
 
 export default function HeaderMenu({ selectMenu, isMobile }) {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const navigate = useNavigate();
-
+  const classes = useStyles();
   const { user } = CryptoState();
 
   const open = Boolean(anchorEl);
@@ -24,7 +28,7 @@ export default function HeaderMenu({ selectMenu, isMobile }) {
   };
   const darkTheme = createTheme({
     palette: {
-      primary: { main: "#fff" },
+      primary: { main: "rgba(255,255,255,1)" },
       type: "light",
     },
   });
@@ -41,6 +45,7 @@ export default function HeaderMenu({ selectMenu, isMobile }) {
         <img src={MenuIcon} alt="menu icon" height={40} />
       </Button>
       <Menu
+        // className={classes.menu}
         id="basic-menu"
         anchorEl={anchorEl}
         open={open}
