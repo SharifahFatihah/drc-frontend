@@ -493,7 +493,7 @@ function PortfolioPage() {
               </Typography>
               <div className={classes.buttonContainer}>
                 {chartDays.map((e) => {
-                  if (e?.value !== 60) {
+                  if (e?.value !== 90) {
                     return (
                       <div
                         key={e.value}

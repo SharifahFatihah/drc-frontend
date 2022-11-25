@@ -31,8 +31,8 @@ export const chartDays = [
     vol: "monthly",
   },
   {
-    label: "2M",
-    value: 60,
+    label: "3M",
+    value: 90,
     api_period: "price_change_percentage_60d",
     vol: "monthly",
   },
