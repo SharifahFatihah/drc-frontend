@@ -7,10 +7,16 @@ import { createTheme, ThemeProvider } from "@material-ui/core";
 
 import { CryptoState } from "../CryptoContext";
 import { useNavigate } from "react-router-dom";
+const useStyles = makeStyles((theme) => ({
+  menu: {
+    color: "#424242",
+  },
+}));
 
 export default function HeaderMenu({ selectMenu, isMobile }) {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const navigate = useNavigate();
+  const classes = useStyles();
   const { user } = CryptoState();
 
   const open = Boolean(anchorEl);

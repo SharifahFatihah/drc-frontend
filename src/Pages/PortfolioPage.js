@@ -47,15 +47,18 @@ const useStyles = makeStyles((theme) => ({
   },
   sidebar: {
     width: "30%",
-
     [theme.breakpoints.down("md")]: {
       width: "100%",
+      marginBottom: 0,
+      paddingBottom: 40,
     },
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
-    marginTop: 25,
+    paddingTop: 50,
+    marginBottom: -160,
     whiteSpace: "wrap",
+    boxShadow: "inset -2px 0px 5px rgba(79, 58, 84, 0.52)",
   },
   buttonContainer: {
     display: "flex",
@@ -68,17 +71,20 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   selectButton: {
-    width: "15%",
+    width: "10%",
     border: "1px solid #FFE227",
     borderRadius: 5,
     padding: 10,
     cursor: "pointer",
     marginLeft: 10,
     alignItems: "center",
-
     "&:hover": {
       backgroundColor: "#FFE227",
       color: "black",
+    },
+    [theme.breakpoints.down("sm")]: {
+      width: "20%",
+      alignItems: "center",
     },
   },
   titleContainer: {
@@ -288,31 +294,57 @@ function PortfolioPage() {
             </Typography>
           </div>
         </div>
-        <div style={{ display: "flex", alignItems: "center" }}>
-          <div>
-            <Typography variant="h5" style={{ fontFamily: "VT323" }}>
-              Portfolio Price: {symbol}
-              {user
-                ? currentPortfolioPrice
-                  ? currentPortfolioPrice?.toFixed(2)
-                  : "0"
-                : "0"}
-            </Typography>
-          </div>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            flexDirection: "row",
+          }}
+        >
+          <Typography
+            variant="h5"
+            style={{ fontFamily: "VT323", marginTop: 25 }}
+          >
+            Portfolio Price :
+          </Typography>
+          <Typography
+            variant="h4"
+            style={{
+              fontFamily: "VT323",
+              marginTop: 25,
+              marginLeft: 15,
+            }}
+          >
+            {symbol}
+            {user
+              ? currentPortfolioPrice
+                ? currentPortfolioPrice?.toFixed(2)
+                : "0"
+              : "0"}
+          </Typography>
+          {/* </div> */}
         </div>
 
         {userState && (
-          <div style={{ marginTop: 20, width: "90%" }}>
+          <div
+            style={{
+              marginTop: 20,
+              width: "90%",
+              backgroundColor: "rgba(79, 58, 84, 0.52)",
+            }}
+          >
             <Paper
               sx={{
                 width: "100%",
                 overflow: "hidden",
               }}
-              style={{ backgroundColor: "rgba(100,100,100,0.0)" }}
+              style={{
+                borderRadius: "15px",
+              }}
             >
               <TableContainer
                 component={Paper}
-                style={{ backgroundColor: "transparent", color: "black" }}
+                style={{ backgroundColor: "#212121", color: "black" }}
               >
                 <div
                   style={{
@@ -422,10 +454,11 @@ function PortfolioPage() {
           <Button
             variant="contained"
             style={{
-              backgroundColor: "yellow",
+              backgroundColor: "#FFE227",
+              border: "5px solid white",
               color: "black",
               fontFamily: "VT323",
-              fontSize: "25px",
+              fontSize: 20,
             }}
             onClick={() => {
               navigate("/coinList");
@@ -434,7 +467,10 @@ function PortfolioPage() {
             Add New Coin
           </Button>
         </div>
-        <Typography variant="h2" style={{ fontFamily: "VT323" }}>
+        <Typography
+          variant="h3"
+          style={{ fontFamily: "VT323", marginTop: 50, marginBottom: 20 }}
+        >
           Coin Weightage{" "}
           <Tooltip title={weightageTooltip}>
             <img src={infoicon} height="13" style={{ marginBottom: "25px" }} />
@@ -483,12 +519,12 @@ function PortfolioPage() {
             }}
           >
             {" "}
-            Your portfolio is empty.
+            Your portfolio is empty. Please add coins to start monitoring.
           </div>
         ) : (
           <div style={{ width: "100%", paddingTop: 40 }}>
             <div className={classes.titleContainer}>
-              <Typography variant="h3" style={{ fontFamily: "VT323" }}>
+              <Typography variant="h2" style={{ fontFamily: "VT323" }}>
                 Portfolio
               </Typography>
               <div className={classes.buttonContainer}>

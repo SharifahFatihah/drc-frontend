@@ -42,7 +42,11 @@ const useStyle = makeStyles((theme) => ({
     flexDirection: "column",
     justifyItems: "center",
     margin: 20,
+    padding: 20,
     width: "60%",
+    boxShadow: "inset 5px 5px 10px rgba(79, 58, 84, 0.52)",
+    // backgroundColor: "rgba(79, 58, 84, 0.52)",
+    borderRadius: "15px",
     [theme.breakpoints.down("md")]: {
       width: "100%",
     },
@@ -52,7 +56,37 @@ const useStyle = makeStyles((theme) => ({
     flexDirection: "column",
     justifyItems: "center",
     margin: 20,
+    padding: 20,
     width: "40%",
+    // backgroundColor: "rgba(79, 58, 84, 0.52)",
+    boxShadow: "inset 5px 5px 10px rgba(79, 58, 84, 0.52)",
+    borderRadius: "15px",
+    [theme.breakpoints.down("md")]: {
+      width: "100%",
+    },
+  },
+  inSecondContainer20: {
+    display: "flex",
+    flexDirection: "column",
+    justifyItems: "center",
+    margin: 20,
+    width: "40%",
+    // backgroundColor: "rgba(79, 58, 84, 0.52)",
+    boxShadow: "inset 5px 5px 10px rgba(79, 58, 84, 0.52)",
+    borderRadius: "15px",
+    [theme.breakpoints.down("md")]: {
+      width: "100%",
+    },
+  },
+  inSecondContainer100: {
+    display: "flex",
+    flexDirection: "column",
+    justifyItems: "center",
+    margin: 20,
+    width: "100%",
+    // backgroundColor: "rgba(79, 58, 84, 0.52)",
+    boxShadow: "inset 5px 5px 10px rgba(79, 58, 84, 0.52)",
+    borderRadius: "15px",
     [theme.breakpoints.down("md")]: {
       width: "100%",
     },
@@ -394,10 +428,18 @@ function PortfolioChart({ days, volatilityDesc, timeFrame }) {
     <div className={classes.container}>
       <div className={classes.secondContainer}>
         <div
-          style={{ display: "flex", flexDirection: "column", width: "100%" }}
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            width: "100%",
+            // backgroundColor: "rgba(79, 58, 84, 0.52)",
+            boxShadow: "inset 5px 5px 10px rgba(79, 58, 84, 0.52)",
+            borderRadius: "15px",
+            padding: 20,
+          }}
         >
-          <Typography variant="h2" style={{ fontFamily: "VT323" }}>
-            Historical Price{" "}
+          <Typography variant="h3" style={{ fontFamily: "VT323" }}>
+            Historical Portfolio Value{" "}
             <Tooltip title={histPriceTooltip}>
               <img
                 src={infoicon}
@@ -495,7 +537,7 @@ function PortfolioChart({ days, volatilityDesc, timeFrame }) {
         </div>
         <div className={classes.inSecondContainer40}>
           <Typography variant="h3" style={{ fontFamily: "VT323" }}>
-            Volitility {""}
+            Volatility {""}
             <Tooltip title={relPriceTooltip}>
               <img
                 src={infoicon}
@@ -550,106 +592,7 @@ function PortfolioChart({ days, volatilityDesc, timeFrame }) {
         </div>
       </div>
       <div className={classes.secondContainer}>
-        <div className={classes.inSecondContainer40}>
-          <TableContainer
-            component={Paper}
-            style={{ backgroundColor: "transparent", color: "black" }}
-          >
-            {" "}
-            <div
-              style={{
-                overflow: "auto",
-                maxHeight: "375px",
-              }}
-            >
-              <Table
-                sx={{ minWidth: 650 }}
-                aria-label="simple table"
-                stickyHeader
-              >
-                <TableHead>
-                  <TableRow>
-                    <TableCell
-                      style={{ color: "black", backgroundColor: "#FFE227" }}
-                    >
-                      Coin
-                    </TableCell>
-                    <TableCell
-                      align="right"
-                      style={{ color: "black", backgroundColor: "#FFE227" }}
-                    >
-                      &sigma; of price ({volatilityDesc})
-                    </TableCell>
-                    <TableCell
-                      align="right"
-                      style={{ color: "black", backgroundColor: "#FFE227" }}
-                    >
-                      &sigma; of return ({volatilityDesc})
-                    </TableCell>
-                  </TableRow>
-                </TableHead>
-
-                <TableBody>
-                  {coinsd2 &&
-                    coinsd2?.map((row) => {
-                      if (
-                        watchlist.includes(
-                          watchlist.find((watch) => watch.id === row.coin.id)
-                        )
-                      ) {
-                        return (
-                          <TableRow
-                            key={row.coin.name}
-                            sx={{
-                              "&:last-child td, &:last-child th": { border: 0 },
-                            }}
-                          >
-                            <TableCell
-                              component="th"
-                              scope="row"
-                              style={{ color: "white" }}
-                            >
-                              <div
-                                style={{
-                                  display: "flex",
-                                  alignItems: "center",
-                                }}
-                              >
-                                <div style={{ marginRight: 10 }}>
-                                  <img src={row?.coin.image} height="20" />
-                                </div>
-                                <div>{row.coin.name}</div>
-                              </div>
-                            </TableCell>
-                            <TableCell align="right" style={{ color: "white" }}>
-                              {Math.sqrt(
-                                row.stats_price.sd_price /
-                                  ((row.coin.holding * row.coin.current_price) /
-                                    row.total_weight)
-                              ).toPrecision(4)}
-                            </TableCell>
-                            <TableCell align="right" style={{ color: "white" }}>
-                              {(
-                                Math.sqrt(
-                                  row.stats_return.sd_return /
-                                    ((row.coin.holding *
-                                      row.coin.current_price) /
-                                      row.total_weight) **
-                                      2
-                                ) * 100
-                              ).toPrecision(4)}
-                              %
-                            </TableCell>
-                          </TableRow>
-                        );
-                      }
-                    })}
-                </TableBody>
-              </Table>
-            </div>
-          </TableContainer>
-        </div>
-        <div className={classes.inSecondContainer}>
+        <div className={classes.inSecondContainer100}>
           <Typography variant="h3" style={{ fontFamily: "VT323" }}>
             Coin Price {""}
             <Tooltip title={relPriceTooltip}>
@@ -680,6 +623,104 @@ function PortfolioChart({ days, volatilityDesc, timeFrame }) {
             }}
           />
         </div>
+      </div>
+      <div className={classes.secondContainer}>
+        <TableContainer
+          component={Paper}
+          style={{ backgroundColor: "transparent", color: "black" }}
+        >
+          {" "}
+          <div
+            style={{
+              overflow: "auto",
+              maxHeight: "375px",
+            }}
+          >
+            <Table
+              sx={{ minWidth: 650 }}
+              aria-label="simple table"
+              stickyHeader
+            >
+              <TableHead>
+                <TableRow>
+                  <TableCell
+                    style={{ color: "black", backgroundColor: "#FFE227" }}
+                  >
+                    Coin
+                  </TableCell>
+                  <TableCell
+                    align="right"
+                    style={{ color: "black", backgroundColor: "#FFE227" }}
+                  >
+                    &sigma; of price ({volatilityDesc})
+                  </TableCell>
+                  <TableCell
+                    align="right"
+                    style={{ color: "black", backgroundColor: "#FFE227" }}
+                  >
+                    &sigma; of return ({volatilityDesc})
+                  </TableCell>
+                </TableRow>
+              </TableHead>
+
+              <TableBody>
+                {coinsd2 &&
+                  coinsd2?.map((row) => {
+                    if (
+                      watchlist.includes(
+                        watchlist.find((watch) => watch.id === row.coin.id)
+                      )
+                    ) {
+                      return (
+                        <TableRow
+                          key={row.coin.name}
+                          sx={{
+                            "&:last-child td, &:last-child th": { border: 0 },
+                          }}
+                        >
+                          <TableCell
+                            component="th"
+                            scope="row"
+                            style={{ color: "white" }}
+                          >
+                            <div
+                              style={{
+                                display: "flex",
+                                alignItems: "center",
+                              }}
+                            >
+                              <div style={{ marginRight: 10 }}>
+                                <img src={row?.coin.image} height="20" />
+                              </div>
+                              <div>{row.coin.name}</div>
+                            </div>
+                          </TableCell>
+                          <TableCell align="right" style={{ color: "white" }}>
+                            {Math.sqrt(
+                              row.stats_price.sd_price /
+                                ((row.coin.holding * row.coin.current_price) /
+                                  row.total_weight)
+                            ).toPrecision(4)}
+                          </TableCell>
+                          <TableCell align="right" style={{ color: "white" }}>
+                            {(
+                              Math.sqrt(
+                                row.stats_return.sd_return /
+                                  ((row.coin.holding * row.coin.current_price) /
+                                    row.total_weight) **
+                                    2
+                              ) * 100
+                            ).toPrecision(4)}
+                            %
+                          </TableCell>
+                        </TableRow>
+                      );
+                    }
+                  })}
+              </TableBody>
+            </Table>
+          </div>
+        </TableContainer>
       </div>
     </div>
   );
