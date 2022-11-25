@@ -16,6 +16,7 @@ function CryptoContext({ children }) {
   const [globalInfo, setGlobalInfo] = useState();
   const [open, setOpen] = useState(false);
   const [authValue, setAuthValue] = useState(0);
+  const [portfolioVol, setPortfolioVol] = useState(0);
 
   const [alert, setAlert] = useState({
     open: false,
@@ -32,7 +33,11 @@ function CryptoContext({ children }) {
         setLoading(false);
       })
       .catch((err) => {
-        console.log(err);
+        setAlert({
+          open: true,
+          message: `API request exceed 50 limit, please wait 1 minute`,
+          type: "error",
+        });
       });
   };
 
@@ -110,6 +115,8 @@ function CryptoContext({ children }) {
         setOpen,
         authValue,
         setAuthValue,
+        setPortfolioVol,
+        portfolioVol,
       }}
     >
       {children}

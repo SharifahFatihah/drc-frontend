@@ -22,8 +22,7 @@ const useStyle = makeStyles((theme) => ({
     borderRadius: 10,
     [theme.breakpoints.down("sm")]: {
       width: "80%",
-
-      height: "80%",
+      height: "90%",
     },
   },
   google: {

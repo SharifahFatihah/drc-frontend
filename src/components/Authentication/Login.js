@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
       overflowY: "scroll",
       height: "90%",
       overflowY: "auto",
-      maxHeight: "300px",
+      maxHeight: "500px",
     },
   },
   google: {
@@ -110,8 +110,6 @@ function Login({ handleClose }) {
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
-          // overflowY: "auto",
-          // maxHeight: "200px",
         }}
       >
         <img src={LogoWord} width="200" />

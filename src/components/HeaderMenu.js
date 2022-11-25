@@ -3,14 +3,8 @@ import Button from "@mui/material/Button";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import MenuIcon from "../asset/menu.png";
-import {
-  createTheme,
-  ThemeProvider,
-  makeStyles,
-  Theme,
-} from "@material-ui/core";
-import UserSidebar from "./UserSidebar";
-import AuthModal from "./Authentication/AuthModal";
+import { createTheme, makeStyles, ThemeProvider } from "@material-ui/core";
+
 import { CryptoState } from "../CryptoContext";
 import { useNavigate } from "react-router-dom";
 const useStyles = makeStyles((theme) => ({
@@ -34,8 +28,8 @@ export default function HeaderMenu({ selectMenu, isMobile }) {
   };
   const darkTheme = createTheme({
     palette: {
-      primary: { main: "#fff" },
-      type: "dark",
+      primary: { main: "rgba(255,255,255,1)" },
+      type: "light",
     },
   });
 
