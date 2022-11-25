@@ -1,4 +1,5 @@
 import {
+  Button,
   makeStyles,
   Paper,
   Table,
@@ -83,6 +84,8 @@ const useStyle = makeStyles((theme) => ({
     flexDirection: "column",
     justifyItems: "center",
     margin: 20,
+    padding: 20,
+
     width: "100%",
     // backgroundColor: "rgba(79, 58, 84, 0.52)",
     boxShadow: "inset 5px 5px 10px rgba(79, 58, 84, 0.52)",
@@ -91,62 +94,39 @@ const useStyle = makeStyles((theme) => ({
       width: "100%",
     },
   },
-  red: {
-    backgroundColor: "#FF4B25",
-    marginLeft: 10,
-    color: "black",
-    padding: 5,
-    borderRadius: 5,
-    width: "80%",
-    display: "flex",
-    justifyContent: "center",
-  },
-  green: {
-    backgroundColor: "#00FF19",
-    marginLeft: 10,
-    color: "black",
-    padding: 5,
-    borderRadius: 5,
-    width: "80%",
-    display: "flex",
-    justifyContent: "center",
-  },
-  yellow: {
-    backgroundColor: "#FFE227",
-    marginLeft: 10,
-    color: "black",
-    padding: 5,
-    borderRadius: 5,
-    width: "80%",
-    display: "flex",
-    justifyContent: "center",
-  },
 }));
 
 function PortfolioChart({ days, volatilityDesc, timeFrame }) {
   const classes = useStyle();
 
-  const { user, setAlert, watchlist, coins, currency, symbol } = CryptoState();
+  const { setAlert, watchlist, coins, currency, setPortfolioVol } =
+    CryptoState();
 
   const [coinHistData, setCoinHistData] = useState([]);
   const [coinHistData2, setCoinHistData2] = useState([]);
-  const [portfolioVol, setPortfolioVol] = useState(0);
+  const [isChart, setIsChart] = useState("portfolio");
 
   useEffect(() => {
     Promise.all(
       coins.map(async (coin) => {
         if (watchlist.includes(watchlist.find((e) => e.id === coin.id)))
-          return Service.getHistoricalChart(coin.id, days, currency).then(
-            async (z) => {
+          return Service.getHistoricalChart(coin.id, days, currency)
+            .then(async (z) => {
               setCoinHistData((coinHistData) => [
                 ...coinHistData,
                 { coin, hist_data: z.data.prices },
               ]);
-            }
-          );
+            })
+            .catch((err) => {
+              setAlert({
+                open: true,
+                message: `API request exceed 50 limit, please wait 1 minute`,
+                type: "error",
+              });
+            });
       })
     );
-  }, [watchlist, days]);
+  }, [watchlist, days, currency]);
 
   useEffect(() => {
     setCoinHistData2([
@@ -365,22 +345,6 @@ function PortfolioChart({ days, volatilityDesc, timeFrame }) {
     }
   });
 
-  const doughnutCoin = () => {
-    const sumArr = coinsd2?.map(
-      (e) => e?.coin?.holding * e?.coin?.current_price
-    );
-    const sum = sumArr?.reduce((acc, val) => acc + val, 0);
-    const holdingArr = coinsd2?.map((e) => {
-      return {
-        name: e.coin.name,
-        weight: e.coin.holding * e.coin.current_price,
-        total_weight: sum,
-      };
-    });
-
-    return holdingArr;
-  };
-
   console.log("coinsd2", coinsd2);
 
   const totalDuration = 2500;
@@ -408,12 +372,6 @@ function PortfolioChart({ days, volatilityDesc, timeFrame }) {
     return "rgba(" + o(r() * s) + "," + o(r() * s) + "," + o(r() * s) + ",1";
   };
 
-  const colours = portfolioReturnChart()?.avg_return?.map((value) =>
-    value < 0 ? "red" : "green"
-  );
-
-  const colourDoughnut = doughnutCoin().map((e) => random_rgba());
-
   const histPriceTooltip = `The price of coin in the past ${days} day(s)`;
   const relPriceTooltip = `The price of each coin in your portfolio relative to its highest value for the past ${days} day(s).`;
   const histReturnTooltip = `The 'Sum of Returns' x 'Weightage of each coin' in your portfolio for the past ${days} day(s).`;
@@ -432,193 +390,191 @@ function PortfolioChart({ days, volatilityDesc, timeFrame }) {
             padding: 20,
           }}
         >
-          <Typography variant="h3" style={{ fontFamily: "VT323" }}>
-            Historical Portfolio Value{" "}
-            <Tooltip title={histPriceTooltip}>
-              <img
-                src={infoicon}
-                height="13"
-                style={{ marginBottom: "25px" }}
+          {" "}
+          <div
+            style={{
+              display: "flex",
+              width: "100%",
+              justifyContent: "space-between",
+            }}
+          >
+            <>
+              {isChart === "portfolio" ? (
+                <Typography variant="h3" style={{ fontFamily: "VT323" }}>
+                  Historical Portfolio Value{" "}
+                  <Tooltip title={histPriceTooltip}>
+                    <img
+                      src={infoicon}
+                      height="13"
+                      style={{ marginBottom: "25px" }}
+                    />
+                  </Tooltip>
+                </Typography>
+              ) : isChart === "coin" ? (
+                <Typography variant="h3" style={{ fontFamily: "VT323" }}>
+                  Coin Price {""}
+                  <Tooltip title={relPriceTooltip}>
+                    <img
+                      src={infoicon}
+                      height="13"
+                      style={{ marginBottom: "25px" }}
+                    />
+                  </Tooltip>
+                </Typography>
+              ) : (
+                <Typography variant="h3" style={{ fontFamily: "VT323" }}>
+                  Historical Returns{" "}
+                  <Tooltip title={histReturnTooltip}>
+                    <img
+                      src={infoicon}
+                      height="13"
+                      style={{ marginBottom: "25px" }}
+                    />
+                  </Tooltip>
+                </Typography>
+              )}
+            </>
+            <div
+              style={{
+                padding: 10,
+                backgroundColor: "rgba(79, 58, 84, 0.52)",
+                borderRadius: 5,
+              }}
+            >
+              <Button
+                style={{
+                  backgroundColor:
+                    isChart === "portfolio" ? "yellow" : "transparent",
+                  color: isChart === "portfolio" ? "black" : "white",
+                }}
+                onClick={() => {
+                  setIsChart("portfolio");
+                }}
+              >
+                portfolio
+              </Button>
+              <Button
+                style={{
+                  backgroundColor:
+                    isChart === "coin" ? "yellow" : "transparent",
+                  color: isChart === "coin" ? "black" : "white",
+                }}
+                onClick={() => {
+                  setIsChart("coin");
+                }}
+              >
+                coin
+              </Button>
+              <Button
+                style={{
+                  backgroundColor:
+                    isChart === "return" ? "yellow" : "transparent",
+                  color: isChart === "return" ? "black" : "white",
+                }}
+                onClick={() => {
+                  setIsChart("return");
+                }}
+              >
+                return
+              </Button>
+            </div>
+          </div>
+          {isChart === "portfolio" ? (
+            portfolioPriceChart().avg_return.length === 0 ? null : (
+              <Line
+                data={{
+                  labels: portfolioPriceChart()?.time?.map((e) => {
+                    let date = new Date(e);
+                    let time = `${date.getHours()}:${date.getMinutes()} `;
+                    return days === 1 ? time : date.toLocaleDateString();
+                  }),
+                  datasets: [
+                    {
+                      data: portfolioPriceChart()?.avg_return.map((e) => e),
+                      label: `Portfolio Price`,
+                      borderColor: "yellow",
+                      borderWidth: 2,
+                      pointBorderColor: "rgba(0,0,0,0)",
+                      pointBackgroundColor: "rgba(0,0,0,0)",
+                      pointHoverBorderColor: "#5AC53B",
+                      pointHitRadius: 6,
+                      yAxisID: "y",
+                    },
+                  ],
+                }}
+                options={{
+                  animation,
+                  plugins: {
+                    legend: {
+                      display: false,
+                    },
+                  },
+                  scales: { y: { display: true } },
+                }}
               />
-            </Tooltip>
-          </Typography>
-
-          {portfolioPriceChart().avg_return.length === 0 ? null : (
+            )
+          ) : isChart === "coin" ? (
             <Line
               data={{
-                labels: portfolioPriceChart()?.time?.map((e) => {
-                  let date = new Date(e);
+                labels: coinHistData2[0]?.hist_data?.map((chartData) => {
+                  let date = new Date(chartData[0]);
                   let time = `${date.getHours()}:${date.getMinutes()} `;
                   return days === 1 ? time : date.toLocaleDateString();
                 }),
-                datasets: [
-                  {
-                    data: portfolioPriceChart()?.avg_return.map((e) => e),
-                    label: `Portfolio Price`,
-                    borderColor: "yellow",
-                    borderWidth: 2,
-                    pointBorderColor: "rgba(0,0,0,0)",
-                    pointBackgroundColor: "rgba(0,0,0,0)",
-                    pointHoverBorderColor: "#5AC53B",
-                    pointHitRadius: 6,
-                    yAxisID: "y",
-                  },
-                ],
+                datasets: coinChart,
               }}
               options={{
                 animation,
                 plugins: {
                   legend: {
-                    display: false,
+                    display: true,
                   },
                 },
                 scales: { y: { display: true } },
               }}
             />
+          ) : (
+            portfolioReturnChart() && (
+              <Line
+                data={{
+                  labels: portfolioReturnChart()?.time?.map((e) => {
+                    let date = new Date(e);
+                    let time = `${date.getHours()}:${date.getMinutes()} `;
+                    return days === 1 ? time : date.toLocaleDateString();
+                  }),
+                  datasets: [
+                    {
+                      data: portfolioReturnChart()?.avg_return.map(
+                        (e) => e * 100
+                      ),
+                      label: `test`,
+                      borderColor: "rgba(255, 226, 39, 1)",
+                      borderWidth: 0.5,
+                      pointBorderColor: "rgba(0,0,0,0)",
+                      pointBackgroundColor: "rgba(0,0,0,0)",
+                      pointHoverBorderColor: "#5AC53B",
+                      pointHitRadius: 6,
+                      yAxisID: "y",
+                      fill: true,
+                      backgroundColor: "rgba(255, 226, 39, 0.6)",
+                    },
+                  ],
+                }}
+                options={{
+                  animation: { duration: 3000, easing: "easeInOutCubic" },
+                  plugins: {
+                    legend: {
+                      display: false,
+                    },
+                  },
+                  scales: { y: { display: true } },
+                }}
+              />
+            )
           )}
         </div>
       </div>
-
-      <div className={classes.secondContainer}>
-        <div className={classes.inSecondContainer}>
-          <Typography variant="h3" style={{ fontFamily: "VT323" }}>
-            Historical Returns{" "}
-            <Tooltip title={histReturnTooltip}>
-              <img
-                src={infoicon}
-                height="13"
-                style={{ marginBottom: "25px" }}
-              />
-            </Tooltip>
-          </Typography>
-          {portfolioReturnChart() && (
-            <Line
-              data={{
-                labels: portfolioReturnChart()?.time?.map((e) => {
-                  let date = new Date(e);
-                  let time = `${date.getHours()}:${date.getMinutes()} `;
-                  return days === 1 ? time : date.toLocaleDateString();
-                }),
-                datasets: [
-                  {
-                    data: portfolioReturnChart()?.avg_return.map(
-                      (e) => e * 100
-                    ),
-                    label: `test`,
-                    borderColor: "rgba(255, 226, 39, 1)",
-                    borderWidth: 0.5,
-                    pointBorderColor: "rgba(0,0,0,0)",
-                    pointBackgroundColor: "rgba(0,0,0,0)",
-                    pointHoverBorderColor: "#5AC53B",
-                    pointHitRadius: 6,
-                    yAxisID: "y",
-                    fill: true,
-                    backgroundColor: "rgba(255, 226, 39, 0.6)",
-                  },
-                ],
-              }}
-              options={{
-                animation: { duration: 3000, easing: "easeInOutCubic" },
-                plugins: {
-                  legend: {
-                    display: false,
-                  },
-                },
-                scales: { y: { display: true } },
-              }}
-            />
-          )}
-        </div>
-        <div className={classes.inSecondContainer40}>
-          <Typography variant="h3" style={{ fontFamily: "VT323" }}>
-            Volatility {""}
-            <Tooltip title={relPriceTooltip}>
-              <img
-                src={infoicon}
-                height="13"
-                style={{ marginBottom: "25px" }}
-              />
-            </Tooltip>
-          </Typography>
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              height: "80%",
-            }}
-          >
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-              }}
-            >
-              <Typography variant="subtitle" style={{ fontFamily: "VT323" }}>
-                {volatilityDesc} volatility of portfolio in the last {days}{" "}
-                day(s)
-              </Typography>
-              <Typography variant="h2" style={{ fontFamily: "VT323" }}>
-                {" "}
-                {portfolioVolatility()?.return_sd.toFixed(2)}%
-              </Typography>
-
-              <div
-                className={
-                  portfolioVolatility()?.return_sd > 3
-                    ? classes.red
-                    : portfolioVolatility()?.return_sd > 2
-                    ? classes.yellow
-                    : classes.green
-                }
-              >
-                <Typography variant="h4" style={{ fontFamily: "VT323" }}>
-                  {portfolioVolatility()?.return_sd > 3
-                    ? "high"
-                    : portfolioVolatility()?.return_sd > 2
-                    ? "moderate"
-                    : "low"}
-                </Typography>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div className={classes.secondContainer}>
-        <div className={classes.inSecondContainer100}>
-          <Typography variant="h3" style={{ fontFamily: "VT323" }}>
-            Coin Price {""}
-            <Tooltip title={relPriceTooltip}>
-              <img
-                src={infoicon}
-                height="13"
-                style={{ marginBottom: "25px" }}
-              />
-            </Tooltip>
-          </Typography>
-          <Line
-            data={{
-              labels: coinHistData2[0]?.hist_data?.map((chartData) => {
-                let date = new Date(chartData[0]);
-                let time = `${date.getHours()}:${date.getMinutes()} `;
-                return days === 1 ? time : date.toLocaleDateString();
-              }),
-              datasets: coinChart,
-            }}
-            options={{
-              animation,
-              plugins: {
-                legend: {
-                  display: true,
-                },
-              },
-              scales: { y: { display: true } },
-            }}
-          />
-        </div>
-      </div>
-      <div className={classes.secondContainer}>
+      <div className={classes.secondContainer} style={{ marginTop: 30 }}>
         <TableContainer
           component={Paper}
           style={{ backgroundColor: "transparent", color: "black" }}

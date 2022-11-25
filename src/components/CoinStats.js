@@ -13,7 +13,7 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "center",
     justifyContent: "center",
     marginTop: 40,
-    [theme.breakpoints.down(1495)]: {
+    [theme.breakpoints.down(1700)]: {
       flexDirection: "column",
       alignItems: "center",
     },
