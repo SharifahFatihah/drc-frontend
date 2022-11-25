@@ -3,7 +3,7 @@ import Button from "@mui/material/Button";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import MenuIcon from "../asset/menu.png";
-import { createTheme, ThemeProvider } from "@material-ui/core";
+import { createTheme, makeStyles, ThemeProvider } from "@material-ui/core";
 
 import { CryptoState } from "../CryptoContext";
 import { useNavigate } from "react-router-dom";
