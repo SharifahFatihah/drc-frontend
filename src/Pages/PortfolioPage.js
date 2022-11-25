@@ -351,237 +351,270 @@ function PortfolioPage() {
                 : "0"
               : "0"}
           </Typography>
-          {/* </div> */}
         </div>
 
-        {userState && (
-          <div
-            style={{
-              marginTop: 20,
-              width: "90%",
-              backgroundColor: "rgba(79, 58, 84, 0.52)",
-            }}
-          >
-            <Paper
-              sx={{
-                width: "100%",
-                overflow: "hidden",
-              }}
-              style={{
-                borderRadius: "15px",
-              }}
-            >
-              <TableContainer
-                component={Paper}
-                style={{ backgroundColor: "#212121", color: "black" }}
-              >
-                <div
-                  style={{
-                    overflow: "auto",
-                    maxHeight: isMobile ? "250px" : "550px",
-                  }}
-                >
-                  <Table sx={{ minWidth: 650 }}>
-                    <TableBody>
-                      {userCoin3?.map((row) => {
-                        if (
-                          watchlist.includes(
-                            watchlist.find((watch) => watch.id === row.id)
-                          )
-                        ) {
-                          return (
-                            <TableRow
-                              key={row.name}
-                              sx={{
-                                "&:last-child td, &:last-child th": {
-                                  border: 0,
-                                },
-                              }}
-                            >
-                              {" "}
-                              <TableCell
-                                component="th"
-                                scope="row"
-                                style={{ color: "white" }}
-                              >
-                                <div
-                                  style={{
-                                    display: "flex",
-                                    alignItems: "center",
-                                  }}
-                                >
-                                  <div style={{ marginRight: 10 }}>
-                                    <img src={row?.image?.thumb} height="20" />
-                                  </div>
-                                  <div>{row.name}</div>
-                                </div>
-                              </TableCell>
-                              <TableCell
-                                align="right"
-                                style={{ color: "white" }}
-                              >
-                                <div>
-                                  <div>
-                                    {symbol}
-                                    {row.holding *
-                                      row.market_data.current_price[
-                                        currency.toLowerCase()
-                                      ] >=
-                                    1
-                                      ? (
-                                          row.holding *
-                                          row.market_data.current_price[
-                                            currency.toLowerCase()
-                                          ]
-                                        ).toFixed(2)
-                                      : (
-                                          row.holding *
-                                          row.market_data.current_price[
-                                            currency.toLowerCase()
-                                          ]
-                                        ).toPrecision(4)}
-                                  </div>
-                                  <div>
-                                    {row.holding >= 1
-                                      ? row.holding.toFixed(2)
-                                      : row?.holding.toPrecision(4)}{" "}
-                                    {row.symbol?.toUpperCase()}
-                                  </div>
-                                </div>
-                              </TableCell>
-                              <TableCell align="right">
-                                <div
-                                  style={{
-                                    display: "flex",
-                                    alignItems: "center",
-                                    justifyContent: "flex-end",
-                                  }}
-                                >
-                                  <HoldingModal coin={row} />
-                                  <DeleteModal row={row} />
-                                </div>
-                              </TableCell>
-                            </TableRow>
-                          );
-                        }
-                      })}
-                    </TableBody>
-                  </Table>
-                </div>
-              </TableContainer>
-            </Paper>
-          </div>
-        )}
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-around",
-            margin: 20,
-          }}
-        >
-          <Button
-            variant="contained"
-            style={{
-              backgroundColor: "#FFE227",
-              border: "5px solid white",
-              color: "black",
-              fontFamily: "VT323",
-              fontSize: 20,
-            }}
-            onClick={() => {
-              navigate("/coinList");
-            }}
-          >
-            Add New Coin
-          </Button>
-        </div>
-
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            height: "80%",
-          }}
-        >
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-            }}
-          >
-            <Typography variant="subtitle" style={{ fontFamily: "VT323" }}>
-              {volatilityDesc} volatility of portfolio/{currency?.toUpperCase()}{" "}
-              in the last {days} day(s)
-            </Typography>
-            <Typography variant="h2" style={{ fontFamily: "VT323" }}>
-              {" "}
-              {portfolioVol.toFixed(2)}%
-            </Typography>
-
+        {userState ? (
+          <>
             <div
-              className={
-                portfolioVol > 3
-                  ? classes.red
-                  : portfolioVol > 2
-                  ? classes.yellow
-                  : classes.green
-              }
+              style={{
+                marginTop: 20,
+                width: "90%",
+                backgroundColor: "rgba(79, 58, 84, 0.52)",
+              }}
             >
-              <Typography variant="h4" style={{ fontFamily: "VT323" }}>
-                {portfolioVol > 3
-                  ? "high"
-                  : portfolioVol > 2
-                  ? "moderate"
-                  : "low"}
-              </Typography>
+              <Paper
+                sx={{
+                  width: "100%",
+                  overflow: "hidden",
+                }}
+                style={{
+                  borderRadius: "15px",
+                }}
+              >
+                <TableContainer
+                  component={Paper}
+                  style={{ backgroundColor: "#212121", color: "black" }}
+                >
+                  <div
+                    style={{
+                      overflow: "auto",
+                      maxHeight: isMobile ? "250px" : "550px",
+                    }}
+                  >
+                    <Table sx={{ minWidth: 650 }}>
+                      <TableBody>
+                        {userCoin3?.map((row) => {
+                          if (
+                            watchlist.includes(
+                              watchlist.find((watch) => watch.id === row.id)
+                            )
+                          ) {
+                            return (
+                              <TableRow
+                                key={row.name}
+                                sx={{
+                                  "&:last-child td, &:last-child th": {
+                                    border: 0,
+                                  },
+                                }}
+                              >
+                                {" "}
+                                <TableCell
+                                  component="th"
+                                  scope="row"
+                                  style={{ color: "white" }}
+                                >
+                                  <div
+                                    style={{
+                                      display: "flex",
+                                      alignItems: "center",
+                                    }}
+                                  >
+                                    <div style={{ marginRight: 10 }}>
+                                      <img
+                                        src={row?.image?.thumb}
+                                        height="20"
+                                      />
+                                    </div>
+                                    <div>{row.name}</div>
+                                  </div>
+                                </TableCell>
+                                <TableCell
+                                  align="right"
+                                  style={{ color: "white" }}
+                                >
+                                  <div>
+                                    <div>
+                                      {symbol}
+                                      {row.holding *
+                                        row.market_data.current_price[
+                                          currency.toLowerCase()
+                                        ] >=
+                                      1
+                                        ? (
+                                            row.holding *
+                                            row.market_data.current_price[
+                                              currency.toLowerCase()
+                                            ]
+                                          ).toFixed(2)
+                                        : (
+                                            row.holding *
+                                            row.market_data.current_price[
+                                              currency.toLowerCase()
+                                            ]
+                                          ).toPrecision(4)}
+                                    </div>
+                                    <div>
+                                      {row.holding >= 1
+                                        ? row.holding.toFixed(2)
+                                        : row?.holding.toPrecision(4)}{" "}
+                                      {row.symbol?.toUpperCase()}
+                                    </div>
+                                  </div>
+                                </TableCell>
+                                <TableCell align="right">
+                                  <div
+                                    style={{
+                                      display: "flex",
+                                      alignItems: "center",
+                                      justifyContent: "flex-end",
+                                    }}
+                                  >
+                                    <HoldingModal coin={row} />
+                                    <DeleteModal row={row} />
+                                  </div>
+                                </TableCell>
+                              </TableRow>
+                            );
+                          }
+                        })}
+                      </TableBody>
+                    </Table>
+                  </div>
+                </TableContainer>
+              </Paper>
             </div>
-          </div>
-        </div>
-        <Typography
-          variant="h3"
-          style={{ fontFamily: "VT323", marginTop: 50, marginBottom: 20 }}
-        >
-          Coin Weightage{" "}
-          <Tooltip title={weightageTooltip}>
-            <img src={infoicon} height="13" style={{ marginBottom: "25px" }} />
-          </Tooltip>
-        </Typography>
-        {donutCoin && (
-          <Doughnut
-            data={{
-              labels: donutCoin?.map((e) => {
-                if (
-                  watchlist.includes(
-                    watchlist.find((watch) => watch.id === e?.id)
-                  )
-                ) {
-                  return e.name;
-                } else {
-                  return "deleted";
-                }
-              }),
-              datasets: [
-                {
-                  data: donutCoin
-                    ? donutCoin?.map((e) => (e.weight / e.total_weight) * 100)
-                    : [],
-                  borderWidth: 0,
-                  backgroundColor: colourDoughnut,
-                  radius: "60%",
-                },
-              ],
-            }}
-            option={{
-              animation: { animateRotate: false },
-            }}
-          />
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-around",
+                margin: 20,
+              }}
+            >
+              <Button
+                variant="contained"
+                style={{
+                  backgroundColor: "#FFE227",
+                  border: "5px solid white",
+                  color: "black",
+                  fontFamily: "VT323",
+                  fontSize: 20,
+                }}
+                onClick={() => {
+                  navigate("/coinList");
+                }}
+              >
+                Add New Coin
+              </Button>
+            </div>
+          </>
+        ) : (
+          <></>
+        )}
+
+        {userState ? (
+          <>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                height: "80%",
+              }}
+            >
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                }}
+              >
+                <Typography variant="subtitle" style={{ fontFamily: "VT323" }}>
+                  {volatilityDesc} volatility of portfolio/
+                  {currency?.toUpperCase()} in the last {days} day(s)
+                </Typography>
+                <Typography variant="h2" style={{ fontFamily: "VT323" }}>
+                  {" "}
+                  {portfolioVol.toFixed(2)}%
+                </Typography>
+
+                <div
+                  className={
+                    portfolioVol > 3
+                      ? classes.red
+                      : portfolioVol > 2
+                      ? classes.yellow
+                      : classes.green
+                  }
+                >
+                  <Typography variant="h4" style={{ fontFamily: "VT323" }}>
+                    {portfolioVol > 3
+                      ? "high"
+                      : portfolioVol > 2
+                      ? "moderate"
+                      : "low"}
+                  </Typography>
+                </div>
+              </div>
+            </div>
+            <Typography
+              variant="h3"
+              style={{ fontFamily: "VT323", marginTop: 50, marginBottom: 20 }}
+            >
+              Coin Weightage{" "}
+              <Tooltip title={weightageTooltip}>
+                <img
+                  src={infoicon}
+                  height="13"
+                  style={{ marginBottom: "25px" }}
+                />
+              </Tooltip>
+            </Typography>
+            {donutCoin && (
+              <Doughnut
+                data={{
+                  labels: donutCoin?.map((e) => {
+                    if (
+                      watchlist.includes(
+                        watchlist.find((watch) => watch.id === e?.id)
+                      )
+                    ) {
+                      return e.name;
+                    } else {
+                      return "deleted";
+                    }
+                  }),
+                  datasets: [
+                    {
+                      data: donutCoin
+                        ? donutCoin?.map(
+                            (e) => (e.weight / e.total_weight) * 100
+                          )
+                        : [],
+                      borderWidth: 0,
+                      backgroundColor: colourDoughnut,
+                      radius: "60%",
+                    },
+                  ],
+                }}
+                option={{
+                  animation: { animateRotate: false },
+                }}
+              />
+            )}
+          </>
+        ) : (
+          <></>
         )}
       </div>
       <div className={classes.mainbar}>
-        {!userState || userCoin2.length == 0 ? (
+        {!userState ? (
+          <>
+            <div
+              style={{
+                display: "flex",
+                width: "100%",
+                height: "800px",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              {" "}
+              Please Login{" "}
+            </div>
+          </>
+        ) : userCoin2.length == 0 ? (
           <div
             style={{
               display: "flex",
