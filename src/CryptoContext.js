@@ -11,6 +11,7 @@ function CryptoContext({ children }) {
   const [symbol, setSymbol] = useState("$");
   const [user, setUser] = useState(null);
   const [watchlist, setWatchlist] = useState([]);
+  const [balance, setBalance] = useState([]);
   const [coins, setCoins] = useState([]);
   const [loading, setLoading] = useState(false);
   const [globalInfo, setGlobalInfo] = useState();
@@ -66,6 +67,7 @@ function CryptoContext({ children }) {
   useEffect(() => {
     if (user) {
       const coinRef = doc(db, "watchlist", user?.uid);
+      const walletRef = doc(db, "wallet", user?.uid);
 
       var unsubscribe = onSnapshot(coinRef, (coin) => {
         if (coin.exists()) {
@@ -73,8 +75,15 @@ function CryptoContext({ children }) {
         } else {
         }
       });
+      var unsubscribe2 = onSnapshot(walletRef, (wallet) => {
+        if (wallet.exists()) {
+          setBalance(wallet.data().balances);
+        } else {
+        }
+      });
       return () => {
         unsubscribe();
+        unsubscribe2();
       };
     }
   }, [user]);
@@ -114,6 +123,7 @@ function CryptoContext({ children }) {
         setOpen,
         setPortfolioVol,
         portfolioVol,
+        balance,
       }}
     >
       {children}

@@ -7,6 +7,12 @@ import GlobalMarket from "../components/GlobalMarket";
 import FavCoin from "../components/FavCoin";
 
 function Homepage() {
+  // let ws = new WebSocket("wss://stream.binance.com:9443/ws/btcusdt@trade");
+
+  // ws.onmessage = (e) => {
+  //   console.log(e.data);
+  // };
+
   return (
     <div>
       <Sound
