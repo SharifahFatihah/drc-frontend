@@ -13,9 +13,12 @@ import {
   ThemeProvider,
   Typography,
 } from "@material-ui/core";
+import { NewspaperRounded } from "@mui/icons-material";
+import { doc, setDoc } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import { Line } from "react-chartjs-2";
 import { CryptoState } from "../CryptoContext";
+import { db } from "../firebase";
 import Service from "../service/Service";
 
 const useStyles = makeStyles((theme) => ({
@@ -78,7 +81,7 @@ const darkTheme = createTheme({
 });
 
 function TradePage() {
-  const { setAlert, balance } = CryptoState();
+  const { setAlert, balance, user } = CryptoState();
   const classes = useStyles();
 
   const [price, setPrice] = useState(0);
@@ -161,6 +164,85 @@ function TradePage() {
 
     console.log("priceArr", priceArr);
   }, [time]);
+
+  //buying
+  const buyCoin = async (q, p, tp) => {
+    if (tp > balance.usd) {
+      setAlert({
+        open: true,
+        message: `insufficient balance`,
+        type: "error",
+      });
+    } else if (p <= 0 || q <= 0) {
+      setAlert({
+        open: true,
+        message: `invalid price`,
+        type: "error",
+      });
+    } else {
+      const newUsd = balance.usd - tp;
+      const newBtc = balance.btc + q;
+      const walletRef = await doc(db, "wallet", user.uid);
+
+      try {
+        await setDoc(
+          walletRef,
+          {
+            balances: { usd: newUsd, btc: newBtc },
+          },
+          { merge: "true" }
+        );
+
+        setAlert({
+          open: true,
+          message: `Buy succesful, current balance $${newUsd}USD`,
+          type: "success",
+        });
+      } catch (error) {}
+    }
+  };
+
+  const sellCoin = async (q, p, tp) => {
+    if (tp > balance.usd) {
+      setAlert({
+        open: true,
+        message: `insufficient balance`,
+        type: "error",
+      });
+    } else if (p <= 0 || q <= 0) {
+      setAlert({
+        open: true,
+        message: `invalid price`,
+        type: "error",
+      });
+    } else if (q > balance.btc) {
+      setAlert({
+        open: true,
+        message: `insufficient coin`,
+        type: "error",
+      });
+    } else {
+      const newUsd = balance.usd - tp + p;
+      const newBtc = balance.btc - q;
+      const walletRef = await doc(db, "wallet", user.uid);
+
+      try {
+        await setDoc(
+          walletRef,
+          {
+            balances: { usd: newUsd, btc: newBtc },
+          },
+          { merge: "true" }
+        );
+
+        setAlert({
+          open: true,
+          message: `Buy succesful, current balance $${newUsd}USD`,
+          type: "success",
+        });
+      } catch (error) {}
+    }
+  };
 
   return (
     <ThemeProvider theme={darkTheme}>
@@ -417,7 +499,7 @@ function TradePage() {
                   setBuyUsd(
                     e.target.value * priceArr[priceArr.length - 1]?.price
                   );
-                  setBuyQuantity(e.target.value);
+                  setBuyQuantity(parseFloat(e.target.value));
 
                   if (
                     e.target.value *
@@ -446,7 +528,7 @@ function TradePage() {
                   setBuyUsd(
                     e.target.value * priceArr[priceArr.length - 1]?.price
                   );
-                  setBuyQuantity(e.target.value);
+                  setBuyQuantity(parseFloat(e.target.value));
                   if (
                     e.target.value *
                       priceArr[priceArr.length - 1]?.price *
@@ -495,6 +577,11 @@ function TradePage() {
               color: "black",
               fontFamily: "VT323",
               fontSize: 16,
+            }}
+            onClick={() => {
+              isBuy
+                ? buyCoin(buyQuantity, buyUsd, totalPayment)
+                : sellCoin(buyQuantity, buyUsd, totalPayment);
             }}
           >
             {isBuy ? "Submit Buy" : "Submit Sell"}
