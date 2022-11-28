@@ -1,4 +1,18 @@
-import { Button, makeStyles, TextField, Typography } from "@material-ui/core";
+import {
+  Button,
+  createTheme,
+  makeStyles,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  TextField,
+  ThemeProvider,
+  Typography,
+} from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import { Line } from "react-chartjs-2";
 import { CryptoState } from "../CryptoContext";
@@ -40,7 +54,28 @@ const useStyles = makeStyles((theme) => ({
     width: "80%",
     marginBottom: 20,
   },
+  red: {
+    backgroundColor: "#FF4B25",
+    marginLeft: 10,
+    color: "black",
+    padding: 5,
+    borderRadius: 5,
+  },
+  green: {
+    backgroundColor: "#00FF19",
+    marginLeft: 10,
+    color: "black",
+    padding: 5,
+    borderRadius: 5,
+  },
 }));
+
+const darkTheme = createTheme({
+  palette: {
+    primary: { main: "#fff" },
+    type: "dark",
+  },
+});
 
 function TradePage() {
   const { setAlert, balance } = CryptoState();
@@ -51,6 +86,24 @@ function TradePage() {
   const [timeParsed, setTimeParsed] = useState("");
   const [priceArr, setPriceArr] = useState([]);
   const [coin, setCoin] = useState();
+  const [isBuy, setIsBuy] = useState(true);
+  const [buyUsd, setBuyUsd] = useState("");
+  const [buyQuantity, setBuyQuantity] = useState("");
+  const [isMobile, setIsMobile] = useState(false);
+  const [brokerFee, setBrokerFee] = useState(0);
+  const [totalPayment, setTotalPayment] = useState(0);
+
+  const handleResize = () => {
+    if (window.innerWidth < 1280) {
+      setIsMobile(true);
+    } else {
+      setIsMobile(false);
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener("resize", handleResize);
+  });
 
   const getSingleCoin = (e) => {
     Service.getSingleCoin(e)
@@ -71,12 +124,19 @@ function TradePage() {
   }, []);
 
   useEffect(() => {
+    const interval = setInterval(() => setTime(Date.now()), 1000);
+    return () => {
+      clearInterval(interval);
+    };
+  }, []);
+
+  useEffect(() => {
     let ws = new WebSocket("wss://stream.binance.com:9443/ws/btcusdt@trade");
 
     ws.onmessage = (e) => {
       setPrice({
         price: parseFloat(JSON.parse(e.data).p).toFixed(2),
-        time: JSON.parse(e.data).t,
+        time: 0,
       });
     };
 
@@ -85,161 +145,363 @@ function TradePage() {
         ws.close();
       }
     };
-  }, []);
+  }, [time]);
 
   useEffect(() => {
-    const interval = setInterval(() => setTime(Date.now()), 1000);
-    return () => {
-      clearInterval(interval);
-    };
-  }, []);
-
-  useEffect(() => {
-    if (priceArr.length < 31) {
-      setPriceArr([...priceArr, price]);
-    } else {
-      priceArr.shift();
-      setPriceArr([...priceArr, price]);
-    }
-
     let date = new Date(time);
     let timeparsed = `${date.getHours()}:${date.getMinutes()}: ${date.getSeconds()}`;
 
     setTimeParsed(timeparsed);
+    if (priceArr.length < 31) {
+      setPriceArr([...priceArr, { price: price.price, time: timeparsed }]);
+    } else {
+      priceArr.shift();
+      setPriceArr([...priceArr, { price: price.price, time: timeparsed }]);
+    }
 
     console.log("priceArr", priceArr);
-    console.log("price", price?.price / 100);
-    console.log(
-      "logDiff",
-      Math.log(priceArr[29]?.price / 100) - Math.log(priceArr[28]?.price / 100)
-    );
   }, [time]);
 
   return (
-    <div className={classes.container}>
-      <div className={classes.sidebar}>{timeParsed}</div>
+    <ThemeProvider theme={darkTheme}>
+      <div className={classes.container}>
+        <div className={classes.sidebar}>
+          <div
+            style={{
+              marginTop: 20,
+              width: "90%",
+              backgroundColor: "rgba(79, 58, 84, 0.52)",
+            }}
+          >
+            <Paper
+              sx={{
+                width: "100%",
+                overflow: "hidden",
+              }}
+              style={{
+                borderRadius: "15px",
+              }}
+            >
+              <TableContainer
+                component={Paper}
+                style={{ backgroundColor: "#212121", color: "black" }}
+              >
+                <div
+                  style={{
+                    overflow: "auto",
+                    maxHeight: isMobile ? "250px" : "550px",
+                  }}
+                >
+                  <Table sx={{ minWidth: 650 }} stickyHeader>
+                    <TableHead>
+                      <TableRow>
+                        <TableCell
+                          align="right"
+                          style={{ color: "black", backgroundColor: "#FFE227" }}
+                        >
+                          Time
+                        </TableCell>
+                        <TableCell
+                          align="right"
+                          style={{ color: "black", backgroundColor: "#FFE227" }}
+                        >
+                          Price USD{" "}
+                        </TableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {priceArr?.map((e) => {
+                        return (
+                          <TableRow>
+                            <TableCell align="right" style={{ color: "white" }}>
+                              <div>{e.time}</div>
+                            </TableCell>
+                            <TableCell align="right">
+                              <div>{e.price}</div>
+                            </TableCell>
+                          </TableRow>
+                        );
+                      })}
+                    </TableBody>
+                  </Table>
+                </div>
+              </TableContainer>
+            </Paper>
+          </div>
+        </div>
 
-      <div className={classes.mainbar}>
-        {(priceArr[priceArr.length - 1]?.price / 100).toFixed(4)}
-        <Line
-          data={{
-            labels: priceArr.map((chartData) => {
-              let date = new Date(chartData.time);
-              let time = `${date.getHours()}:${date.getMinutes()}: ${date.getSeconds()}`;
-              return time;
-            }),
-            datasets: [
-              {
-                data: priceArr.map((chartData) => chartData.price / 100),
-                label: `test`,
-                borderColor: "#FFE227",
-                borderWidth: 2,
+        <div className={classes.mainbar}>
+          <div
+            style={{
+              width: "100%",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "flex-start",
+            }}
+          >
+            <Typography
+              variant="h2"
+              style={{
+                fontFamily: "VT323",
+                marginRight: 20,
+                color:
+                  priceArr[priceArr.length - 1]?.price >
+                  priceArr[priceArr.length - 2]?.price
+                    ? "#00FF19"
+                    : "red",
+              }}
+            >
+              ${(priceArr[priceArr.length - 1]?.price / 100).toFixed(4)} USD
+            </Typography>
+            <Typography
+              className={
+                Math.log(priceArr[priceArr.length - 1]?.price) -
+                  Math.log(priceArr[priceArr.length - 2]?.price) >
+                0
+                  ? classes.green
+                  : classes.red
+              }
+            >
+              {Math.log(priceArr[priceArr.length - 1]?.price) -
+                Math.log(priceArr[priceArr.length - 2]?.price) >
+              0
+                ? "+"
+                : ""}
+              {(
+                (Math.log(priceArr[priceArr.length - 1]?.price) -
+                  Math.log(priceArr[priceArr.length - 2]?.price)) *
+                100
+              ).toPrecision(4)}
+              %
+            </Typography>
+          </div>
+          <Line
+            data={{
+              labels: priceArr.map((chartData) => {
+                let date = new Date(chartData.time);
+                let time = `${date.getHours()}:${date.getMinutes()}: ${date.getSeconds()}`;
+                return chartData.time;
+              }),
+              datasets: [
+                {
+                  data: priceArr.map((chartData) => chartData.price / 100),
+                  label: `price`,
+                  borderColor: "#FFE227",
+                  borderWidth: 2,
 
-                pointBorderColor: "rgba(0,0,0,0)",
-                pointBackgroundColor: "rgba(0,0,0,0)",
-                pointHoverBorderColor: "#5AC53B",
-                pointHitRadius: 6,
-                fill: true,
-                backgroundColor: "rgba(243, 251, 0, 0.02)",
-              },
-            ],
-          }}
-          options={{
-            responsive: true,
-            animation: false,
-            plugins: {
-              legend: {
-                display: false,
-              },
-            },
-            scales: {
-              x: {
-                display: false,
-                title: {
-                  display: true,
-                  text: "Time",
+                  pointBorderColor: "rgba(0,0,0,0)",
+                  pointBackgroundColor: "rgba(0,0,0,0)",
+                  pointHoverBorderColor: "#5AC53B",
+                  pointHitRadius: 6,
+                  fill: true,
+                  backgroundColor: "rgba(243, 251, 0, 0.02)",
+                },
+              ],
+            }}
+            options={{
+              responsive: true,
+              animation: false,
+              plugins: {
+                legend: {
+                  display: false,
                 },
               },
-              y: {
-                display: true,
-                title: {
+              scales: {
+                x: {
+                  display: false,
+                  title: {
+                    display: true,
+                    text: "Time",
+                  },
+                },
+                y: {
                   display: true,
-                  text: "Price",
+                  title: {
+                    display: true,
+                    text: "Price",
+                  },
                 },
               },
-            },
-          }}
-        />
-      </div>
-      <div className={classes.sidebar}>
-        <div className={classes.inSidebar}>
+            }}
+          />
+        </div>
+        <div className={classes.sidebar}>
+          <div className={classes.inSidebar}>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-evenly",
+                width: "40%",
+              }}
+            >
+              <div>
+                <img
+                  src={coin?.image?.small}
+                  height={30}
+                  style={{ marginRight: 10 }}
+                />
+              </div>
+              <Typography>BTC/USD</Typography>
+            </div>
+            <div>2</div>
+          </div>
+          <div className={classes.inSidebar}>
+            <Typography>Balance</Typography>
+            <Typography>
+              {isBuy ? `$${balance.usd}` : `${balance.btc}BTC`}
+            </Typography>
+          </div>
           <div
             style={{
               display: "flex",
               alignItems: "center",
               justifyContent: "space-evenly",
-              width: "40%",
+              width: "80%",
             }}
           >
-            <div>
-              <img
-                src={coin?.image?.small}
-                height={30}
-                style={{ marginRight: 10 }}
-              />
+            <div
+              className={classes.inSidebar}
+              style={{
+                display: "flex",
+                width: "100%",
+                backgroundColor: "rgba(79, 58, 84, 0.52)",
+                borderRadius: 5,
+                justifyContent: "space-evenly",
+              }}
+            >
+              <Button
+                style={{
+                  backgroundColor: isBuy ? "yellow" : "transparent",
+                  color: isBuy ? "black" : "white",
+                  width: "80%",
+                }}
+                onClick={() => {
+                  setIsBuy(true);
+                  setBuyUsd("");
+                  setBuyQuantity("");
+                  setBrokerFee("");
+                  setTotalPayment("");
+                }}
+              >
+                Buy
+              </Button>
+              <Button
+                style={{
+                  backgroundColor: !isBuy ? "yellow" : "transparent",
+                  color: !isBuy ? "black" : "white",
+                  width: "80%",
+                }}
+                onClick={() => {
+                  setIsBuy(false);
+                  setBuyUsd("");
+                  setBuyQuantity("");
+                  setBrokerFee("");
+                  setTotalPayment("");
+                }}
+              >
+                Sell
+              </Button>
             </div>
-            <Typography>BTC/USD</Typography>
           </div>
-          <div>2</div>
-        </div>
-        <div className={classes.inSidebar}>
-          <Typography>Balance</Typography>
-          <Typography>${balance.usd}</Typography>
-        </div>
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-evenly",
-            width: "80%",
-          }}
-        >
-          <div
-            className={classes.inSidebar}
+
+          <div className={classes.inSidebar}>
+            <TextField
+              type="number"
+              variant="outlined"
+              defaultValue=""
+              label="Position Size"
+              value={buyQuantity}
+              onChange={(e) => {
+                if (isBuy) {
+                  setBuyUsd(
+                    e.target.value * priceArr[priceArr.length - 1]?.price
+                  );
+                  setBuyQuantity(e.target.value);
+
+                  if (
+                    e.target.value *
+                      priceArr[priceArr.length - 1]?.price *
+                      0.001 >
+                    8
+                  ) {
+                    setBrokerFee(
+                      e.target.value *
+                        priceArr[priceArr.length - 1]?.price *
+                        0.001
+                    );
+                    setTotalPayment(
+                      e.target.value * priceArr[priceArr.length - 1]?.price +
+                        e.target.value *
+                          priceArr[priceArr.length - 1]?.price *
+                          0.001
+                    );
+                  } else {
+                    setBrokerFee(8);
+                    setTotalPayment(
+                      e.target.value * priceArr[priceArr.length - 1]?.price + 8
+                    );
+                  }
+                } else {
+                  setBuyUsd(
+                    e.target.value * priceArr[priceArr.length - 1]?.price
+                  );
+                  setBuyQuantity(e.target.value);
+                  if (
+                    e.target.value *
+                      priceArr[priceArr.length - 1]?.price *
+                      0.001 >
+                    8
+                  ) {
+                    setBrokerFee(
+                      e.target.value *
+                        priceArr[priceArr.length - 1]?.price *
+                        0.001
+                    );
+                    setTotalPayment(
+                      e.target.value *
+                        priceArr[priceArr.length - 1]?.price *
+                        0.001
+                    );
+                  } else {
+                    setBrokerFee(8);
+                    setTotalPayment(8);
+                  }
+                }
+              }}
+              fullWidth
+            />
+          </div>
+          <div className={classes.inSidebar}>
+            <Typography>{isBuy ? "Buy Summary" : "Sell Summary"}</Typography>
+          </div>
+          <div className={classes.inSidebar}>
+            <Typography>{isBuy ? "Price" : "Profit"}</Typography>
+            <Typography>{buyUsd} </Typography>
+          </div>
+          <div className={classes.inSidebar}>
+            <Typography>Broker Fee</Typography>
+            <Typography>{brokerFee} </Typography>
+          </div>
+          <div className={classes.inSidebar}>
+            <Typography>Total Payment</Typography>
+            <Typography>{totalPayment} </Typography>
+          </div>
+          <Button
+            variant="contained"
             style={{
-              display: "flex",
-              width: "100%",
-              backgroundColor: "rgba(79, 58, 84, 0.52)",
-              borderRadius: 5,
-              justifyContent: "space-evenly",
+              backgroundColor: "#FFE227",
+              border: "5px solid white",
+              color: "black",
+              fontFamily: "VT323",
+              fontSize: 16,
             }}
           >
-            <Button
-              style={{
-                backgroundColor: "transparent",
-                color: "white",
-              }}
-            >
-              Buy
-            </Button>
-            <Button
-              style={{
-                backgroundColor: "transparent",
-                color: "white",
-              }}
-            >
-              Sell
-            </Button>
-          </div>
-        </div>
-        <div className={classes.inSidebar}>
-          <TextField style={{ backgroundColor: "white", width: "100%" }} />
-        </div>
-        <div className={classes.inSidebar}>
-          <TextField style={{ backgroundColor: "white", width: "100%" }} />
+            {isBuy ? "Submit Buy" : "Submit Sell"}
+          </Button>
         </div>
       </div>
-    </div>
+    </ThemeProvider>
   );
 }
 

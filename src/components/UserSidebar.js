@@ -153,7 +153,7 @@ export default function UserSidebar() {
                   <hr></hr>
                 </div>
                 <Typography style={{ color: "white" }}>
-                  {balance?.usd} KC Coin
+                  {balance?.usd} USD
                 </Typography>
                 <Typography style={{ color: "white" }}>
                   {balance?.btc} BTC
