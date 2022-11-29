@@ -1,7 +1,5 @@
 import {
   Button,
-  createTheme,
-  makeStyles,
   Paper,
   Table,
   TableBody,
@@ -12,15 +10,18 @@ import {
   TextField,
   ThemeProvider,
   Typography,
+  createTheme,
+  makeStyles,
 } from "@material-ui/core";
-import { NewspaperRounded } from "@mui/icons-material";
-import { doc, setDoc } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
-import { Line } from "react-chartjs-2";
+import { doc, setDoc } from "firebase/firestore";
+
 import { CryptoState } from "../CryptoContext";
-import { db } from "../firebase";
-import Service from "../service/Service";
 import Kaching from "../asset/kaching.mp3";
+import { Line } from "react-chartjs-2";
+import { NewspaperRounded } from "@mui/icons-material";
+import Service from "../service/Service";
+import { db } from "../firebase";
 import { useNavigate } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
@@ -646,7 +647,7 @@ function TradePage() {
               />
             </div>
             <div className={classes.inSidebar}>
-              <Typography>{isBuy ? "Buy Summary" : "Sell Summary"}</Typography>
+              <Typography>{isBuy ? "Buy Summary" : "Sells Summary"}</Typography>
             </div>
             <div className={classes.inSidebar}>
               <Typography>{isBuy ? "Price" : "Profit"}</Typography>
