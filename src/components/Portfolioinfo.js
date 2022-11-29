@@ -288,7 +288,7 @@ function Portfolioinfo({
             </Typography>
           </div>
 
-          <div style={{ width: "100%", overflowY: "auto", maxHeight: "100px" }}>
+          <div style={{ width: "100%", overflowY: "auto", maxHeight: "70px" }}>
             {alerts.length == 0 ? (
               <Typography>no major drop in the last 24h</Typography>
             ) : (
