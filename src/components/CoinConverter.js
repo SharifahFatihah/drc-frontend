@@ -12,7 +12,8 @@ import logo from "../asset/currency_1.png";
 
 const useStyles = makeStyles((theme) => ({
   Converterbox: {
-    border: "1px solid white",
+    // boxShadow: "inset 5px 5px 5px rgba(79, 58, 84, 0.52)",
+    // border: "1px solid white",
     display: "flex",
     flexDirection: "column",
     alignItems: "flex-start",
@@ -21,11 +22,10 @@ const useStyles = makeStyles((theme) => ({
     width: "75%",
     margin: 15,
     borderRadius: "15px",
-    background: "rgba(79, 58, 84, 0.52)",
+    background: "#212121",
     minHeight: "185px",
     [theme.breakpoints.down("md")]: {
       width: "100%",
-      alignItems: "flex-start",
     },
   },
   bigbox: {
@@ -36,11 +36,13 @@ const useStyles = makeStyles((theme) => ({
     padding: 20,
     width: "100%",
     borderRadius: "15px",
-    background: "rgba(79, 58, 84, 0.52)",
+    background: "#212121",
     minHeight: "185px",
     [theme.breakpoints.down("md")]: {
-      width: "100%",
+      width: "90%",
       alignItems: "center",
+      marginLeft: "5%",
+      padding: 10,
     },
   },
   coinbox: {
@@ -73,7 +75,7 @@ function CoinConverter({ coin }) {
     <ThemeProvider theme={darkTheme}>
       <div className={classes.bigbox}>
         <Typography
-          style={{ color: "white", fontFamily: "VT323", fontSize: 30 }}
+          style={{ color: "white", fontFamily: "VT323", fontSize: 40 }}
         >
           Crypto Calculator
         </Typography>

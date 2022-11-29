@@ -53,9 +53,11 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: "column",
     alignItems: "center",
     paddingTop: 50,
-    marginBottom: -160,
+    paddingBottom: 100,
+    marginBottom: -100,
     whiteSpace: "wrap",
-    boxShadow: "inset -2px 0px 5px rgba(79, 58, 84, 0.52)",
+    background: "rgba(79, 58, 84, 0.52)",
+    // boxShadow: "inset -2px 0px 5px rgba(79, 58, 84, 0.52)",
   },
   buttonContainer: {
     display: "flex",
@@ -64,12 +66,14 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "center",
     [theme.breakpoints.down("sm")]: {
       width: "100%",
+      marginTop: 20,
       justifyContent: "center",
     },
   },
   selectButton: {
     width: "10%",
-    border: "1px solid #FFE227",
+    // border: "1px solid #FFE227",
+    border: "5px solid #FFFFFF",
     borderRadius: 5,
     padding: 10,
     cursor: "pointer",
@@ -88,7 +92,8 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     alignItems: "center",
     justifyContent: "space-between",
-    width: "90%",
+    // width: "90%",
+    marginRight: 60,
     paddingLeft: 40,
     [theme.breakpoints.down("sm")]: {
       width: "100%",
@@ -98,7 +103,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   red: {
-    backgroundColor: "#FF4B25",
+    backgroundColor: "#FF0000",
     marginLeft: 10,
     color: "black",
     padding: 5,
@@ -108,7 +113,7 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: "center",
   },
   green: {
-    backgroundColor: "#00FF19",
+    backgroundColor: "#33FF00",
     marginLeft: 10,
     color: "black",
     padding: 5,
@@ -126,6 +131,34 @@ const useStyles = makeStyles((theme) => ({
     width: "80%",
     display: "flex",
     justifyContent: "center",
+  },
+  volatilityContainer: {
+    borderRadius: "15px",
+    // background: "rgba(79, 58, 84, 0.52)",
+    background: "#212121",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    padding: 50,
+    marginTop: 50,
+    width: "90%",
+    [theme.breakpoints.down("sm")]: {
+      padding: 30,
+    },
+  },
+  chartContainer: {
+    borderRadius: "15px",
+    // background: "rgba(79, 58, 84, 0.52)",
+    background: "#212121",
+    padding: "30px",
+    marginTop: 50,
+    marginBottom: "50px",
+    width: "90%",
+    [theme.breakpoints.down("sm")]: {
+      marginBottom: 0,
+      padding: 20,
+      paddingTop: 0,
+    },
   },
 }));
 
@@ -497,14 +530,7 @@ function PortfolioPage() {
           </Button>
         </div>
 
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            height: "80%",
-          }}
-        >
+        <div className={classes.volatilityContainer}>
           <div
             style={{
               display: "flex",
@@ -512,6 +538,12 @@ function PortfolioPage() {
               alignItems: "center",
             }}
           >
+            <Typography
+              variant="h3"
+              style={{ fontFamily: "VT323", marginBottom: 20 }}
+            >
+              Volatility
+            </Typography>
             <Typography variant="subtitle" style={{ fontFamily: "VT323" }}>
               {volatilityDesc} volatility of portfolio/{currency?.toUpperCase()}{" "}
               in the last {days} day(s)
@@ -540,46 +572,53 @@ function PortfolioPage() {
             </div>
           </div>
         </div>
-        <Typography
-          variant="h3"
-          style={{ fontFamily: "VT323", marginTop: 50, marginBottom: 20 }}
-        >
-          Coin Weightage{" "}
-          <Tooltip title={weightageTooltip}>
-            <img src={infoicon} height="13" style={{ marginBottom: "25px" }} />
-          </Tooltip>
-        </Typography>
-        {donutCoin && (
-          <Doughnut
-            data={{
-              labels: donutCoin?.map((e) => {
-                if (
-                  watchlist.includes(
-                    watchlist.find((watch) => watch.id === e?.id)
-                  )
-                ) {
-                  return e.name;
-                } else {
-                  return "deleted";
-                }
-              }),
-              datasets: [
-                {
-                  data: donutCoin
-                    ? donutCoin?.map((e) => (e.weight / e.total_weight) * 100)
-                    : [],
-                  borderWidth: 0,
-                  backgroundColor: colourDoughnut,
-                  radius: "60%",
-                },
-              ],
-            }}
-            option={{
-              animation: { animateRotate: false },
-            }}
-          />
-        )}
+        <div className={classes.chartContainer}>
+          <Typography
+            variant="h3"
+            style={{ fontFamily: "VT323", marginTop: 50, marginBottom: 20 }}
+          >
+            Coin Weightage{" "}
+            <Tooltip title={weightageTooltip}>
+              <img
+                src={infoicon}
+                height="13"
+                style={{ marginBottom: "25px" }}
+              />
+            </Tooltip>
+          </Typography>
+          {donutCoin && (
+            <Doughnut
+              data={{
+                labels: donutCoin?.map((e) => {
+                  if (
+                    watchlist.includes(
+                      watchlist.find((watch) => watch.id === e?.id)
+                    )
+                  ) {
+                    return e.name;
+                  } else {
+                    return "deleted";
+                  }
+                }),
+                datasets: [
+                  {
+                    data: donutCoin
+                      ? donutCoin?.map((e) => (e.weight / e.total_weight) * 100)
+                      : [],
+                    borderWidth: 0,
+                    backgroundColor: colourDoughnut,
+                    radius: "60%",
+                  },
+                ],
+              }}
+              option={{
+                animation: { animateRotate: false },
+              }}
+            />
+          )}
+        </div>
       </div>
+
       <div className={classes.mainbar}>
         {!userState || userCoin2.length == 0 ? (
           <div

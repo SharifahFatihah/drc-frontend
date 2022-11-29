@@ -38,9 +38,10 @@ const useStyle = makeStyles((theme) => ({
     [theme.breakpoints.down("md")]: {
       flexDirection: "column",
       display: "flex",
-      width: "50%",
+      width: "100%",
       alignItems: "center",
-      justifyContent: "space-evenly",
+      justifyContent: "center",
+      marginLeft: 0,
     },
   },
   description: {
@@ -70,7 +71,6 @@ function Banner() {
               variant="h1"
               style={{
                 marginBottom: 15,
-                paddingRight: 20,
                 paddingLeft: 20,
                 fontFamily: "VT323",
                 color: "white",

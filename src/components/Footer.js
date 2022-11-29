@@ -29,7 +29,7 @@ function Footer() {
         }}
       ></img>
       <AppBar
-        position="static"
+        position="sticky"
         elevation={0}
         component="footer"
         color="default"
