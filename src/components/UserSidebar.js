@@ -125,7 +125,7 @@ export default function UserSidebar() {
                 <span
                   style={{
                     width: "100%",
-                    fontSize: 25,
+                    fontSize: 20,
                     color: "white",
                     textAlign: "center",
                     fontWeight: "bolder",
@@ -191,7 +191,10 @@ export default function UserSidebar() {
                 >
                   <hr></hr>
                 </div>
-                <div className={classes.watchlist}>
+                <div
+                  className={classes.watchlist}
+                  style={{ overflowY: "auto", maxHeight: "250px" }}
+                >
                   {coins.map((coin) => {
                     if (
                       watchlist?.includes(

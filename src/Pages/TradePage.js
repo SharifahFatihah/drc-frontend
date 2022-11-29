@@ -20,6 +20,7 @@ import { Line } from "react-chartjs-2";
 import { CryptoState } from "../CryptoContext";
 import { db } from "../firebase";
 import Service from "../service/Service";
+import Kaching from "../asset/kaching.mp3";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -81,6 +82,8 @@ const darkTheme = createTheme({
 });
 
 function TradePage() {
+  var audio = new Audio(Kaching);
+
   const { setAlert, balance, user } = CryptoState();
   const classes = useStyles();
 
@@ -198,6 +201,7 @@ function TradePage() {
           message: `Buy succesful, current balance $${newUsd}USD`,
           type: "success",
         });
+        audio.play();
       } catch (error) {}
     }
   };
@@ -225,6 +229,7 @@ function TradePage() {
       const newUsd = balance.usd - tp + p;
       const newBtc = balance.btc - q;
       const walletRef = await doc(db, "wallet", user.uid);
+      audio.play();
 
       try {
         await setDoc(
@@ -240,6 +245,7 @@ function TradePage() {
           message: `Buy succesful, current balance $${newUsd}USD`,
           type: "success",
         });
+        audio.play();
       } catch (error) {}
     }
   };
@@ -431,7 +437,9 @@ function TradePage() {
           <div className={classes.inSidebar}>
             <Typography>Balance</Typography>
             <Typography>
-              {isBuy ? `$${balance.usd}` : `${balance.btc}BTC`}
+              {isBuy
+                ? `$${balance.usd?.toFixed(2)}`
+                : `${balance.btc?.toFixed(4)}BTC`}
             </Typography>
           </div>
           <div
@@ -490,6 +498,7 @@ function TradePage() {
           <div className={classes.inSidebar}>
             <TextField
               type="number"
+              step="0.01"
               variant="outlined"
               defaultValue=""
               label="Position Size"
@@ -566,7 +575,7 @@ function TradePage() {
             <Typography>{brokerFee} </Typography>
           </div>
           <div className={classes.inSidebar}>
-            <Typography>Total Payment</Typography>
+            <Typography>Total Cost</Typography>
             <Typography>{totalPayment} </Typography>
           </div>
           <Button
