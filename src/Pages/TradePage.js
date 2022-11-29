@@ -21,6 +21,7 @@ import { CryptoState } from "../CryptoContext";
 import { db } from "../firebase";
 import Service from "../service/Service";
 import Kaching from "../asset/kaching.mp3";
+import { useNavigate } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -82,9 +83,11 @@ const darkTheme = createTheme({
 });
 
 function TradePage() {
+  const navigate = useNavigate();
+
   var audio = new Audio(Kaching);
 
-  const { setAlert, balance, user } = CryptoState();
+  const { setAlert, balance, user, receipt } = CryptoState();
   const classes = useStyles();
 
   const [price, setPrice] = useState(0);
@@ -202,10 +205,12 @@ function TradePage() {
           type: "success",
         });
         audio.play();
+        buyReceipt(new Date(time), q, p, tp);
       } catch (error) {}
     }
   };
 
+  //sell coin
   const sellCoin = async (q, p, tp) => {
     if (tp > balance.usd) {
       setAlert({
@@ -226,7 +231,7 @@ function TradePage() {
         type: "error",
       });
     } else {
-      const newUsd = balance.usd - tp + p;
+      const newUsd = balance.usd + tp;
       const newBtc = balance.btc - q;
       const walletRef = await doc(db, "wallet", user.uid);
       audio.play();
@@ -246,8 +251,79 @@ function TradePage() {
           type: "success",
         });
         audio.play();
+        sellReceipt(new Date(time), q, p, tp);
       } catch (error) {}
     }
+  };
+
+  const buyReceipt = async (time, quantity, price, cost) => {
+    const transactionRef = doc(db, "transaction", user?.uid);
+
+    try {
+      await setDoc(
+        transactionRef,
+        {
+          receipts: receipt
+            ? [
+                ...receipt,
+                {
+                  time: time,
+                  coin: "btc",
+                  type: "buy",
+                  quantity: quantity,
+                  profit: -1 * price,
+                  total_gain: -1 * cost,
+                },
+              ]
+            : [
+                {
+                  time: time,
+                  coin: "btc",
+                  type: "buy",
+                  quantity: quantity,
+                  profit: -1 * price,
+                  total_gain: -1 * cost,
+                },
+              ],
+        },
+        { merge: "true" }
+      );
+    } catch (error) {}
+  };
+
+  const sellReceipt = async (time, quantity, profit, cost) => {
+    const transactionRef = doc(db, "transaction", user?.uid);
+
+    try {
+      await setDoc(
+        transactionRef,
+        {
+          receipts: receipt
+            ? [
+                ...receipt,
+                {
+                  time: time,
+                  coin: "btc",
+                  type: "sell",
+                  quantity: quantity,
+                  profit: profit,
+                  total_gain: cost,
+                },
+              ]
+            : [
+                {
+                  time: time,
+                  coin: "btc",
+                  type: "sell",
+                  quantity: quantity,
+                  profit: profit,
+                  total_gain: cost,
+                },
+              ],
+        },
+        { merge: "true" }
+      );
+    } catch (error) {}
   };
 
   return (
@@ -511,64 +587,61 @@ function TradePage() {
                 defaultValue=""
                 label="Position Size"
                 value={buyQuantity}
-                onChange={(e) => {
-                  if (isBuy) {
-                    setBuyUsd(
-                      e.target.value * priceArr[priceArr.length - 1]?.price
-                    );
-                    setBuyQuantity(parseFloat(e.target.value));
-
-                    if (
+                onChange={(e) =>
+                  isBuy
+                    ? (setBuyUsd(
+                        e.target.value * priceArr[priceArr.length - 1]?.price
+                      ),
+                      setBuyQuantity(parseFloat(e.target.value)),
                       e.target.value *
                         priceArr[priceArr.length - 1]?.price *
                         0.001 >
                       8
-                    ) {
-                      setBrokerFee(
-                        e.target.value *
-                          priceArr[priceArr.length - 1]?.price *
-                          0.001
-                      );
-                      setTotalPayment(
-                        e.target.value * priceArr[priceArr.length - 1]?.price +
-                          e.target.value *
-                            priceArr[priceArr.length - 1]?.price *
-                            0.001
-                      );
-                    } else {
-                      setBrokerFee(8);
-                      setTotalPayment(
-                        e.target.value * priceArr[priceArr.length - 1]?.price +
-                          8
-                      );
-                    }
-                  } else {
-                    setBuyUsd(
-                      e.target.value * priceArr[priceArr.length - 1]?.price
-                    );
-                    setBuyQuantity(parseFloat(e.target.value));
-                    if (
+                        ? (setBrokerFee(
+                            e.target.value *
+                              priceArr[priceArr.length - 1]?.price *
+                              0.001
+                          ),
+                          setTotalPayment(
+                            e.target.value *
+                              priceArr[priceArr.length - 1]?.price +
+                              e.target.value *
+                                priceArr[priceArr.length - 1]?.price *
+                                0.001
+                          ))
+                        : (setBrokerFee(8),
+                          setTotalPayment(
+                            e.target.value *
+                              priceArr[priceArr.length - 1]?.price +
+                              8
+                          )))
+                    : (setBuyUsd(
+                        e.target.value * priceArr[priceArr.length - 1]?.price
+                      ),
+                      setBuyQuantity(parseFloat(e.target.value)),
                       e.target.value *
                         priceArr[priceArr.length - 1]?.price *
                         0.001 >
                       8
-                    ) {
-                      setBrokerFee(
-                        e.target.value *
-                          priceArr[priceArr.length - 1]?.price *
-                          0.001
-                      );
-                      setTotalPayment(
-                        e.target.value *
-                          priceArr[priceArr.length - 1]?.price *
-                          0.001
-                      );
-                    } else {
-                      setBrokerFee(8);
-                      setTotalPayment(8);
-                    }
-                  }
-                }}
+                        ? (setBrokerFee(
+                            e.target.value *
+                              priceArr[priceArr.length - 1]?.price *
+                              0.001
+                          ),
+                          setTotalPayment(
+                            e.target.value *
+                              priceArr[priceArr.length - 1]?.price -
+                              e.target.value *
+                                priceArr[priceArr.length - 1]?.price *
+                                0.001
+                          ))
+                        : (setBrokerFee(8),
+                          setTotalPayment(
+                            e.target.value *
+                              priceArr[priceArr.length - 1]?.price -
+                              8
+                          )))
+                }
                 fullWidth
               />
             </div>
@@ -584,7 +657,7 @@ function TradePage() {
               <Typography>{brokerFee} </Typography>
             </div>
             <div className={classes.inSidebar}>
-              <Typography>Total Cost</Typography>
+              <Typography>{isBuy ? "Total Cost" : "Total Gain"}</Typography>
               <Typography>{totalPayment} </Typography>
             </div>
             <Button
@@ -595,14 +668,32 @@ function TradePage() {
                 color: "black",
                 fontFamily: "VT323",
                 fontSize: 16,
+                width: "80%",
               }}
-              onClick={() => {
+              onClick={() =>
                 isBuy
                   ? buyCoin(buyQuantity, buyUsd, totalPayment)
-                  : sellCoin(buyQuantity, buyUsd, totalPayment);
-              }}
+                  : sellCoin(buyQuantity, buyUsd, totalPayment)
+              }
             >
               Submit
+            </Button>
+            <Button
+              variant="contained"
+              style={{
+                backgroundColor: "#212121",
+                border: "5px solid #FFE227",
+                color: "white",
+                fontFamily: "VT323",
+                fontSize: 16,
+                width: "80%",
+                marginTop: 10,
+              }}
+              onClick={() => {
+                navigate("/transaction");
+              }}
+            >
+              History
             </Button>
           </div>
         ) : (

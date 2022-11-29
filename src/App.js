@@ -13,6 +13,7 @@ import PriceHorizontal from "./components/PriceHorizontal";
 import CoinListPage from "./Pages/CoinListPage";
 import PortfolioPage from "./Pages/PortfolioPage";
 import TradePage from "./Pages/TradePage";
+import TransactionPage from "./Pages/TransactionPage";
 
 const useStyles = makeStyles(() => ({
   app: {
@@ -36,6 +37,8 @@ function App() {
             <Route path="/coins/:id" element={<CoinPage />} />
             <Route path="/portfolio" element={<PortfolioPage />} />
             <Route path="/trade" element={<TradePage />} />
+            <Route path="/transaction" element={<TransactionPage />} />
+
             <Route path="*" element={<PageNotFound />} />
           </Route>
         </Routes>

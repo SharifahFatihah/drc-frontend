@@ -1,4 +1,3 @@
-import { render } from "@testing-library/react";
 import { onAuthStateChanged } from "firebase/auth";
 import { doc, onSnapshot, setDoc } from "firebase/firestore";
 import React, { createContext, useContext, useState, useEffect } from "react";
@@ -13,6 +12,7 @@ function CryptoContext({ children }) {
   const [user, setUser] = useState(null);
   const [watchlist, setWatchlist] = useState([]);
   const [balance, setBalance] = useState();
+  const [receipt, setReceipt] = useState([]);
   const [coins, setCoins] = useState([]);
   const [loading, setLoading] = useState(false);
   const [globalInfo, setGlobalInfo] = useState();
@@ -69,6 +69,7 @@ function CryptoContext({ children }) {
     if (user) {
       const coinRef = doc(db, "watchlist", user?.uid);
       const walletRef = doc(db, "wallet", user?.uid);
+      const transactionRef = doc(db, "transaction", user?.uid);
 
       var unsubscribe = onSnapshot(coinRef, (coin) => {
         if (coin.exists()) {
@@ -82,9 +83,16 @@ function CryptoContext({ children }) {
         } else {
         }
       });
+      var unsubscribe3 = onSnapshot(transactionRef, (transaction) => {
+        if (transaction.exists()) {
+          setReceipt(transaction.data().receipts);
+        } else {
+        }
+      });
       return () => {
         unsubscribe();
         unsubscribe2();
+        unsubscribe3();
       };
     }
   }, [user]);
@@ -128,6 +136,8 @@ function CryptoContext({ children }) {
         setPortfolioVol,
         portfolioVol,
         balance,
+        receipt,
+        setReceipt,
       }}
     >
       {children}
