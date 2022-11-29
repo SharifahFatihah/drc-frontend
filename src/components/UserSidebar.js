@@ -72,10 +72,10 @@ export default function UserSidebar() {
   };
 
   const resetBalance = async () => {
-    const coinRef = await doc(db, "wallet", user.uid);
+    const walletRef = await doc(db, "wallet", user.uid);
 
     try {
-      await setDoc(coinRef, {
+      await setDoc(walletRef, {
         balances: { usd: 10000, btc: 0 },
       });
 
@@ -86,6 +86,26 @@ export default function UserSidebar() {
       });
     } catch (error) {}
   };
+
+  const resetFirstBalance = async () => {
+    const walletRef = await doc(db, "wallet", user.uid);
+
+    try {
+      await setDoc(
+        walletRef,
+        {
+          balances: balance
+            ? { usd: balance.usd, btc: balance.btc }
+            : { usd: 10000, btc: 0 },
+        },
+        { merge: "true" }
+      );
+    } catch (error) {}
+  };
+
+  React.useEffect(() => {
+    resetFirstBalance();
+  }, []);
 
   console.log("balance", balance);
 

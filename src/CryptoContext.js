@@ -1,5 +1,6 @@
+import { render } from "@testing-library/react";
 import { onAuthStateChanged } from "firebase/auth";
-import { doc, onSnapshot } from "firebase/firestore";
+import { doc, onSnapshot, setDoc } from "firebase/firestore";
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { auth, db } from "./firebase";
 import Service from "./service/Service";
@@ -11,7 +12,7 @@ function CryptoContext({ children }) {
   const [symbol, setSymbol] = useState("$");
   const [user, setUser] = useState(null);
   const [watchlist, setWatchlist] = useState([]);
-  const [balance, setBalance] = useState([]);
+  const [balance, setBalance] = useState();
   const [coins, setCoins] = useState([]);
   const [loading, setLoading] = useState(false);
   const [globalInfo, setGlobalInfo] = useState();
@@ -90,8 +91,11 @@ function CryptoContext({ children }) {
 
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
-      if (user) setUser(user);
-      else setUser(null);
+      if (user) {
+        setUser(user);
+      } else {
+        setUser(null);
+      }
     });
   }, []);
 

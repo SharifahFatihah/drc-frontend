@@ -96,8 +96,8 @@ function TradePage() {
   const [buyUsd, setBuyUsd] = useState("");
   const [buyQuantity, setBuyQuantity] = useState("");
   const [isMobile, setIsMobile] = useState(false);
-  const [brokerFee, setBrokerFee] = useState(0);
-  const [totalPayment, setTotalPayment] = useState(0);
+  const [brokerFee, setBrokerFee] = useState("");
+  const [totalPayment, setTotalPayment] = useState("");
 
   const handleResize = () => {
     if (window.innerWidth < 1280) {
@@ -176,7 +176,7 @@ function TradePage() {
         message: `insufficient balance`,
         type: "error",
       });
-    } else if (p <= 0 || q <= 0) {
+    } else if (p <= 0 || q <= 0 || isNaN(tp) || isNaN(p)) {
       setAlert({
         open: true,
         message: `invalid price`,
@@ -213,10 +213,10 @@ function TradePage() {
         message: `insufficient balance`,
         type: "error",
       });
-    } else if (p <= 0 || q <= 0) {
+    } else if (p <= 0 || q <= 0 || isNaN(tp) || isNaN(p)) {
       setAlert({
         open: true,
-        message: `invalid price`,
+        message: `invalid`,
         type: "error",
       });
     } else if (q > balance.btc) {
@@ -438,8 +438,8 @@ function TradePage() {
             <Typography>Balance</Typography>
             <Typography>
               {isBuy
-                ? `$${balance.usd?.toFixed(2)}`
-                : `${balance.btc?.toFixed(4)}BTC`}
+                ? `$${balance?.usd?.toFixed(2)}`
+                : `${balance?.btc?.toFixed(4)}BTC`}
             </Typography>
           </div>
           <div
