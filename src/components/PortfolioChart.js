@@ -94,6 +94,15 @@ const useStyle = makeStyles((theme) => ({
       width: "100%",
     },
   },
+  titleContainer: {
+    display: "flex",
+    width: "100%",
+    justifyContent: "space-between",
+    [theme.breakpoints.down("md")]: {
+      flexDirection: "column",
+      alignItems: "center",
+    },
+  },
 }));
 
 function PortfolioChart({ days, volatilityDesc, timeFrame }) {
@@ -391,13 +400,7 @@ function PortfolioChart({ days, volatilityDesc, timeFrame }) {
           }}
         >
           {" "}
-          <div
-            style={{
-              display: "flex",
-              width: "100%",
-              justifyContent: "space-between",
-            }}
-          >
+          <div className={classes.titleContainer}>
             <>
               {isChart === "portfolio" ? (
                 <Typography variant="h3" style={{ fontFamily: "VT323" }}>
@@ -436,9 +439,12 @@ function PortfolioChart({ days, volatilityDesc, timeFrame }) {
             </>
             <div
               style={{
+                display: "flex",
+                width: "260px",
                 padding: 10,
                 backgroundColor: "rgba(79, 58, 84, 0.52)",
                 borderRadius: 5,
+                justifyContent: "center",
               }}
             >
               <Button

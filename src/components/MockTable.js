@@ -181,7 +181,7 @@ export default function EnhancedTable({ coins }) {
 
   React.useEffect(() => {
     coins.map((v) =>
-      watchlist.includes(watchlist.find((e) => e.id === v.id))
+      watchlist?.includes(watchlist.find((e) => e.id === v.id))
         ? (v.in_watchlist = true)
         : (v.in_watchlist = false)
     );
@@ -243,7 +243,7 @@ export default function EnhancedTable({ coins }) {
                 .map((row, index) => {
                   const isItemSelected = isSelected(row.name);
                   const labelId = `enhanced-table-checkbox-${index}`;
-                  const inWatchlist = watchlist.includes(
+                  const inWatchlist = watchlist?.includes(
                     watchlist.find((e) => e.id === row?.id)
                   );
 

@@ -3,10 +3,11 @@ import Drawer from "@mui/material/Drawer";
 import Button from "@mui/material/Button";
 import { CryptoState } from "../CryptoContext";
 import { Avatar, dividerClasses } from "@mui/material";
-import { makeStyles } from "@material-ui/core";
+import { makeStyles, Typography } from "@material-ui/core";
 import { signOut } from "firebase/auth";
-import { auth } from "../firebase";
+import { auth, db } from "../firebase";
 import { ImportContactsSharp } from "@material-ui/icons";
+import { doc, setDoc } from "firebase/firestore";
 
 const useStyles = makeStyles({
   container: {
@@ -48,7 +49,7 @@ export default function UserSidebar() {
     right: false,
   });
 
-  const { user, setAlert, watchlist, coins } = CryptoState();
+  const { user, setAlert, watchlist, coins, balance } = CryptoState();
 
   const toggleDrawer = (anchor, open) => (event) => {
     if (
@@ -69,6 +70,44 @@ export default function UserSidebar() {
       type: "success",
     });
   };
+
+  const resetBalance = async () => {
+    const walletRef = await doc(db, "wallet", user.uid);
+
+    try {
+      await setDoc(walletRef, {
+        balances: { usd: 10000, btc: 0 },
+      });
+
+      setAlert({
+        open: true,
+        message: `You have reset your balance`,
+        type: "success",
+      });
+    } catch (error) {}
+  };
+
+  const resetFirstBalance = async () => {
+    const walletRef = await doc(db, "wallet", user.uid);
+
+    try {
+      await setDoc(
+        walletRef,
+        {
+          balances: balance
+            ? { usd: balance.usd, btc: balance.btc }
+            : { usd: 10000, btc: 0 },
+        },
+        { merge: "true" }
+      );
+    } catch (error) {}
+  };
+
+  React.useEffect(() => {
+    resetFirstBalance();
+  }, []);
+
+  console.log("balance", balance);
 
   return (
     <div>
@@ -106,7 +145,7 @@ export default function UserSidebar() {
                 <span
                   style={{
                     width: "100%",
-                    fontSize: 25,
+                    fontSize: 20,
                     color: "white",
                     textAlign: "center",
                     fontWeight: "bolder",
@@ -124,6 +163,45 @@ export default function UserSidebar() {
                     fontSize: 20,
                   }}
                 >
+                  Wallet
+                </div>
+                <div
+                  style={{
+                    width: "240px",
+                  }}
+                >
+                  <hr></hr>
+                </div>
+                <Typography style={{ color: "white" }}>
+                  {balance?.usd} USD
+                </Typography>
+                <Typography style={{ color: "white" }}>
+                  {balance?.btc} BTC
+                </Typography>
+                <Button
+                  style={{
+                    background: "yellow",
+                    marginRight: 80,
+                    marginLeft: 80,
+                    display: "flex",
+                    alignItems: "center",
+                    border: "5px solid white",
+                    color: "black",
+                    fontWeight: "bolder",
+                  }}
+                  onClick={resetBalance}
+                >
+                  {" "}
+                  Reset
+                </Button>
+                <div
+                  style={{
+                    color: "white",
+                    fontWeight: "bolder",
+                    wordWrap: "break-word",
+                    fontSize: 20,
+                  }}
+                >
                   Assets
                 </div>
                 <div
@@ -133,10 +211,13 @@ export default function UserSidebar() {
                 >
                   <hr></hr>
                 </div>
-                <div className={classes.watchlist}>
+                <div
+                  className={classes.watchlist}
+                  style={{ overflowY: "auto", maxHeight: "250px" }}
+                >
                   {coins.map((coin) => {
                     if (
-                      watchlist.includes(
+                      watchlist?.includes(
                         watchlist.find((e) => e.id === coin.id)
                       )
                     )
@@ -160,16 +241,11 @@ export default function UserSidebar() {
                   display: "flex",
                   alignItems: "center",
                   border: "5px solid white",
+                  color: "black",
+                  fontWeight: "bolder",
                 }}
               >
-                <a
-                  style={{
-                    color: "black",
-                    fontWeight: "bolder",
-                  }}
-                >
-                  Logout
-                </a>
+                Logout
               </Button>
             </div>
           </Drawer>
