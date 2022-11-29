@@ -62,7 +62,7 @@ function CoinDesc({ coin }) {
             }}
             onClick={() => setShowMore(!showMore)}
           >
-            {showMore ? "Show less" : "Show more"}
+            {showMore ? "Show less" : "Read more"}
           </Button>
         </Typography>
       </div>
