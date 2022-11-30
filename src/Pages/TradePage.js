@@ -22,6 +22,7 @@ import { db } from "../firebase";
 import Service from "../service/Service";
 import Kaching from "../asset/kaching.mp3";
 import { useNavigate } from "react-router-dom";
+import CheatModal from "../components/CheatModal";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -36,9 +37,11 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     flexDirection: "column",
     alignItems: "flex-start",
+    padding: 10,
     [theme.breakpoints.down("md")]: {
       width: "100%",
       alignItems: "center",
+      padding: 5,
     },
   },
   sidebar: {
@@ -161,7 +164,7 @@ function TradePage() {
     let timeparsed = `${date.getHours()}:${date.getMinutes()}: ${date.getSeconds()}`;
 
     setTimeParsed(timeparsed);
-    if (priceArr.length < 31) {
+    if (priceArr.length < 61) {
       setPriceArr([...priceArr, { price: price.price, time: timeparsed }]);
     } else {
       priceArr.shift();
@@ -179,7 +182,14 @@ function TradePage() {
         message: `insufficient balance`,
         type: "error",
       });
-    } else if (p <= 0 || q <= 0 || isNaN(tp) || isNaN(p)) {
+    } else if (
+      p <= 0 ||
+      q <= 0 ||
+      isNaN(tp) ||
+      isNaN(p) ||
+      isNaN(balance.usd) ||
+      isNaN(balance.btc)
+    ) {
       setAlert({
         open: true,
         message: `invalid price`,
@@ -211,14 +221,21 @@ function TradePage() {
   };
 
   //sell coin
-  const sellCoin = async (q, p, tp) => {
-    if (tp > balance.usd) {
+  const sellCoin = async (q, p, tp, bf) => {
+    if (bf > balance.usd) {
       setAlert({
         open: true,
         message: `insufficient balance`,
         type: "error",
       });
-    } else if (p <= 0 || q <= 0 || isNaN(tp) || isNaN(p)) {
+    } else if (
+      p <= 0 ||
+      q <= 0 ||
+      isNaN(tp) ||
+      isNaN(p) ||
+      isNaN(balance.usd) ||
+      isNaN(balance.btc)
+    ) {
       setAlert({
         open: true,
         message: `invalid`,
@@ -332,7 +349,6 @@ function TradePage() {
         <div className={classes.sidebar}>
           <div
             style={{
-              marginTop: 20,
               width: "90%",
               backgroundColor: "rgba(79, 58, 84, 0.52)",
             }}
@@ -415,7 +431,7 @@ function TradePage() {
                     : "red",
               }}
             >
-              ${(priceArr[priceArr.length - 1]?.price / 100).toFixed(4)} USD
+              ${priceArr[priceArr.length - 1]?.price} USD
             </Typography>
             <Typography
               className={
@@ -448,7 +464,7 @@ function TradePage() {
               }),
               datasets: [
                 {
-                  data: priceArr.map((chartData) => chartData.price / 100),
+                  data: priceArr.map((chartData) => chartData.price),
                   label: `price`,
                   borderColor: "#FFE227",
                   borderWidth: 2,
@@ -509,10 +525,13 @@ function TradePage() {
                 </div>
                 <Typography>BTC/USD</Typography>
               </div>
-              <div>2</div>
+              <div></div>
             </div>
-            <div className={classes.inSidebar}>
-              <Typography>Balance</Typography>
+            <div
+              className={classes.inSidebar}
+              style={{ alignItems: "flex-start" }}
+            >
+              <CheatModal />
               <div
                 style={{
                   display: "flex",
@@ -590,55 +609,55 @@ function TradePage() {
                 onChange={(e) =>
                   isBuy
                     ? (setBuyUsd(
-                        e.target.value * priceArr[priceArr.length - 1]?.price
+                        e.target.value * priceArr[priceArr.length - 1].price
                       ),
                       setBuyQuantity(parseFloat(e.target.value)),
                       e.target.value *
-                        priceArr[priceArr.length - 1]?.price *
+                        priceArr[priceArr.length - 1].price *
                         0.001 >
                       8
                         ? (setBrokerFee(
                             e.target.value *
-                              priceArr[priceArr.length - 1]?.price *
+                              priceArr[priceArr.length - 1].price *
                               0.001
                           ),
                           setTotalPayment(
                             e.target.value *
-                              priceArr[priceArr.length - 1]?.price +
+                              priceArr[priceArr.length - 1].price +
                               e.target.value *
-                                priceArr[priceArr.length - 1]?.price *
+                                priceArr[priceArr.length - 1].price *
                                 0.001
                           ))
                         : (setBrokerFee(8),
                           setTotalPayment(
                             e.target.value *
-                              priceArr[priceArr.length - 1]?.price +
+                              priceArr[priceArr.length - 1].price +
                               8
                           )))
                     : (setBuyUsd(
-                        e.target.value * priceArr[priceArr.length - 1]?.price
+                        e.target.value * priceArr[priceArr.length - 1].price
                       ),
                       setBuyQuantity(parseFloat(e.target.value)),
                       e.target.value *
-                        priceArr[priceArr.length - 1]?.price *
+                        priceArr[priceArr.length - 1].price *
                         0.001 >
                       8
                         ? (setBrokerFee(
                             e.target.value *
-                              priceArr[priceArr.length - 1]?.price *
+                              priceArr[priceArr.length - 1].price *
                               0.001
                           ),
                           setTotalPayment(
                             e.target.value *
-                              priceArr[priceArr.length - 1]?.price -
+                              priceArr[priceArr.length - 1].price -
                               e.target.value *
-                                priceArr[priceArr.length - 1]?.price *
+                                priceArr[priceArr.length - 1].price *
                                 0.001
                           ))
                         : (setBrokerFee(8),
                           setTotalPayment(
                             e.target.value *
-                              priceArr[priceArr.length - 1]?.price -
+                              priceArr[priceArr.length - 1].price -
                               8
                           )))
                 }
@@ -646,7 +665,9 @@ function TradePage() {
               />
             </div>
             <div className={classes.inSidebar}>
-              <Typography>{isBuy ? "Buy Summary" : "Sell Summary"}</Typography>
+              <Typography variant="h4" style={{ fontFamily: "VT323" }}>
+                {isBuy ? "Buy Summary" : "Sell Summary"}
+              </Typography>
             </div>
             <div className={classes.inSidebar}>
               <Typography>{isBuy ? "Price" : "Profit"}</Typography>
@@ -673,7 +694,7 @@ function TradePage() {
               onClick={() =>
                 isBuy
                   ? buyCoin(buyQuantity, buyUsd, totalPayment)
-                  : sellCoin(buyQuantity, buyUsd, totalPayment)
+                  : sellCoin(buyQuantity, buyUsd, totalPayment, brokerFee)
               }
             >
               Submit

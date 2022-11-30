@@ -19,11 +19,12 @@ import infoicon from "../asset/infoicon.png";
 
 const useStyle = makeStyles((theme) => ({
   container: {
-    width: "90%",
+    width: "100%",
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
     padding: 40,
+    marginBottom: 50,
     [theme.breakpoints.down("md")]: {
       width: "100%",
       padding: "0",
@@ -38,69 +39,28 @@ const useStyle = makeStyles((theme) => ({
       alignItems: "center",
     },
   },
-  inSecondContainer: {
-    display: "flex",
-    flexDirection: "column",
-    justifyItems: "center",
-    margin: 20,
-    padding: 20,
-    width: "60%",
-    boxShadow: "inset 5px 5px 10px rgba(79, 58, 84, 0.52)",
-    // backgroundColor: "rgba(79, 58, 84, 0.52)",
-    borderRadius: "15px",
-    [theme.breakpoints.down("md")]: {
-      width: "100%",
-    },
-  },
-  inSecondContainer40: {
-    display: "flex",
-    flexDirection: "column",
-    justifyItems: "center",
-    margin: 20,
-    padding: 20,
-    width: "40%",
-    // backgroundColor: "rgba(79, 58, 84, 0.52)",
-    boxShadow: "inset 5px 5px 10px rgba(79, 58, 84, 0.52)",
-    borderRadius: "15px",
-    [theme.breakpoints.down("md")]: {
-      width: "100%",
-    },
-  },
-  inSecondContainer20: {
-    display: "flex",
-    flexDirection: "column",
-    justifyItems: "center",
-    margin: 20,
-    width: "40%",
-    // backgroundColor: "rgba(79, 58, 84, 0.52)",
-    boxShadow: "inset 5px 5px 10px rgba(79, 58, 84, 0.52)",
-    borderRadius: "15px",
-    [theme.breakpoints.down("md")]: {
-      width: "100%",
-    },
-  },
-  inSecondContainer100: {
-    display: "flex",
-    flexDirection: "column",
-    justifyItems: "center",
-    margin: 20,
-    padding: 20,
-
-    width: "100%",
-    // backgroundColor: "rgba(79, 58, 84, 0.52)",
-    boxShadow: "inset 5px 5px 10px rgba(79, 58, 84, 0.52)",
-    borderRadius: "15px",
-    [theme.breakpoints.down("md")]: {
-      width: "100%",
-    },
-  },
   titleContainer: {
     display: "flex",
     width: "100%",
     justifyContent: "space-between",
-    [theme.breakpoints.down("md")]: {
+    alignItems: "center",
+    marginBottom: 50,
+    [theme.breakpoints.down("sm")]: {
       flexDirection: "column",
-      alignItems: "center",
+      marginBottom: 0,
+    },
+  },
+  selectChart: {
+    padding: 10,
+    backgroundColor: "rgba(79, 58, 84, 0.52)",
+    borderRadius: 5,
+    [theme.breakpoints.down("md")]: {
+      margin: 20,
+    },
+    [theme.breakpoints.down("sm")]: {
+      margin: 0,
+      marginTop: 10,
+      marginBottom: 10,
     },
   },
 }));
@@ -393,8 +353,6 @@ function PortfolioChart({ days, volatilityDesc, timeFrame }) {
             display: "flex",
             flexDirection: "column",
             width: "100%",
-            // backgroundColor: "rgba(79, 58, 84, 0.52)",
-            boxShadow: "inset 5px 5px 10px rgba(79, 58, 84, 0.52)",
             borderRadius: "15px",
             padding: 20,
           }}
@@ -437,51 +395,50 @@ function PortfolioChart({ days, volatilityDesc, timeFrame }) {
                 </Typography>
               )}
             </>
-            <div
-              style={{
-                display: "flex",
-                width: "260px",
-                padding: 10,
-                backgroundColor: "rgba(79, 58, 84, 0.52)",
-                borderRadius: 5,
-                justifyContent: "center",
-              }}
-            >
+            <div className={classes.selectChart}>
               <Button
                 style={{
                   backgroundColor:
-                    isChart === "portfolio" ? "yellow" : "transparent",
+                    isChart === "portfolio" ? "#FFE227" : "transparent",
                   color: isChart === "portfolio" ? "black" : "white",
+                  border:
+                    isChart === "portfolio"
+                      ? "5px solid #FFFFFF"
+                      : "transparent",
                 }}
                 onClick={() => {
                   setIsChart("portfolio");
                 }}
               >
-                portfolio
+                Portfolio
               </Button>
               <Button
                 style={{
                   backgroundColor:
-                    isChart === "coin" ? "yellow" : "transparent",
+                    isChart === "coin" ? "#FFE227" : "transparent",
                   color: isChart === "coin" ? "black" : "white",
+                  border:
+                    isChart === "coin" ? "5px solid #FFFFFF" : "transparent",
                 }}
                 onClick={() => {
                   setIsChart("coin");
                 }}
               >
-                coin
+                Coin
               </Button>
               <Button
                 style={{
                   backgroundColor:
-                    isChart === "return" ? "yellow" : "transparent",
+                    isChart === "return" ? "#FFE227" : "transparent",
                   color: isChart === "return" ? "black" : "white",
+                  border:
+                    isChart === "return" ? "5px solid #FFFFFF" : "transparent",
                 }}
                 onClick={() => {
                   setIsChart("return");
                 }}
               >
-                return
+                Return
               </Button>
             </div>
           </div>
@@ -580,10 +537,10 @@ function PortfolioChart({ days, volatilityDesc, timeFrame }) {
           )}
         </div>
       </div>
-      <div className={classes.secondContainer} style={{ marginTop: 30 }}>
+      <div className={classes.secondContainer} style={{ marginTop: 40 }}>
         <TableContainer
           component={Paper}
-          style={{ backgroundColor: "transparent", color: "black" }}
+          style={{ backgroundColor: "rgba(79, 58, 84, 0.52)", color: "black" }}
         >
           {" "}
           <div

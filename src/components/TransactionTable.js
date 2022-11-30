@@ -15,8 +15,8 @@ import { visuallyHidden } from "@mui/utils";
 import Service from "../service/Service";
 import { CryptoState } from "../CryptoContext";
 import { useNavigate } from "react-router-dom";
-import FavouriteIcon from "../asset/favourite.png";
-import UnFavouriteIcon from "../asset/unfav-icon.png";
+import FavouriteIcon from "../asset/favouriteicon.png";
+import UnFavouriteIcon from "../asset/unfavouriteicon.png";
 import {
   createTheme,
   LinearProgress,
@@ -44,47 +44,53 @@ function getComparator(order, orderBy) {
 }
 
 function stableSort(array, comparator) {
-  const stabilizedThis = array.map((el, index) => [el, index]);
-  stabilizedThis.sort((a, b) => {
+  const stabilizedThis = array?.map((el, index) => [el, index]);
+  stabilizedThis?.sort((a, b) => {
     const order = comparator(a[0], b[0]);
     if (order !== 0) {
       return order;
     }
     return a[1] - b[1];
   });
-  return stabilizedThis.map((el) => el[0]);
+  return stabilizedThis?.map((el) => el[0]);
 }
 
 const headCells = [
   {
-    id: "name",
+    id: "time",
     numeric: false,
     disablePadding: true,
-    label: "Coin Name",
+    label: "Time",
   },
   {
-    id: "current_price",
+    id: "coin",
     numeric: true,
     disablePadding: false,
-    label: "Price",
+    label: "Coin",
   },
   {
-    id: "price_change_percentage_24h",
+    id: "type",
     numeric: true,
     disablePadding: false,
-    label: "24H Change",
+    label: "Buy/Sell",
   },
   {
-    id: "market_cap",
+    id: "quantity",
     numeric: true,
     disablePadding: false,
-    label: "Market Cap",
+    label: "Quantity",
   },
   {
-    id: "in_watchlist",
+    id: "profit",
     numeric: true,
     disablePadding: false,
-    label: <img src={FavouriteIcon} height={30} />,
+    label: "Profit",
+  },
+  {
+    id: "total_gain",
+    numeric: true,
+    disablePadding: false,
+    label: "Total Gain",
   },
 ];
 
@@ -131,61 +137,15 @@ EnhancedTableHead.propTypes = {
   rowCount: PropTypes.number.isRequired,
 };
 
-export default function EnhancedTable({ coins }) {
+export default function EnhancedTable({ receipt }) {
   const [order, setOrder] = React.useState("asc");
   const [orderBy, setOrderBy] = React.useState("calories");
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
-  const [rowsPerPage, setRowsPerPage] = React.useState(coins?.length);
+  const [rowsPerPage, setRowsPerPage] = React.useState(receipt?.length);
 
-  const { symbol, watchlist, setAlert, user, setOpen } = CryptoState();
-
-  const addToWatchList = async (usercoin) => {
-    const coinRef = await doc(db, "watchlist", user.uid);
-
-    try {
-      await setDoc(coinRef, {
-        coins: watchlist
-          ? [...watchlist, { id: usercoin.id, holding: 1 }]
-          : [{ id: usercoin.id, holding: 1 }],
-      });
-
-      setAlert({
-        open: true,
-        message: `${usercoin.name} added to your watchlist`,
-        type: "success",
-      });
-    } catch (error) {}
-  };
-
-  const removeFromWatchlist = async (usercoin) => {
-    const coinRef = await doc(db, "watchlist", user.uid);
-
-    try {
-      await setDoc(
-        coinRef,
-        {
-          coins: watchlist.filter((watch) => watch.id !== usercoin?.id),
-        },
-        { merge: "true" }
-      );
-
-      setAlert({
-        open: true,
-        message: `${usercoin.name} remove from your watchlist`,
-        type: "success",
-      });
-    } catch (error) {}
-  };
-
-  React.useEffect(() => {
-    coins.map((v) =>
-      watchlist?.includes(watchlist.find((e) => e.id === v.id))
-        ? (v.in_watchlist = true)
-        : (v.in_watchlist = false)
-    );
-  }, [watchlist]);
+  const { user } = CryptoState();
 
   const navigate = useNavigate();
 
@@ -198,16 +158,15 @@ export default function EnhancedTable({ coins }) {
   const handleChangeDense = (event) => {
     setDense(event.target.checked);
   };
-  const handleOpen = () => setOpen(true);
 
   const isSelected = (name) => selected.indexOf(name) !== -1;
 
   const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - coins.length) : 0;
+    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - receipt.length) : 0;
 
   React.useEffect(() => {
-    setRowsPerPage(coins?.length);
-  }, [coins]);
+    setRowsPerPage(receipt?.length);
+  }, [receipt]);
 
   return (
     <Box sx={{ width: "100%" }}>
@@ -234,28 +193,24 @@ export default function EnhancedTable({ coins }) {
               order={order}
               orderBy={orderBy}
               onRequestSort={handleRequestSort}
-              rowCount={coins.length}
+              rowCount={receipt?.length}
             />
 
             <TableBody>
-              {stableSort(coins, getComparator(order, orderBy))
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((row, index) => {
-                  const isItemSelected = isSelected(row.name);
+              {stableSort(receipt, getComparator(order, orderBy))
+                ?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                ?.map((row, index) => {
                   const labelId = `enhanced-table-checkbox-${index}`;
-                  const inWatchlist = watchlist?.includes(
-                    watchlist.find((e) => e.id === row?.id)
-                  );
 
+                  let date = new Date(row.time.seconds * 1000);
+                  let timeparsed = `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
+                  let dateparsed = date.toLocaleDateString();
                   return (
                     <TableRow
                       hover
                       onClick={() => handleClick()}
                       role="checkbox"
-                      aria-checked={isItemSelected}
                       tabIndex={-1}
-                      key={row.name}
-                      selected={isItemSelected}
                     >
                       <TableCell
                         component="th"
@@ -264,93 +219,33 @@ export default function EnhancedTable({ coins }) {
                         style={{
                           display: "flex",
                           alignItems: "center",
-                          cursor: "pointer",
+                          color: "white",
                         }}
-                        onClick={() => navigate(`/coins/${row.id}`)}
                       >
-                        <img
-                          src={row.image}
-                          height="25"
-                          style={{ marginRight: "15px" }}
-                        />
-                        <div
-                          style={{ display: "flex", flexDirection: "column" }}
-                        >
-                          <Typography variant="h6" style={{ color: "white" }}>
-                            {row.symbol.toUpperCase()}
-                          </Typography>
-                          <Typography
-                            variant="subtitle2"
-                            style={{ color: "white" }}
-                          >
-                            {row.name}
-                          </Typography>
-                        </div>
+                        <Typography style={{ marginRight: 20 }}>
+                          {dateparsed}
+                        </Typography>
+                        <Typography>{timeparsed}</Typography>
                       </TableCell>
                       <TableCell align="right" style={{ color: "white" }}>
-                        {symbol}
-                        {row.current_price > 1
-                          ? Service.addCommas(row.current_price)
-                          : row.current_price}{" "}
+                        {row.coin?.toUpperCase()}
                       </TableCell>
                       <TableCell
                         align="right"
-                        style={
-                          Service.isProfit(row.price_change_percentage_24h)
-                            ? { color: "#33FF00" }
-                            : { color: "#FF0000" }
-                        }
+                        style={{
+                          color: "white",
+                        }}
                       >
-                        {Service.isProfit(row.price_change_percentage_24h)
-                          ? "+"
-                          : ""}
-                        {parseFloat(row.price_change_percentage_24h).toFixed(2)}
-                        {"%"}
+                        {row.type?.toUpperCase()}
                       </TableCell>
                       <TableCell align="right" style={{ color: "white" }}>
-                        {symbol}
-                        {Service.addCommas(row.market_cap).slice(0, -8)}
-                        {" Million"}
+                        {row.quantity}
                       </TableCell>
-                      <TableCell align="right">
-                        {user ? (
-                          inWatchlist ? (
-                            <img
-                              src={FavouriteIcon}
-                              height="30rem"
-                              onClick={() => {
-                                inWatchlist
-                                  ? removeFromWatchlist(row)
-                                  : addToWatchList(row);
-                              }}
-                              style={{ cursor: "pointer" }}
-                            />
-                          ) : (
-                            <img
-                              src={UnFavouriteIcon}
-                              height="30rem"
-                              onClick={() => {
-                                inWatchlist
-                                  ? removeFromWatchlist(row)
-                                  : addToWatchList(row);
-                              }}
-                              style={{ cursor: "pointer" }}
-                            />
-                          )
-                        ) : (
-                          <img
-                            src={UnFavouriteIcon}
-                            height="30rem"
-                            onClick={() =>
-                              setAlert({
-                                open: true,
-                                message: `Please login to add coins to portfolio`,
-                                type: "error",
-                              })
-                            }
-                            style={{ cursor: "pointer" }}
-                          />
-                        )}
+                      <TableCell align="right" style={{ color: "white" }}>
+                        {row.profit}
+                      </TableCell>
+                      <TableCell align="right" style={{ color: "white" }}>
+                        {row.total_gain}
                       </TableCell>
                     </TableRow>
                   );

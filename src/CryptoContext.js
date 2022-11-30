@@ -17,6 +17,7 @@ function CryptoContext({ children }) {
   const [loading, setLoading] = useState(false);
   const [globalInfo, setGlobalInfo] = useState();
   const [open, setOpen] = useState(false);
+  const [authValue, setAuthValue] = useState(0);
   const [portfolioVol, setPortfolioVol] = useState(0);
 
   const [alert, setAlert] = useState({
@@ -133,6 +134,8 @@ function CryptoContext({ children }) {
         globalInfo,
         open,
         setOpen,
+        authValue,
+        setAuthValue,
         setPortfolioVol,
         portfolioVol,
         balance,
