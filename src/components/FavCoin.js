@@ -1,6 +1,7 @@
 import { Button, makeStyles, Typography } from "@material-ui/core";
 import React from "react";
 import CoinPic from "../asset/fav-coin.gif";
+import { useNavigate } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -9,16 +10,15 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.down("md")]: {
       flexDirection: "column-reverse",
       alignItems: "center",
-      marginLeft: "0",
-      marginRight: "0",
-      paddingRight: "0",
-      paddingLeft: "0",
+      paddingRight: "20",
+      paddingLeft: "20",
     },
   },
   left: {
     width: "50%",
     padding: 50,
     [theme.breakpoints.down("md")]: {
+      width: "100%",
       alignItems: "center",
       padding: 0,
     },
@@ -34,15 +34,16 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     flexDirection: "column",
     alignItems: "flex-start",
+    marginLeft: 150,
     [theme.breakpoints.down("md")]: {
       alignItems: "center",
       justifyContent: "center",
+      marginLeft: 0,
     },
   },
   favCoinSub: {
     fontFamily: "VT323",
     color: "white",
-    marginLeft: 150,
     marginBottom: 50,
     fontSize: "50px",
     [theme.breakpoints.down("md")]: {
@@ -61,6 +62,7 @@ const useStyles = makeStyles((theme) => ({
 
 function FavCoin() {
   const classes = useStyles();
+  const navigate = useNavigate();
 
   return (
     <div className={classes.container}>
@@ -73,7 +75,6 @@ function FavCoin() {
             alignItems: "flex-end",
           }}
         >
-          {" "}
           <div className={classes.favCoinLeft}>
             <Typography
               variant="h2"
@@ -81,7 +82,6 @@ function FavCoin() {
                 fontFamily: "VT323",
                 color: "#FFE227",
                 marginBottom: 50,
-                marginLeft: 150,
               }}
             >
               Favourite Coins
@@ -92,12 +92,14 @@ function FavCoin() {
             <Button
               variant="contained"
               style={{
-                marginLeft: 150,
                 backgroundColor: "#FFE227",
                 color: "black",
                 border: "5px solid white",
                 fontFamily: "VT323",
                 fontSize: 20,
+              }}
+              onClick={() => {
+                navigate("/coinList");
               }}
             >
               Add Now

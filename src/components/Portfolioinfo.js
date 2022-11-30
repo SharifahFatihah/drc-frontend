@@ -15,22 +15,22 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "center",
     justifyContent: "space-evenly",
     padding: 20,
-    width: "24%",
+    width: "25%",
     margin: 15,
     borderRadius: "15px",
     background: "rgba(79, 58, 84, 0.52)",
     minHeight: "185px",
     [theme.breakpoints.down("md")]: {
-      width: "35%",
+      width: "50%",
       alignItems: "flex-start",
     },
     [theme.breakpoints.down("xs")]: {
-      width: "80%",
+      width: "90%",
       alignItems: "flex-start",
     },
   },
   marketContainer: {
-    marginTop: 40,
+    padding: 40,
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
@@ -42,20 +42,20 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   redColor: {
-    color: "#FF4B25",
+    color: "#FF0000",
   },
   greenColor: {
-    color: "#00FF19",
+    color: "#33FF00",
   },
   red: {
-    backgroundColor: "#FF4B25",
+    backgroundColor: "#FF0000",
     marginLeft: 10,
     color: "black",
     padding: 5,
     borderRadius: 5,
   },
   green: {
-    backgroundColor: "#00FF19",
+    backgroundColor: "#33FF00",
     marginLeft: 10,
     color: "black",
     padding: 5,
@@ -288,9 +288,7 @@ function Portfolioinfo({
             </Typography>
           </div>
 
-          <div
-            style={{ width: "100%", overflowY: "scroll", maxHeight: "100px" }}
-          >
+          <div style={{ width: "100%", overflowY: "auto", maxHeight: "70px" }}>
             {alerts.length == 0 ? (
               <Typography>no major drop in the last 24h</Typography>
             ) : (

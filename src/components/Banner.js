@@ -1,12 +1,13 @@
+import { Button, Container, Typography, makeStyles } from "@material-ui/core";
+
 import React from "react";
-import { makeStyles, Container, Typography, Button } from "@material-ui/core";
 import pixel from "../asset/pixelated_1.png";
+import { CryptoState } from "../CryptoContext";
+import { useNavigate } from "react-router-dom";
 
 const useStyle = makeStyles((theme) => ({
   banner: {
     backgroundPosition: "center center",
-    background: "rgb(52,0,57)",
-    // backgroundImage: `linear-gradient(180deg, rgba(52,0,57,0.87) 0%, rgba(107,13,116,0.8) 70%, rgba(255,226,39,1) 100%), url(https://www.themasterpicks.com/wp-content/uploads/2020/04/22b22287602523.5dbd29081561d.gif), url(${pixel}) `,
     background:
       "linear-gradient(180deg, rgba(52,0,57,0.87) 0%, rgba(107,13,116,0.8) 70%, rgba(255,226,39,1) 100%), url(https://www.themasterpicks.com/wp-content/uploads/2020/04/22b22287602523.5dbd29081561d.gif)",
     backgroundSize: "contain",
@@ -37,8 +38,12 @@ const useStyle = makeStyles((theme) => ({
     alignItems: "flex-start",
     marginLeft: 200,
     [theme.breakpoints.down("md")]: {
-      marginLeft: "0",
-      marginRight: "0",
+      flexDirection: "column",
+      display: "flex",
+      width: "100%",
+      alignItems: "center",
+      justifyContent: "center",
+      marginLeft: 0,
     },
   },
   description: {
@@ -57,6 +62,9 @@ const useStyle = makeStyles((theme) => ({
 }));
 
 function Banner() {
+  const { user, setOpen } = CryptoState();
+  const navigate = useNavigate();
+
   const classes = useStyle();
 
   return (
@@ -68,7 +76,6 @@ function Banner() {
               variant="h1"
               style={{
                 marginBottom: 15,
-                paddingRight: 20,
                 paddingLeft: 20,
                 fontFamily: "VT323",
                 color: "white",
@@ -96,6 +103,9 @@ function Banner() {
                 fontFamily: "VT323",
                 fontSize: 20,
                 marginLeft: 20,
+              }}
+              onClick={() => {
+                user ? navigate("/portfolio") : setOpen(true);
               }}
             >
               Get Started!

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Service from "../service/Service";
 import { CryptoState } from "../CryptoContext";
 import {
@@ -7,18 +7,22 @@ import {
   ThemeProvider,
   CircularProgress,
   Typography,
+  Button,
 } from "@material-ui/core";
 import { Line } from "react-chartjs-2";
 import { Chart as ChartJS } from "chart.js/auto";
 import { chartDays } from "../service/Service";
+import Chart from "react-apexcharts";
+import LineChartIcon from "../asset/linecharticon.png";
+import CandlestickIcon from "../asset/candlestickicon.png";
 
 const useStyle = makeStyles((theme) => ({
   container: {
-    width: "90%",
+    width: "100%",
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
-    padding: 40,
+    padding: 60,
     [theme.breakpoints.down("md")]: {
       width: "100%",
       padding: "0",
@@ -26,16 +30,20 @@ const useStyle = makeStyles((theme) => ({
   },
   selectButton: {
     width: "15%",
-    border: "1px solid #FFE227",
+    border: "5px solid #FFFFFF",
     borderRadius: 5,
     padding: 10,
     cursor: "pointer",
     marginLeft: 10,
     alignItems: "center",
-
     "&:hover": {
       backgroundColor: "#FFE227",
       color: "black",
+    },
+    [theme.breakpoints.down("sm")]: {
+      height: "50%",
+      padding: 5,
+      border: "2px solid #FFFFFF",
     },
   },
   chartContainer: {
@@ -57,6 +65,13 @@ const useStyle = makeStyles((theme) => ({
       justifyContent: "center",
     },
   },
+  priceContainer: {
+    fontFamily: "VT323",
+    fontSize: "48px",
+    [theme.breakpoints.down("sm")]: {
+      fontSize: "32px",
+    },
+  },
   basicContainer: {
     display: "flex",
     alignItems: "center",
@@ -67,14 +82,14 @@ const useStyle = makeStyles((theme) => ({
     },
   },
   red: {
-    backgroundColor: "#FF4B25",
+    backgroundColor: "#FF0000",
     marginLeft: 10,
     color: "black",
     padding: 5,
     borderRadius: 5,
   },
   green: {
-    backgroundColor: "#00FF19",
+    backgroundColor: "#33FF00",
     marginLeft: 10,
     color: "black",
     padding: 5,
@@ -88,8 +103,38 @@ function CoinChart({ coin }) {
   const { currency, symbol } = CryptoState();
 
   const [histData, setHistData] = useState([]);
+  const [histCandle, setHistCandle] = useState([]);
   const [loading, setLoading] = useState(false);
   const [days, setDays] = useState(1);
+  const [isMobile, setIsMobile] = useState(false);
+  const [isTablet, setIsTablet] = useState(false);
+  const [isLine, setIsLine] = useState(true);
+
+  const handleResize = () => {
+    if (window.innerWidth < 500) {
+      setIsMobile(true);
+    } else if (window.innerWidth < 1000) {
+      setIsTablet(true);
+    } else {
+      setIsMobile(false);
+      setIsTablet(false);
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener("resize", handleResize);
+  });
+
+  useEffect(() => {
+    if (window.innerWidth < 500) {
+      setIsMobile(true);
+    } else if (window.innerWidth < 1000) {
+      setIsTablet(true);
+    } else {
+      setIsMobile(false);
+      setIsTablet(false);
+    }
+  }, []);
 
   const getHistoricalChart = (e, f, g) => {
     setLoading(true);
@@ -97,6 +142,19 @@ function CoinChart({ coin }) {
     Service.getHistoricalChart(e, f, g)
       .then((response) => {
         setHistData(response.data.prices);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const getHistoricalCandle = (e, f, g) => {
+    setLoading(true);
+
+    Service.getHistoricalCandle(e, f, g)
+      .then((response) => {
+        setHistCandle(response.data);
         setLoading(false);
       })
       .catch((err) => {
@@ -114,7 +172,21 @@ function CoinChart({ coin }) {
   useEffect(() => {
     setLoading(true);
     getHistoricalChart(coin?.id, days, currency);
+    getHistoricalCandle(coin?.id, days, currency?.toLowerCase());
   }, [currency, days, coin?.id]);
+
+  console.log("histCandle", histCandle);
+
+  const priceData = {
+    data: histCandle.map((e) => {
+      return {
+        x: new Date(e[0]),
+        y: [e[1], e[2], e[3], e[4]],
+      };
+    }),
+  };
+
+  console.log("priceData", priceData);
 
   const totalDuration = 2500;
   const delayBetweenPoints = totalDuration / histData.length;
@@ -135,10 +207,21 @@ function CoinChart({ coin }) {
   };
   return (
     <ThemeProvider theme={darkTheme}>
+      <Typography
+        style={{
+          fontFamily: "VT323",
+          marginTop: 40,
+          marginLeft: 40,
+          alignItems: "flex-start",
+        }}
+        variant="h2"
+      >
+        Coin Details
+      </Typography>
       <div className={classes.container}>
         <div className={classes.chartContainer}>
           <div className={classes.basicContainer}>
-            <Typography variant="h4">
+            <Typography className={classes.priceContainer}>
               {symbol}
               {coin?.market_data.current_price[currency.toLowerCase()] > 1
                 ? coin?.market_data.current_price[currency.toLowerCase()]
@@ -165,6 +248,19 @@ function CoinChart({ coin }) {
           </div>
 
           <div className={classes.buttonContainer}>
+            <Button
+              style={{ height: "100%" }}
+              onClick={() => {
+                isLine ? setIsLine(false) : setIsLine(true);
+              }}
+            >
+              {" "}
+              {isLine ? (
+                <img src={CandlestickIcon} height={30} />
+              ) : (
+                <img src={LineChartIcon} height={20} />
+              )}
+            </Button>
             {chartDays.map((e) => (
               <div
                 key={e.value}
@@ -184,50 +280,102 @@ function CoinChart({ coin }) {
           <CircularProgress />
         ) : (
           <>
-            <Line
-              data={{
-                labels: histData.map((chartData) => {
-                  let date = new Date(chartData[0]);
-                  let time = `${date.getHours()}:${date.getMinutes()} `;
-                  return days === 1 ? time : date.toLocaleDateString();
-                }),
-                datasets: [
-                  {
-                    data: histData.map((chartData) => chartData[1]),
-                    label: `Price of ${coin?.name} in the last ${days} days in ${currency}`,
-                    borderColor: "#FFE227",
-                    borderWidth: 2,
-
-                    pointBorderColor: "rgba(0,0,0,0)",
-                    pointBackgroundColor: "rgba(0,0,0,0)",
-                    pointHoverBorderColor: "#5AC53B",
-                    pointHitRadius: 6,
-                    fill: true,
-                    backgroundColor: "rgba(243, 251, 0, 0.02)",
-                  },
-                ],
-              }}
-              options={{
-                responsive: true,
-                animation,
-                scales: {
-                  x: {
-                    display: true,
-                    title: {
+            {isLine ? (
+              <Line
+                data={{
+                  labels: histData.map((chartData) => {
+                    let date = new Date(chartData[0]);
+                    let time = `${date.getHours()}:${date.getMinutes()} `;
+                    return days === 1 ? time : date.toLocaleDateString();
+                  }),
+                  datasets: [
+                    {
+                      data: histData.map((chartData) => chartData[1]),
+                      label: `Price of ${coin?.name} in the last ${days} days in ${currency}`,
+                      borderColor: "#FFE227",
+                      borderWidth: 2,
+                      pointBorderColor: "rgba(0,0,0,0)",
+                      pointBackgroundColor: "rgba(0,0,0,0)",
+                      pointHoverBorderColor: "#5AC53B",
+                      pointHitRadius: 6,
+                      fill: true,
+                      backgroundColor: "rgba(243, 251, 0, 0.02)",
+                    },
+                  ],
+                }}
+                options={{
+                  responsive: true,
+                  animation,
+                  scales: {
+                    x: {
                       display: true,
-                      text: "Time",
+                      title: {
+                        display: true,
+                        text: "Time",
+                      },
+                    },
+                    y: {
+                      display: true,
+                      title: {
+                        display: true,
+                        text: "Price",
+                      },
                     },
                   },
-                  y: {
-                    display: true,
-                    title: {
-                      display: true,
-                      text: "Price",
+                }}
+              />
+            ) : (
+              <div
+                style={{
+                  display: "flex",
+                  width: "100%",
+                  justifyContent: "center",
+                  marginTop: 20,
+                }}
+              >
+                <Chart
+                  options={{
+                    chart: {
+                      type: "candlestick",
                     },
-                  },
-                },
-              }}
-            />
+                    title: {
+                      text: "Price of Coin",
+                      align: "left",
+                    },
+                    xaxis: {
+                      type: "datetime",
+                    },
+                    yaxis: {
+                      tooltip: {
+                        enabled: true,
+                      },
+                    },
+                    tooltip: {
+                      followCursor: true,
+                      theme: true,
+                      style: {
+                        fontSize: "1.5rem",
+                        fontFamily: "VT323",
+                      },
+                    },
+                    theme: {
+                      mode: "dark",
+                      palette: "palette8",
+                      monochrome: {
+                        enabled: true,
+                        color: "#FFE227",
+                        shadeTo: "dark",
+                        shadeIntensity: 0.65,
+                      },
+                    },
+                  }}
+                  series={[priceData]}
+                  type="candlestick"
+                  width={isMobile ? "125%" : isTablet ? "300%" : "400%"}
+                  height={isMobile ? "125%" : isTablet ? "300%" : "400%"}
+                />
+              </div>
+            )}
           </>
         )}
       </div>
