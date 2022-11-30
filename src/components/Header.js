@@ -31,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
     color: "white",
     fontFamily: "VT323",
     fontSize: "25px",
-    width: "250px ",
+    width: "300px ",
     justifyContent: "space-around",
     cursor: "pointer",
   },
@@ -122,6 +122,14 @@ function Header() {
         }}
       >
         News
+      </div>
+      <div
+        className={classes.navButton}
+        onClick={() => {
+          navigate("/trade");
+        }}
+      >
+        Trade
       </div>
     </div>
   );
