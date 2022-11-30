@@ -72,7 +72,7 @@ const headCells = [
     id: "type",
     numeric: true,
     disablePadding: false,
-    label: "24H Change",
+    label: "Buy/Sell",
   },
   {
     id: "quantity",
@@ -90,7 +90,7 @@ const headCells = [
     id: "total_gain",
     numeric: true,
     disablePadding: false,
-    label: "Total Cost",
+    label: "Total Gain",
   },
 ];
 
