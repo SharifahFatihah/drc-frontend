@@ -1,6 +1,7 @@
 import { Button, makeStyles, Typography } from "@material-ui/core";
 import React from "react";
 import CoinPic from "../asset/fav-coin.gif";
+import { useNavigate } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -61,6 +62,7 @@ const useStyles = makeStyles((theme) => ({
 
 function FavCoin() {
   const classes = useStyles();
+  const navigate = useNavigate();
 
   return (
     <div className={classes.container}>
@@ -95,6 +97,9 @@ function FavCoin() {
                 border: "5px solid white",
                 fontFamily: "VT323",
                 fontSize: 20,
+              }}
+              onClick={() => {
+                navigate("/coinList");
               }}
             >
               Add Now

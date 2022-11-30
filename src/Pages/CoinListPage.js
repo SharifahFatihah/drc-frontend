@@ -2,9 +2,11 @@ import { Typography } from "@material-ui/core";
 import React from "react";
 import CoinTable from "../components/CoinTable";
 import Trending2 from "../components/Trending2";
-import { CryptoState } from "../CryptoContext";
 
 function CoinListPage() {
+  console.log(
+    "you might find the answer in Douglas Adams’s 1979 novel,The Hitchhiker’s Guide to the Galaxy"
+  );
   return (
     <div>
       <Trending2 />
