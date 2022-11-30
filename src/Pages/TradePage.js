@@ -22,6 +22,7 @@ import { db } from "../firebase";
 import Service from "../service/Service";
 import Kaching from "../asset/kaching.mp3";
 import { useNavigate } from "react-router-dom";
+import CheatModal from "../components/CheatModal";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -530,7 +531,7 @@ function TradePage() {
               className={classes.inSidebar}
               style={{ alignItems: "flex-start" }}
             >
-              <Typography>Balance</Typography>
+              <CheatModal />
               <div
                 style={{
                   display: "flex",

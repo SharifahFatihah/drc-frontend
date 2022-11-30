@@ -3,6 +3,9 @@ import React from "react";
 import ChromeDinoGame from "react-chrome-dino";
 
 function PageNotFound() {
+  console.log(
+    "Hye Investor~, you have found me, so, tell me, what is the meaning of life?"
+  );
   return (
     <>
       <ChromeDinoGame />
