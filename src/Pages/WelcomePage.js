@@ -7,48 +7,99 @@ import LogoWord from "../asset/logoword.png";
 import Mario from "../asset/mario.gif";
 import Coin from "../asset/mariocoin.gif";
 
-const useStyle = makeStyles(() => ({
+const useStyle = makeStyles((theme) => ({
   banner: {
     backgroundPosition: "center center",
-    // backgroundImage:
-    //   "url(https://www.themasterpicks.com/wp-content/uploads/2020/04/22b22287602523.5dbd29081561d.gif)",
     height: 1000,
-    background: "rgb(107,13,116)",
     background:
-      "linear-gradient(166deg, rgba(107,13,116,1) 37%, rgba(255,226,39,1) 100%)",
+      "linear-gradient(0deg, rgba(255,255,255,0.3) 0%, rgba(150,150,150,0.5) 100%), url(https://www.themasterpicks.com/wp-content/uploads/2020/04/22b22287602523.5dbd29081561d.gif)",
+    backgroundSize: "contain",
     display: "flex",
     justifyContent: "center",
+    [theme.breakpoints.down("md")]: {
+      height: 700,
+    },
   },
   bannerContent: {
     margin: "0",
-    // height: 1000,
     paddingTop: 25,
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
+    [theme.breakpoints.down("md")]: {
+      paddingTop: 10,
+    },
   },
   hello: {
-    background: "#FFFFFF",
+    background: "rgb(107,13,116)",
+    background:
+      "linear-gradient(180deg, rgba(52,11,54,1) 0%, rgba(245,0,255,0.4514180672268907) 28%, rgba(255,255,255,1) 75%)",
+    boxShadow: "10px 10px 63px -3px rgba(0,0,0,0.69)",
+    borderRadius: "15px",
     display: "flex",
     flexDirection: "column",
-    alignItems: "flex-start",
+    alignItems: "center",
     padding: 90,
     width: "50%",
+    [theme.breakpoints.down("md")]: {
+      width: "85%",
+      height: "90%",
+      paddingTop: 40,
+      padding: 20,
+    },
   },
-  cryptogif: {},
+  investor: {
+    fontSize: "5rem",
+    marginBottom: 5,
+    paddingRight: 20,
+    paddingLeft: 20,
+    fontFamily: "VT323",
+    color: "#FFFFFF",
+    [theme.breakpoints.down("md")]: {
+      fontSize: "44px",
+      marginBottom: 0,
+      paddingRight: 5,
+      paddingLeft: 5,
+      alignItems: "center",
+      justifyContent: "center",
+    },
+  },
+  adventure: {
+    fontSize: "3rem",
+    marginBottom: 50,
+    paddingRight: 20,
+    paddingLeft: 20,
+    fontFamily: "VT323",
+    color: "#FFFFFF",
+    [theme.breakpoints.down("md")]: {
+      fontSize: "30px",
+      padding: 0,
+      marginBottom: 0,
+    },
+  },
+  buttonStart: {
+    backgroundColor: "#FFE227",
+    color: "black",
+    border: "5px solid white",
+    fontFamily: "VT323",
+    fontSize: 20,
+    marginLeft: 50,
+    [theme.breakpoints.down("md")]: {
+      marginLeft: 0,
+    },
+  },
+  coingif: {
+    [theme.breakpoints.down("md")]: {
+      height: 70,
+    },
+  },
   mariogif: {
-    background: "#FFFFFF",
-    display: "flex",
-    height: 500,
-    alignItems: "center",
-    // padding: 30,
-    // paddingLeft: 90,
-    // paddingRight: 90,
-    // margin: 15,
-    // width: "50%",
+    height: 200,
+    [theme.breakpoints.down("md")]: {
+      height: 70,
+    },
   },
-  currencypic: {},
 }));
 
 function WelcomePage() {
@@ -73,53 +124,29 @@ function WelcomePage() {
             src={LogoWord}
             alt="kaching"
             style={{
-              marginBottom: 5,
+              marginBottom: 50,
               paddingLeft: 20,
             }}
           />
-          <Typography
-            variant="h2"
-            style={{
-              marginBottom: 5,
-              paddingRight: 20,
-              paddingLeft: 20,
-              fontFamily: "VT323",
-              color: "#212121",
-            }}
-          >
-            Hello Investor!
-          </Typography>
-          <Typography
-            variant="h4"
-            style={{
-              marginBottom: 50,
-              paddingRight: 20,
-              paddingLeft: 20,
-              fontFamily: "VT323",
-              color: "#212121",
-            }}
-          >
+          <Typography className={classes.investor}>Hello Investor!</Typography>
+          <Typography className={classes.adventure}>
             Are you ready for an adventure?
           </Typography>
-          <img src={Coin} alt="coins" />
+          <img className={classes.coingif} src={Coin} alt="coins" />
           <Button
+            className={classes.buttonStart}
             variant="contained"
-            color="primary"
-            style={{
-              backgroundColor: "#FFE227",
-              color: "black",
-              border: "5px solid white",
-              fontFamily: "VT323",
-              fontSize: 20,
-              marginLeft: 80,
-            }}
             onClick={() => {
               playSound();
             }}
           >
             Let's Start!
           </Button>
-          <img src={Mario} alt="mario collect coins" height={200} />
+          <img
+            className={classes.mariogif}
+            src={Mario}
+            alt="mario collect coins"
+          />
         </div>
       </Container>
     </div>
