@@ -15,8 +15,8 @@ import { visuallyHidden } from "@mui/utils";
 import Service from "../service/Service";
 import { CryptoState } from "../CryptoContext";
 import { useNavigate } from "react-router-dom";
-import FavouriteIcon from "../asset/favouriteicon.png";
-import UnFavouriteIcon from "../asset/unfavouriteicon.png";
+import FavouriteIcon from "../asset/favourite.png";
+import UnFavouriteIcon from "../asset/unfav-icon.png";
 import {
   createTheme,
   LinearProgress,
