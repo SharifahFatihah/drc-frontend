@@ -1,5 +1,5 @@
 import { onAuthStateChanged } from "firebase/auth";
-import { doc, onSnapshot } from "firebase/firestore";
+import { doc, onSnapshot, setDoc } from "firebase/firestore";
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { auth, db } from "./firebase";
 import Service from "./service/Service";
@@ -11,10 +11,14 @@ function CryptoContext({ children }) {
   const [symbol, setSymbol] = useState("$");
   const [user, setUser] = useState(null);
   const [watchlist, setWatchlist] = useState([]);
+  const [balance, setBalance] = useState();
+  const [receipt, setReceipt] = useState([]);
   const [coins, setCoins] = useState([]);
   const [loading, setLoading] = useState(false);
   const [globalInfo, setGlobalInfo] = useState();
   const [open, setOpen] = useState(false);
+  const [authValue, setAuthValue] = useState(0);
+  const [portfolioVol, setPortfolioVol] = useState(0);
 
   const [alert, setAlert] = useState({
     open: false,
@@ -31,7 +35,11 @@ function CryptoContext({ children }) {
         setLoading(false);
       })
       .catch((err) => {
-        console.log(err);
+        setAlert({
+          open: true,
+          message: `API request exceed 50 limit, please wait 1 minute`,
+          type: "error",
+        });
       });
   };
 
@@ -61,6 +69,8 @@ function CryptoContext({ children }) {
   useEffect(() => {
     if (user) {
       const coinRef = doc(db, "watchlist", user?.uid);
+      const walletRef = doc(db, "wallet", user?.uid);
+      const transactionRef = doc(db, "transaction", user?.uid);
 
       var unsubscribe = onSnapshot(coinRef, (coin) => {
         if (coin.exists()) {
@@ -68,16 +78,33 @@ function CryptoContext({ children }) {
         } else {
         }
       });
+      var unsubscribe2 = onSnapshot(walletRef, (wallet) => {
+        if (wallet.exists()) {
+          setBalance(wallet.data().balances);
+        } else {
+        }
+      });
+      var unsubscribe3 = onSnapshot(transactionRef, (transaction) => {
+        if (transaction.exists()) {
+          setReceipt(transaction.data().receipts);
+        } else {
+        }
+      });
       return () => {
         unsubscribe();
+        unsubscribe2();
+        unsubscribe3();
       };
     }
   }, [user]);
 
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
-      if (user) setUser(user);
-      else setUser(null);
+      if (user) {
+        setUser(user);
+      } else {
+        setUser(null);
+      }
     });
   }, []);
 
@@ -107,6 +134,13 @@ function CryptoContext({ children }) {
         globalInfo,
         open,
         setOpen,
+        authValue,
+        setAuthValue,
+        setPortfolioVol,
+        portfolioVol,
+        balance,
+        receipt,
+        setReceipt,
       }}
     >
       {children}
