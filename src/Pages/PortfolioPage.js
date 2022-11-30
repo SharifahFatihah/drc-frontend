@@ -344,12 +344,16 @@ function PortfolioPage() {
   const colourDoughnut = donutCoin?.map((e) => random_rgba());
   const weightageTooltip = `The weightage of each coin in your portfolio for the past ${days} day(s).`;
 
-  console.log("vol", portfolioVol);
   return (
     <div className={classes.container}>
       <div className={classes.sidebar}>
         <div style={{ display: "flex", alignItems: "center" }}>
-          <img src={currentAssetIcon} height="30" style={{ marginRight: 20 }} />
+          <img
+            src={currentAssetIcon}
+            height="30"
+            style={{ marginRight: 20 }}
+            alt="currentasseticon"
+          />
           <div>
             <Typography variant="h3" style={{ fontFamily: "VT323" }}>
               Current Asset
@@ -431,7 +435,6 @@ function PortfolioPage() {
                                   },
                                 }}
                               >
-                                {" "}
                                 <TableCell
                                   component="th"
                                   scope="row"
@@ -447,6 +450,7 @@ function PortfolioPage() {
                                       <img
                                         src={row?.image?.thumb}
                                         height="20"
+                                        alt="coinicon"
                                       />
                                     </div>
                                     <div>{row.name}</div>
@@ -553,7 +557,7 @@ function PortfolioPage() {
                   alignItems: "center",
                 }}
               >
-                <Typography variant="subtitle" style={{ fontFamily: "VT323" }}>
+                <Typography variant="subtitle1" style={{ fontFamily: "VT323" }}>
                   {volatilityDesc} volatility of portfolio/
                   {currency?.toUpperCase()} in the last {days} day(s)
                 </Typography>
@@ -591,6 +595,7 @@ function PortfolioPage() {
                   src={infoicon}
                   height="13"
                   style={{ marginBottom: "25px" }}
+                  alt="infoicon"
                 />
               </Tooltip>
             </Typography>
@@ -647,7 +652,7 @@ function PortfolioPage() {
               Please Login{" "}
             </div>
           </>
-        ) : userCoin2.length == 0 ? (
+        ) : userCoin2.length === 0 ? (
           <div
             style={{
               display: "flex",

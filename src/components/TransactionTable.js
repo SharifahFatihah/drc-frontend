@@ -211,6 +211,7 @@ export default function EnhancedTable({ receipt }) {
                       onClick={() => handleClick()}
                       role="checkbox"
                       tabIndex={-1}
+                      key={index}
                     >
                       <TableCell
                         component="th"

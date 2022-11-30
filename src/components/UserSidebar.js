@@ -2,11 +2,10 @@ import * as React from "react";
 import Drawer from "@mui/material/Drawer";
 import Button from "@mui/material/Button";
 import { CryptoState } from "../CryptoContext";
-import { Avatar, dividerClasses } from "@mui/material";
+import { Avatar } from "@mui/material";
 import { makeStyles, Typography } from "@material-ui/core";
 import { signOut } from "firebase/auth";
 import { auth, db } from "../firebase";
-import { ImportContactsSharp } from "@material-ui/icons";
 import { doc, setDoc } from "firebase/firestore";
 
 const useStyles = makeStyles({
@@ -90,29 +89,30 @@ export default function UserSidebar() {
   const resetFirstBalance = async () => {
     const walletRef = await doc(db, "wallet", user.uid);
 
-    try {
-      await setDoc(
-        walletRef,
-        {
-          balances: balance
-            ? { usd: balance.usd, btc: balance.btc }
-            : { usd: 10000, btc: 0 },
-        },
-        { merge: "true" }
-      );
-    } catch (error) {}
+    if (balance && !balance.usd && !balance.btc) {
+      try {
+        await setDoc(
+          walletRef,
+          {
+            balances: balance
+              ? { usd: balance.usd, btc: balance.btc }
+              : { usd: 10000, btc: 0 },
+          },
+          { merge: "true" }
+        );
+      } catch (error) {}
+    } else {
+    }
   };
 
   React.useEffect(() => {
     resetFirstBalance();
-  }, []);
-
-  console.log("balance", balance);
+  });
 
   return (
     <div>
       {["right"].map((anchor) => (
-        <React.Fragment key={anchor}>
+        <React.Fragment key="right">
           <Avatar
             onClick={toggleDrawer(anchor, true)}
             style={{
@@ -172,10 +172,16 @@ export default function UserSidebar() {
                 >
                   <hr></hr>
                 </div>
-                <Typography style={{ color: "white" }}>
-                  {balance?.usd} USD
+                <Typography
+                  variant="h4"
+                  style={{ color: "white", fontFamily: "VT323" }}
+                >
+                  {balance?.usd?.toFixed(2)} USD
                 </Typography>
-                <Typography style={{ color: "white" }}>
+                <Typography
+                  variant="h4"
+                  style={{ color: "white", fontFamily: "VT323" }}
+                >
                   {balance?.btc} BTC
                 </Typography>
                 <Button
@@ -222,7 +228,10 @@ export default function UserSidebar() {
                       )
                     )
                       return (
-                        <div style={{ display: "flex", alignItems: "center" }}>
+                        <div
+                          style={{ display: "flex", alignItems: "center" }}
+                          key={coin?.id}
+                        >
                           <div style={{ marginRight: 20 }}>
                             <img src={coin.image} height="25" />
                           </div>

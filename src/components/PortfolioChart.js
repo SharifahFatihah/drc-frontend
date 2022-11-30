@@ -269,8 +269,6 @@ function PortfolioChart({ days, volatilityDesc, timeFrame }) {
     setPortfolioVol(portfolioVolatility()?.return_sd);
   }, [watchlist, coinsd2, days]);
 
-  console.log("goldmine", portfolioVolatility());
-
   const coinChart = coinHistData2.map((e) => {
     const data1 = e.hist_data?.map((chartData) => chartData[1]);
 
@@ -313,8 +311,6 @@ function PortfolioChart({ days, volatilityDesc, timeFrame }) {
       };
     }
   });
-
-  console.log("coinsd2", coinsd2);
 
   const totalDuration = 2500;
   const delayBetweenPoints = totalDuration / 250;

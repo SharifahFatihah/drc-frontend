@@ -54,7 +54,16 @@ const useStyle = makeStyles(() => ({
 function WelcomePage() {
   const classes = useStyle();
   const navigate = useNavigate();
-  var audio = new Audio(Kaching);
+
+  const playSound = () => {
+    var kaching = new Audio(Kaching);
+    kaching.play();
+
+    kaching.onended = () => {
+      kaching.setAttribute("src", "");
+      navigate("/homepage");
+    };
+  };
 
   return (
     <div className={classes.banner}>
@@ -105,17 +114,13 @@ function WelcomePage() {
               marginLeft: 80,
             }}
             onClick={() => {
-              navigate("/homepage");
-              audio.play();
+              playSound();
             }}
           >
             Let's Start!
           </Button>
           <img src={Mario} alt="mario collect coins" height={200} />
         </div>
-        {/* <div className={classes.mariogif}>
-          <img src={MarioCoin} alt="mario collect coins" height={250} />
-        </div> */}
       </Container>
     </div>
   );
