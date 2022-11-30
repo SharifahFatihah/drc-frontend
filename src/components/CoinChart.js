@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import Service from "../service/Service";
 import { CryptoState } from "../CryptoContext";
 import {
@@ -100,7 +100,7 @@ const useStyle = makeStyles((theme) => ({
 function CoinChart({ coin }) {
   const classes = useStyle();
 
-  const { currency, symbol } = CryptoState();
+  const { currency, symbol, setAlert } = CryptoState();
 
   const [histData, setHistData] = useState([]);
   const [histCandle, setHistCandle] = useState([]);
@@ -145,7 +145,11 @@ function CoinChart({ coin }) {
         setLoading(false);
       })
       .catch((err) => {
-        console.log(err);
+        setAlert({
+          open: true,
+          message: `API request exceed 50 limit, please wait 1 minute`,
+          type: "error",
+        });
       });
   };
 
@@ -158,7 +162,11 @@ function CoinChart({ coin }) {
         setLoading(false);
       })
       .catch((err) => {
-        console.log(err);
+        setAlert({
+          open: true,
+          message: `API request exceed 50 limit, please wait 1 minute`,
+          type: "error",
+        });
       });
   };
 
@@ -175,8 +183,6 @@ function CoinChart({ coin }) {
     getHistoricalCandle(coin?.id, days, currency?.toLowerCase());
   }, [currency, days, coin?.id]);
 
-  console.log("histCandle", histCandle);
-
   const priceData = {
     data: histCandle.map((e) => {
       return {
@@ -185,8 +191,6 @@ function CoinChart({ coin }) {
       };
     }),
   };
-
-  console.log("priceData", priceData);
 
   const totalDuration = 2500;
   const delayBetweenPoints = totalDuration / histData.length;
@@ -256,9 +260,9 @@ function CoinChart({ coin }) {
             >
               {" "}
               {isLine ? (
-                <img src={CandlestickIcon} height={30} />
+                <img src={CandlestickIcon} height={30} alt="candlestickicon" />
               ) : (
-                <img src={LineChartIcon} height={20} />
+                <img src={LineChartIcon} height={20} alt="linecharticon" />
               )}
             </Button>
             {chartDays.map((e) => (

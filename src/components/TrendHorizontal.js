@@ -27,7 +27,7 @@ function TrendHorizontal() {
   const classes = useStyle();
   const navigate = useNavigate();
 
-  const { currency, symbol } = CryptoState();
+  const { currency, symbol, setAlert } = CryptoState();
 
   const [trending, setTrending] = useState([]);
 
@@ -37,7 +37,11 @@ function TrendHorizontal() {
         setTrending(response.data);
       })
       .catch((err) => {
-        console.log(err);
+        setAlert({
+          open: true,
+          message: `API request exceed 50 limit, please wait 1 minute`,
+          type: "error",
+        });
       });
   };
 
@@ -84,7 +88,7 @@ function TrendHorizontal() {
           }}
         >
           <div style={{ display: "flex", marginBottom: 20 }}>
-            <img src={coin?.item?.large} alt={coin?.item?.name } height="70" />
+            <img src={coin?.item?.large} alt={coin?.item?.name} height="70" />
             <div style={{ marginLeft: 10 }}>
               <Typography variant="h4" style={{ fontWeight: "bold" }}>
                 {coin?.item?.symbol.toUpperCase()}

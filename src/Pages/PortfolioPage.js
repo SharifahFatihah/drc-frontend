@@ -134,21 +134,25 @@ const useStyles = makeStyles((theme) => ({
   },
   volatilityContainer: {
     borderRadius: "15px",
-    // background: "rgba(79, 58, 84, 0.52)",
     background: "#212121",
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
     padding: 50,
+    paddingTop: 0,
     marginTop: 50,
     width: "90%",
+    height: "80%",
     [theme.breakpoints.down("sm")]: {
       padding: 30,
+      paddingTop: 0,
     },
   },
   chartContainer: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
     borderRadius: "15px",
-    // background: "rgba(79, 58, 84, 0.52)",
     background: "#212121",
     padding: "30px",
     marginTop: 50,
@@ -344,12 +348,16 @@ function PortfolioPage() {
   const colourDoughnut = donutCoin?.map((e) => random_rgba());
   const weightageTooltip = `The weightage of each coin in your portfolio for the past ${days} day(s).`;
 
-  console.log("vol", portfolioVol);
   return (
     <div className={classes.container}>
       <div className={classes.sidebar}>
         <div style={{ display: "flex", alignItems: "center" }}>
-          <img src={currentAssetIcon} height="30" style={{ marginRight: 20 }} />
+          <img
+            src={currentAssetIcon}
+            height="30"
+            style={{ marginRight: 20 }}
+            alt="currentasseticon"
+          />
           <div>
             <Typography variant="h3" style={{ fontFamily: "VT323" }}>
               Current Asset
@@ -431,7 +439,6 @@ function PortfolioPage() {
                                   },
                                 }}
                               >
-                                {" "}
                                 <TableCell
                                   component="th"
                                   scope="row"
@@ -447,6 +454,7 @@ function PortfolioPage() {
                                       <img
                                         src={row?.image?.thumb}
                                         height="20"
+                                        alt="coinicon"
                                       />
                                     </div>
                                     <div>{row.name}</div>
@@ -538,14 +546,7 @@ function PortfolioPage() {
 
         {userState ? (
           <>
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                height: "80%",
-              }}
-            >
+            <div className={classes.volatilityContainer}>
               <div
                 style={{
                   display: "flex",
@@ -553,7 +554,17 @@ function PortfolioPage() {
                   alignItems: "center",
                 }}
               >
-                <Typography variant="subtitle" style={{ fontFamily: "VT323" }}>
+                <Typography
+                  variant="h3"
+                  style={{
+                    fontFamily: "VT323",
+                    marginTop: 50,
+                    marginBottom: 20,
+                  }}
+                >
+                  Volatility
+                </Typography>
+                <Typography variant="subtitle1" style={{ fontFamily: "VT323" }}>
                   {volatilityDesc} volatility of portfolio/
                   {currency?.toUpperCase()} in the last {days} day(s)
                 </Typography>
@@ -581,51 +592,58 @@ function PortfolioPage() {
                 </div>
               </div>
             </div>
-            <Typography
-              variant="h3"
-              style={{ fontFamily: "VT323", marginTop: 50, marginBottom: 20 }}
-            >
-              Coin Weightage{" "}
-              <Tooltip title={weightageTooltip}>
-                <img
-                  src={infoicon}
-                  height="13"
-                  style={{ marginBottom: "25px" }}
+            <div className={classes.chartContainer}>
+              <Typography
+                variant="h3"
+                style={{
+                  fontFamily: "VT323",
+                  marginTop: 20,
+                  marginBottom: 20,
+                }}
+              >
+                Coin Weightage{" "}
+                <Tooltip title={weightageTooltip}>
+                  <img
+                    src={infoicon}
+                    height="13"
+                    style={{ marginBottom: "25px" }}
+                    alt="infoicon"
+                  />
+                </Tooltip>
+              </Typography>
+              {donutCoin && (
+                <Doughnut
+                  data={{
+                    labels: donutCoin?.map((e) => {
+                      if (
+                        watchlist.includes(
+                          watchlist.find((watch) => watch.id === e?.id)
+                        )
+                      ) {
+                        return e.name;
+                      } else {
+                        return "deleted";
+                      }
+                    }),
+                    datasets: [
+                      {
+                        data: donutCoin
+                          ? donutCoin?.map(
+                              (e) => (e.weight / e.total_weight) * 100
+                            )
+                          : [],
+                        borderWidth: 0,
+                        backgroundColor: colourDoughnut,
+                        radius: "60%",
+                      },
+                    ],
+                  }}
+                  option={{
+                    animation: { animateRotate: false },
+                  }}
                 />
-              </Tooltip>
-            </Typography>
-            {donutCoin && (
-              <Doughnut
-                data={{
-                  labels: donutCoin?.map((e) => {
-                    if (
-                      watchlist.includes(
-                        watchlist.find((watch) => watch.id === e?.id)
-                      )
-                    ) {
-                      return e.name;
-                    } else {
-                      return "deleted";
-                    }
-                  }),
-                  datasets: [
-                    {
-                      data: donutCoin
-                        ? donutCoin?.map(
-                            (e) => (e.weight / e.total_weight) * 100
-                          )
-                        : [],
-                      borderWidth: 0,
-                      backgroundColor: colourDoughnut,
-                      radius: "60%",
-                    },
-                  ],
-                }}
-                option={{
-                  animation: { animateRotate: false },
-                }}
-              />
-            )}
+              )}
+            </div>
           </>
         ) : (
           <></>
@@ -647,7 +665,7 @@ function PortfolioPage() {
               Please Login{" "}
             </div>
           </>
-        ) : userCoin2.length == 0 ? (
+        ) : userCoin2.length === 0 ? (
           <div
             style={{
               display: "flex",
