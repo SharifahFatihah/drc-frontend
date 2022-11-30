@@ -31,15 +31,14 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   marketSub: {
-    paddingRight: 20,
-    paddingLeft: 20,
     fontFamily: "VT323",
     color: "white",
     fontSize: "50px",
     [theme.breakpoints.down("md")]: {
       fontSize: "34px",
-      // paddingRight: 0,
-      // paddingLeft: 0,
+      paddingRight: 30,
+      paddingLeft: 30,
+      alignItems: "center",
     },
   },
 }));
