@@ -1,19 +1,20 @@
 import { Button, Container, makeStyles, Typography } from "@material-ui/core";
 import { Gradient } from "@material-ui/icons";
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Kaching from "../asset/kaching.mp3";
 import LogoWord from "../asset/logoword.png";
-import Mario from "../asset/mario.gif";
+import Mario from "../asset/mario3.gif";
+import MarioStay from "../asset/mariostay.png";
 import Coin from "../asset/mariocoin.gif";
 
 const useStyle = makeStyles((theme) => ({
   banner: {
     backgroundPosition: "center center",
-    height: 1000,
+    minHeight: "100vh",
     background:
       "linear-gradient(0deg, rgba(255,255,255,0.3) 0%, rgba(150,150,150,0.5) 100%), url(https://www.themasterpicks.com/wp-content/uploads/2020/04/22b22287602523.5dbd29081561d.gif)",
-    backgroundSize: "contain",
+    backgroundSize: "100%",
     display: "flex",
     justifyContent: "center",
     [theme.breakpoints.down("md")]: {
@@ -95,7 +96,7 @@ const useStyle = makeStyles((theme) => ({
     },
   },
   mariogif: {
-    height: 200,
+    height: 150,
     [theme.breakpoints.down("md")]: {
       height: 70,
     },
@@ -105,7 +106,16 @@ const useStyle = makeStyles((theme) => ({
 function WelcomePage() {
   const classes = useStyle();
   const navigate = useNavigate();
-  var audio = new Audio(Kaching);
+  const [isClick, setIsClick] = useState(false);
+
+  const playSound = () => {
+    var kaching = new Audio(Kaching);
+    kaching.play();
+
+    kaching.onended = () => {
+      kaching.setAttribute("src", "");
+    };
+  };
 
   return (
     <div className={classes.banner}>
@@ -123,22 +133,35 @@ function WelcomePage() {
           <Typography className={classes.adventure}>
             Are you ready for an adventure?
           </Typography>
-          <img className={classes.coingif} src={Coin} alt="coins" />
+          {isClick && (
+            <img className={classes.coingif} src={Coin} alt="coins" />
+          )}
           <Button
             className={classes.buttonStart}
             variant="contained"
             onClick={() => {
-              navigate("/homepage");
-              audio.play();
+              playSound();
+              setIsClick(true);
+              setTimeout(() => {
+                navigate("/homepage");
+              }, 650);
             }}
           >
             Let's Start!
           </Button>
-          <img
-            className={classes.mariogif}
-            src={Mario}
-            alt="mario collect coins"
-          />
+          {!isClick ? (
+            <img
+              className={classes.mariogif}
+              src={MarioStay}
+              alt="mario collect coins"
+            />
+          ) : (
+            <img
+              className={classes.mariogif}
+              src={Mario}
+              alt="mario collect coins"
+            />
+          )}
         </div>
       </Container>
     </div>

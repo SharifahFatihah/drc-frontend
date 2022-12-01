@@ -1,5 +1,5 @@
 import { onAuthStateChanged } from "firebase/auth";
-import { doc, onSnapshot, setDoc } from "firebase/firestore";
+import { doc, onSnapshot } from "firebase/firestore";
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { auth, db } from "./firebase";
 import Service from "./service/Service";
@@ -11,7 +11,7 @@ function CryptoContext({ children }) {
   const [symbol, setSymbol] = useState("$");
   const [user, setUser] = useState(null);
   const [watchlist, setWatchlist] = useState([]);
-  const [balance, setBalance] = useState();
+  const [balance, setBalance] = useState({});
   const [receipt, setReceipt] = useState([]);
   const [coins, setCoins] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -57,7 +57,11 @@ function CryptoContext({ children }) {
         setLoading(false);
       })
       .catch((err) => {
-        console.log(err);
+        setAlert({
+          open: true,
+          message: `API request exceed 50 limit, please wait 1 minute`,
+          type: "error",
+        });
       });
   };
 

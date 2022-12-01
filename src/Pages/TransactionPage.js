@@ -35,8 +35,6 @@ function TransactionPage() {
 
   const classes = useStyles();
 
-  console.log("transactionpage", receipt);
-
   const deleteReceipt = async () => {
     const transactionRef = doc(db, "transaction", user?.uid);
 

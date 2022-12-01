@@ -38,6 +38,7 @@
     "react-screentype-hook": "^1.0.18",
     "react-scripts": "5.0.1",
     "react-sound": "^1.2.0",
+    "use-sound": "^4.0.1",
     "web-vitals": "^2.1.4"
   },
   "scripts": {

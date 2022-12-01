@@ -103,7 +103,6 @@ function CoinConverter({ coin }) {
             <TextField
               type="number"
               variant="outlined"
-              defaultValue=""
               label="insert crypto amount"
               value={crypto}
               onChange={(e) => {
@@ -130,7 +129,6 @@ function CoinConverter({ coin }) {
             <TextField
               type="number"
               variant="outlined"
-              defaultValue=""
               label="insert currency amount"
               value={fiat}
               onChange={(e) => {
