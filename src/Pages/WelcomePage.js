@@ -133,8 +133,15 @@ function WelcomePage() {
           <Typography className={classes.adventure}>
             Are you ready for an adventure?
           </Typography>
-          {isClick && (
+          {isClick ? (
             <img className={classes.coingif} src={Coin} alt="coins" />
+          ) : (
+            <img
+              className={classes.coingif}
+              style={{ visibility: "hidden" }}
+              src={Coin}
+              alt="coins"
+            />
           )}
           <Button
             className={classes.buttonStart}
