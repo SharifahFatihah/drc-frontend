@@ -66,7 +66,7 @@ export default function HeaderMenu({ selectMenu, isMobile }) {
         </MenuItem>
         <MenuItem
           onClick={() => {
-            navigate("/");
+            navigate("/news");
             handleClose();
           }}
         >
