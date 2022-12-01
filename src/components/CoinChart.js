@@ -225,7 +225,7 @@ function CoinChart({ coin }) {
       <div className={classes.container}>
         <div className={classes.chartContainer}>
           <div className={classes.basicContainer}>
-            <Typography className={classes.priceContainer}>
+            <Typography id="coinPrice" className={classes.priceContainer}>
               {symbol}
               {coin?.market_data.current_price[currency.toLowerCase()] > 1
                 ? coin?.market_data.current_price[currency.toLowerCase()]
