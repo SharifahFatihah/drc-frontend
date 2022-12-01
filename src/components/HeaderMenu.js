@@ -3,21 +3,15 @@ import Button from "@mui/material/Button";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import MenuIcon from "../asset/menu.png";
-import { createTheme, makeStyles, ThemeProvider } from "@material-ui/core";
+import { createTheme, ThemeProvider } from "@material-ui/core";
 
 import { CryptoState } from "../CryptoContext";
 import { useNavigate } from "react-router-dom";
-const useStyles = makeStyles((theme) => ({
-  menu: {
-    color: "#424242",
-  },
-}));
 
 export default function HeaderMenu({ selectMenu, isMobile }) {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const navigate = useNavigate();
-  const classes = useStyles();
-  const { user } = CryptoState();
+  const { user, setOpen } = CryptoState();
 
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -56,7 +50,7 @@ export default function HeaderMenu({ selectMenu, isMobile }) {
       >
         <MenuItem
           onClick={() => {
-            navigate("/portfolio");
+            user ? navigate("/portfolio") : setOpen(true);
             handleClose();
           }}
         >
@@ -70,8 +64,23 @@ export default function HeaderMenu({ selectMenu, isMobile }) {
         >
           Coin
         </MenuItem>
+        <MenuItem
+          onClick={() => {
+            navigate("/");
+            handleClose();
+          }}
+        >
+          News
+        </MenuItem>
+        <MenuItem
+          onClick={() => {
+            navigate("/trade");
+            handleClose();
+          }}
+        >
+          Trade
+        </MenuItem>
 
-        <MenuItem onClick={handleClose}>News</MenuItem>
         <MenuItem onClick={handleClose}>{selectMenu}</MenuItem>
       </Menu>
     </ThemeProvider>

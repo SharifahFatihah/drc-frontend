@@ -21,10 +21,18 @@ import { useNavigate } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   title: {
-    flex: 1,
+    display: "flex",
     color: "#fcc7f4",
-    fontWeight: "bold",
-    alignItems: "start",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  toolbar: {
+    display: "flex",
+    justifyContent: "space-between",
+    width: "80%",
+    [theme.breakpoints.down("sm")]: {
+      width: "100%",
+    },
   },
   navigations: {
     display: "flex",
@@ -34,6 +42,7 @@ const useStyles = makeStyles((theme) => ({
     width: "300px ",
     justifyContent: "space-around",
     cursor: "pointer",
+    marginLeft: 20,
   },
   navButton: {
     "&:hover": {
@@ -137,34 +146,39 @@ function Header() {
   return (
     <ThemeProvider theme={darkTheme}>
       <AppBar style={{ background: "#212121" }} position="sticky">
-        <Container>
-          <Toolbar>
-            <Typography className={classes.title}>
+        <Container
+          maxWidth="xl"
+          style={{ display: "flex", justifyContent: "center" }}
+        >
+          <Toolbar className={classes.toolbar}>
+            <div className={classes.title}>
+              <Typography>
+                {isMobile && (
+                  <img
+                    src={LogoIcon}
+                    height="30"
+                    onClick={() => navigate("/homepage")}
+                    style={{ cursor: "pointer" }}
+                  />
+                )}
+                {!isMobile && (
+                  <img
+                    src={LogoWord}
+                    height="30"
+                    onClick={() => navigate("/homepage")}
+                    style={{ cursor: "pointer" }}
+                  />
+                )}
+              </Typography>
+              {!isMobile && navigations}{" "}
+            </div>
+            <div style={{ display: "flex", alignItems: "center" }}>
+              {!isMobile && selectMenu}
+              {user ? <UserSidebar /> : <AuthModal />}
               {isMobile && (
-                <img
-                  src={LogoIcon}
-                  height="30"
-                  onClick={() => navigate("/homepage")}
-                  style={{ cursor: "pointer" }}
-                />
+                <HeaderMenu selectMenu={selectMenu} isMobile={isMobile} />
               )}
-              {!isMobile && (
-                <img
-                  src={LogoWord}
-                  height="30"
-                  onClick={() => navigate("/homepage")}
-                  style={{ cursor: "pointer" }}
-                />
-              )}
-            </Typography>
-
-            {!isMobile && navigations}
-
-            {!isMobile && selectMenu}
-            {user ? <UserSidebar /> : <AuthModal />}
-            {isMobile && (
-              <HeaderMenu selectMenu={selectMenu} isMobile={isMobile} />
-            )}
+            </div>
           </Toolbar>
         </Container>
       </AppBar>
