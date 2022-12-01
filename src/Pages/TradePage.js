@@ -1,7 +1,5 @@
 import {
   Button,
-  createTheme,
-  makeStyles,
   Paper,
   Table,
   TableBody,
@@ -12,16 +10,20 @@ import {
   TextField,
   ThemeProvider,
   Typography,
+  createTheme,
+  makeStyles,
 } from "@material-ui/core";
-import { doc, setDoc } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
-import { Line } from "react-chartjs-2";
-import { CryptoState } from "../CryptoContext";
-import { db } from "../firebase";
-import Service from "../service/Service";
-import Kaching from "../asset/kaching.mp3";
-import { useNavigate } from "react-router-dom";
+import { doc, setDoc } from "firebase/firestore";
+
 import CheatModal from "../components/CheatModal";
+import { CryptoState } from "../CryptoContext";
+import Kaching from "../asset/kaching.mp3";
+import { Line } from "react-chartjs-2";
+import { NewspaperRounded } from "@mui/icons-material";
+import Service from "../service/Service";
+import { db } from "../firebase";
+import { useNavigate } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -665,11 +667,7 @@ function TradePage() {
                 fullWidth
               />
             </div>
-            <div className={classes.inSidebar}>
-              <Typography variant="h4" style={{ fontFamily: "VT323" }}>
-                {isBuy ? "Buy Summary" : "Sell Summary"}
-              </Typography>
-            </div>
+            <div className={classes.inSidebar}></div>
             <div className={classes.inSidebar}>
               <Typography>{isBuy ? "Price" : "Profit"}</Typography>
               <Typography>{buyUsd} </Typography>
