@@ -64,7 +64,7 @@ export default function UserSidebar() {
   const logout = () => {
     signOut(auth);
     setAlert({
-      open: "true",
+      open: true,
       message: "See you again!",
       type: "success",
     });

@@ -15,7 +15,7 @@ function AlertSnackbar() {
   };
 
   return (
-    <Snackbar open={alert.open} autoHideDuration={2000} onClose={handleClose}>
+    <Snackbar open={alert.open} autoHideDuration={5000} onClose={handleClose}>
       <MuiAlert
         onClose={handleClose}
         elevation={10}

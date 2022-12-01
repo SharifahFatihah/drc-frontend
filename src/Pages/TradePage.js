@@ -612,7 +612,7 @@ function TradePage() {
                     ? (setBuyUsd(
                         e.target.value * priceArr[priceArr.length - 1].price
                       ),
-                      setBuyQuantity(parseFloat(e.target.value)),
+                      setBuyQuantity(e.target.value),
                       e.target.value *
                         priceArr[priceArr.length - 1].price *
                         0.001 >
@@ -638,7 +638,7 @@ function TradePage() {
                     : (setBuyUsd(
                         e.target.value * priceArr[priceArr.length - 1].price
                       ),
-                      setBuyQuantity(parseFloat(e.target.value)),
+                      setBuyQuantity(e.target.value),
                       e.target.value *
                         priceArr[priceArr.length - 1].price *
                         0.001 >
@@ -694,8 +694,13 @@ function TradePage() {
               }}
               onClick={() =>
                 isBuy
-                  ? buyCoin(buyQuantity, buyUsd, totalPayment)
-                  : sellCoin(buyQuantity, buyUsd, totalPayment, brokerFee)
+                  ? buyCoin(parseFloat(buyQuantity), buyUsd, totalPayment)
+                  : sellCoin(
+                      parseFloat(buyQuantity),
+                      buyUsd,
+                      totalPayment,
+                      brokerFee
+                    )
               }
             >
               Submit
