@@ -1,6 +1,6 @@
-import { Typography, makeStyles } from "@material-ui/core";
+import { Button, Typography, makeStyles } from "@material-ui/core";
+import React, { useState } from "react";
 
-import React from "react";
 import parser from "html-react-parser";
 
 const useStyles = makeStyles((theme) => ({
@@ -32,8 +32,11 @@ const useStyles = makeStyles((theme) => ({
     },
   },
 }));
+
 function CoinDesc({ coin }) {
   const classes = useStyles();
+  const [showMore, setShowMore] = useState(false);
+
   return (
     <div className={classes.descbox}>
       <div style={{ width: "90%" }}>
@@ -45,7 +48,26 @@ function CoinDesc({ coin }) {
           className={classes.description}
           style={{ fontFamily: "Inter" }}
         >
-          {parser(`${coin?.description.en.split(". ").slice(0, 6).join(". ")}`)}
+          {!showMore
+            ? `${parser(
+                `${coin?.description.en.split(". ").slice(0, 6).join(". ")}`
+              )
+                ?.toString()
+                .substring(0, 200)}...`
+            : parser(
+                `${coin?.description.en.split(". ").slice(0, 6).join(". ")}`
+              )}
+
+          <Button
+            style={{
+              fontFamily: "Inter",
+              color: "#FFE227",
+              textTransform: "none",
+            }}
+            onClick={() => setShowMore(!showMore)}
+          >
+            {showMore ? "Show less" : "Read more"}
+          </Button>
         </Typography>
       </div>
     </div>
