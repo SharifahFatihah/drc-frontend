@@ -28,9 +28,7 @@ const useStyle = makeStyles((theme) => ({
     },
   },
 }));
-export default function CheatModal(row) {
-  var audio = new Audio(WinSound);
-
+export default function CheatModal() {
   const { user, setAlert, balance } = CryptoState();
 
   const [open, setOpen] = React.useState(false);
@@ -38,6 +36,16 @@ export default function CheatModal(row) {
   const handleClose = () => setOpen(false);
   const [cheatCode, setCheatCode] = React.useState("");
   const classes = useStyle();
+
+  const playSound = () => {
+    var winSound = new Audio(WinSound);
+    winSound.play();
+
+    winSound.onended = () => {
+      winSound.remove();
+      winSound.setAttribute("src", "");
+    };
+  };
 
   const cheatCodeSuccess = async () => {
     const walletRef = await doc(db, "wallet", user.uid);
@@ -58,8 +66,9 @@ export default function CheatModal(row) {
           message: `CONGRATULATION, YOU JUST WON $1000000!`,
           type: "success",
         });
-        audio.play();
+
         handleClose();
+        playSound();
       } catch (error) {}
     } else {
       setAlert({
@@ -98,7 +107,6 @@ export default function CheatModal(row) {
             <TextField
               type="string"
               variant="outlined"
-              defaultValue=""
               label="Enter your answer"
               value={cheatCode}
               onChange={(e) => {

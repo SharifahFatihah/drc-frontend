@@ -13,7 +13,6 @@ import {
   ThemeProvider,
   Typography,
 } from "@material-ui/core";
-import { NewspaperRounded } from "@mui/icons-material";
 import { doc, setDoc } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import { Line } from "react-chartjs-2";
@@ -88,14 +87,11 @@ const darkTheme = createTheme({
 function TradePage() {
   const navigate = useNavigate();
 
-  var audio = new Audio(Kaching);
-
   const { setAlert, balance, user, receipt } = CryptoState();
   const classes = useStyles();
 
   const [price, setPrice] = useState(0);
   const [time, setTime] = useState(0);
-  const [timeParsed, setTimeParsed] = useState("");
   const [priceArr, setPriceArr] = useState([]);
   const [coin, setCoin] = useState();
   const [isBuy, setIsBuy] = useState(true);
@@ -104,6 +100,16 @@ function TradePage() {
   const [isMobile, setIsMobile] = useState(false);
   const [brokerFee, setBrokerFee] = useState("");
   const [totalPayment, setTotalPayment] = useState("");
+
+  const playSound = () => {
+    var kaching = new Audio(Kaching);
+    kaching.play();
+
+    kaching.onended = () => {
+      kaching.remove();
+      kaching.setAttribute("src", "");
+    };
+  };
 
   const handleResize = () => {
     if (window.innerWidth < 1280) {
@@ -148,7 +154,7 @@ function TradePage() {
     ws.onmessage = (e) => {
       setPrice({
         price: parseFloat(JSON.parse(e.data).p).toFixed(2),
-        time: 0,
+        time: time,
       });
     };
 
@@ -157,21 +163,18 @@ function TradePage() {
         ws.close();
       }
     };
-  }, [time]);
+  }, []);
 
   useEffect(() => {
     let date = new Date(time);
-    let timeparsed = `${date.getHours()}:${date.getMinutes()}: ${date.getSeconds()}`;
+    let timeparsed = `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
 
-    setTimeParsed(timeparsed);
     if (priceArr.length < 61) {
       setPriceArr([...priceArr, { price: price.price, time: timeparsed }]);
     } else {
       priceArr.shift();
       setPriceArr([...priceArr, { price: price.price, time: timeparsed }]);
     }
-
-    console.log("priceArr", priceArr);
   }, [time]);
 
   //buying
@@ -214,8 +217,9 @@ function TradePage() {
           message: `Buy succesful, current balance $${newUsd}USD`,
           type: "success",
         });
-        audio.play();
+
         buyReceipt(new Date(time), q, p, tp);
+        playSound();
       } catch (error) {}
     }
   };
@@ -251,7 +255,6 @@ function TradePage() {
       const newUsd = balance.usd + tp;
       const newBtc = balance.btc - q;
       const walletRef = await doc(db, "wallet", user.uid);
-      audio.play();
 
       try {
         await setDoc(
@@ -264,11 +267,11 @@ function TradePage() {
 
         setAlert({
           open: true,
-          message: `Buy succesful, current balance $${newUsd}USD`,
+          message: `Sell succesful, current balance $${newUsd}USD`,
           type: "success",
         });
-        audio.play();
         sellReceipt(new Date(time), q, p, tp);
+        playSound();
       } catch (error) {}
     }
   };
@@ -390,9 +393,9 @@ function TradePage() {
                       </TableRow>
                     </TableHead>
                     <TableBody>
-                      {priceArr?.map((e) => {
+                      {priceArr?.map((e, i) => {
                         return (
-                          <TableRow>
+                          <TableRow key={i}>
                             <TableCell align="right" style={{ color: "white" }}>
                               <div>{e.time}</div>
                             </TableCell>
@@ -458,8 +461,6 @@ function TradePage() {
           <Line
             data={{
               labels: priceArr.map((chartData) => {
-                let date = new Date(chartData.time);
-                let time = `${date.getHours()}:${date.getMinutes()}: ${date.getSeconds()}`;
                 return chartData.time;
               }),
               datasets: [
@@ -521,6 +522,7 @@ function TradePage() {
                     src={coin?.image?.small}
                     height={30}
                     style={{ marginRight: 10 }}
+                    alt="coinicon"
                   />
                 </div>
                 <Typography>BTC/USD</Typography>
@@ -603,7 +605,6 @@ function TradePage() {
                 type="number"
                 step="0.01"
                 variant="outlined"
-                defaultValue=""
                 label="Position Size"
                 value={buyQuantity}
                 onChange={(e) =>
@@ -611,7 +612,7 @@ function TradePage() {
                     ? (setBuyUsd(
                         e.target.value * priceArr[priceArr.length - 1].price
                       ),
-                      setBuyQuantity(parseFloat(e.target.value)),
+                      setBuyQuantity(e.target.value),
                       e.target.value *
                         priceArr[priceArr.length - 1].price *
                         0.001 >
@@ -637,7 +638,7 @@ function TradePage() {
                     : (setBuyUsd(
                         e.target.value * priceArr[priceArr.length - 1].price
                       ),
-                      setBuyQuantity(parseFloat(e.target.value)),
+                      setBuyQuantity(e.target.value),
                       e.target.value *
                         priceArr[priceArr.length - 1].price *
                         0.001 >
@@ -693,8 +694,13 @@ function TradePage() {
               }}
               onClick={() =>
                 isBuy
-                  ? buyCoin(buyQuantity, buyUsd, totalPayment)
-                  : sellCoin(buyQuantity, buyUsd, totalPayment, brokerFee)
+                  ? buyCoin(parseFloat(buyQuantity), buyUsd, totalPayment)
+                  : sellCoin(
+                      parseFloat(buyQuantity),
+                      buyUsd,
+                      totalPayment,
+                      brokerFee
+                    )
               }
             >
               Submit

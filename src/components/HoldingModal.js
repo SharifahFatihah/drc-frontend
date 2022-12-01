@@ -148,7 +148,6 @@ export default function HoldingModal({ coin }) {
                 </div>
                 <TextField
                   variant="outlined"
-                  defaultValue=""
                   type="number"
                   label={holdingPlaceHolder}
                   value={newHolding}
@@ -196,7 +195,6 @@ export default function HoldingModal({ coin }) {
                 </div>
                 <TextField
                   variant="outlined"
-                  defaultValue=""
                   type="number"
                   label="Enter Coin Quantity"
                   value={newHoldingQuantity}

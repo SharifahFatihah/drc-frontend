@@ -71,8 +71,6 @@ export default function DeleteModal(row) {
     } catch (error) {}
   };
 
-  console.log("row", row);
-
   return (
     <div>
       <Button onClick={handleOpen}>
