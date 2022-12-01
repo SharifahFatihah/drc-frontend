@@ -12,7 +12,7 @@ import {
 import { CryptoState } from "../CryptoContext";
 import { doc, setDoc } from "firebase/firestore";
 import { db } from "../firebase";
-import EditIcon from "../asset/editicon.png";
+import EditIcon from "../asset/edit.png";
 
 const useStyle = makeStyles((theme) => ({
   paper: {

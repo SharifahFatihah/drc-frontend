@@ -11,10 +11,6 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.down("md")]: {
       flexDirection: "column-reverse",
       alignItems: "center",
-      // marginLeft: "0",
-      // marginRight: "0",
-      // paddingRight: "0",
-      // paddingLeft: "0",
       padding: 20,
     },
   },

@@ -17,6 +17,9 @@ const TrendingCoins = (currency) =>
 const GlobalInfo = () => `https://api.coingecko.com/api/v3/global`;
 const TrendingCoins2 = () => `https://api.coingecko.com/api/v3/search/trending`;
 
+
+
+
 export const chartDays = [
   {
     label: "24H",

@@ -2,9 +2,9 @@ import { makeStyles, TableContainer, Typography } from "@material-ui/core";
 
 import React from "react";
 import { CryptoState } from "../CryptoContext";
-import bestperformanceicon from "../asset/bestperformanceicon.png";
-import worstperformericon from "../asset/worstperformericon.png";
-import bell from "../asset/alert-1.png";
+import bestperformanceicon from "../asset/best-performer.png";
+import worstperformericon from "../asset/worst-performer.png";
+import bell from "../asset/alert.png";
 import currentbalance from "../asset/current-balance .png";
 import Service from "../service/Service";
 
