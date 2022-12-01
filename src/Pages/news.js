@@ -23,21 +23,11 @@ const useStyles = makeStyles((theme) => ({
       alignItems: "flex-start",
     },
   },
-  // Header: {
-  //   display: "flex",
-  //   alignItems: "center",
-  //   justifyContent: "center",
-  //   flexDirection: "row",
-  //   padding: 100,
-  //   [theme.breakpoints.down("md")]: {
-  //     width: "100%",
-  //     alignItems: "center",
-  //     flexDirection: "column",
-  //   },
-  // },
+
   container: {
     display: "flex",
     padding: 50,
+
     [theme.breakpoints.down("md")]: {
       flexDirection: "column-reverse",
       alignItems: "center",
@@ -89,8 +79,6 @@ function NewsPage() {
     getNews().then((e) => setArticles(e.data.value));
   }, []);
 
-  console.log(articles);
-
   return (
     <>
       <div
@@ -134,6 +122,7 @@ function NewsPage() {
             alignItems: "center",
             justifyContent: "center",
             flexWrap: "wrap",
+            minHeight: "500px",
           }}
         >
           {articles
@@ -141,7 +130,7 @@ function NewsPage() {
             .sort(function (a, b) {
               return new Date(b.datePublished) - new Date(a.datePublished);
             })
-            .map((article) => {
+            .map((article, i) => {
               return (
                 <div
                   className={classes.newsbox}
@@ -149,6 +138,7 @@ function NewsPage() {
                     window.open(article?.url);
                   }}
                   style={{ cursor: "pointer" }}
+                  key={i}
                 >
                   <div>
                     <div style={{ display: "flex", margin: 10 }}>

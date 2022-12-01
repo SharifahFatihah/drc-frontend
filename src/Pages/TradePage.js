@@ -724,8 +724,19 @@ function TradePage() {
             </Button>
           </div>
         ) : (
-          <div className={classes.sidebar} style={{ height: "100%" }}>
-            Please login to start trading
+          <div
+            className={classes.sidebar}
+            style={{
+              height: "500px",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <Typography variant="h5" style={{ fontFamily: "VT323" }}>
+              Please login to start trading
+            </Typography>
           </div>
         )}
       </div>
