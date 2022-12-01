@@ -89,25 +89,18 @@ export default function UserSidebar() {
   const resetFirstBalance = async () => {
     const walletRef = await doc(db, "wallet", user.uid);
 
-    if (balance && !balance.usd && !balance.btc) {
-      try {
-        await setDoc(
-          walletRef,
-          {
-            balances: balance
-              ? { usd: balance.usd, btc: balance.btc }
-              : { usd: 10000, btc: 0 },
-          },
-          { merge: "true" }
-        );
-      } catch (error) {}
-    } else {
-    }
+    try {
+      await setDoc(walletRef, {
+        balances: balance
+          ? { usd: balance.usd, btc: balance.btc }
+          : { usd: 10000, btc: 0 },
+      });
+    } catch (error) {}
   };
 
   React.useEffect(() => {
     resetFirstBalance();
-  });
+  }, []);
 
   return (
     <div>

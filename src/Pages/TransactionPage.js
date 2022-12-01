@@ -22,6 +22,19 @@ const useStyles = makeStyles((theme) => ({
       alignItems: "center",
     },
   },
+  title: {
+    width: "90%",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
+    marginTop: 20,
+    marginBottom: 20,
+    [theme.breakpoints.down("md")]: {
+      flexDirection: "column",
+      alignItems: "center",
+      justifyContent: "center",
+    },
+  },
 }));
 
 const darkTheme = createTheme({
@@ -52,19 +65,10 @@ function TransactionPage() {
   return (
     <ThemeProvider theme={darkTheme}>
       <div className={classes.container}>
-        <div
-          style={{
-            width: "90%",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            marginTop: 20,
-            marginBottom: 20,
-          }}
-        >
+        <div className={classes.title}>
           <div
             style={{
-              width: "50%",
+              width: "100%",
               alignItems: "center",
               justifyContent: "flex-start",
             }}
@@ -82,6 +86,7 @@ function TransactionPage() {
               color: "white",
               fontFamily: "VT323",
               fontSize: 20,
+              margin: 20,
             }}
             onClick={deleteReceipt}
           >

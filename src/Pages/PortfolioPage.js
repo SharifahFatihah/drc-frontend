@@ -348,6 +348,13 @@ function PortfolioPage() {
   const colourDoughnut = donutCoin?.map((e) => random_rgba());
   const weightageTooltip = `The weightage of each coin in your portfolio for the past ${days} day(s).`;
 
+  const timeVol =
+    days === 1
+      ? portfolioVol / Math.sqrt(1 / 288)
+      : days === 30
+      ? portfolioVol / Math.sqrt(1 / 72)
+      : portfolioVol / Math.sqrt(1 / 365);
+
   return (
     <div className={classes.container}>
       <div className={classes.sidebar}>
@@ -570,14 +577,14 @@ function PortfolioPage() {
                 </Typography>
                 <Typography variant="h2" style={{ fontFamily: "VT323" }}>
                   {" "}
-                  {portfolioVol.toFixed(2)}%
+                  {timeVol.toFixed(2)}%
                 </Typography>
 
                 <div
                   className={
-                    portfolioVol > 3
+                    timeVol > 35
                       ? classes.red
-                      : portfolioVol > 2
+                      : timeVol > 10
                       ? classes.yellow
                       : classes.green
                   }
