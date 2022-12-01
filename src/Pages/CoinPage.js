@@ -53,10 +53,8 @@ const useStyles = makeStyles((theme) => ({
     background: "rgba(79, 58, 84, 0.52)",
   },
   description: {
-    // margin: 20,
     paddingBottom: 25,
     textAlign: "justify",
-    // fontFamily: "VT323",
   },
   coinBasicContainer: {
     display: "flex",

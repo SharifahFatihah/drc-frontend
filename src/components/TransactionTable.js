@@ -15,7 +15,7 @@ import { visuallyHidden } from "@mui/utils";
 import Service from "../service/Service";
 import { CryptoState } from "../CryptoContext";
 import { useNavigate } from "react-router-dom";
-import FavouriteIcon from "../asset/favouriteicon.png";
+import FavouriteIcon from "../asset/favourite.png";
 import UnFavouriteIcon from "../asset/unfavouriteicon.png";
 import {
   createTheme,
@@ -211,6 +211,7 @@ export default function EnhancedTable({ receipt }) {
                       onClick={() => handleClick()}
                       role="checkbox"
                       tabIndex={-1}
+                      key={index}
                     >
                       <TableCell
                         component="th"

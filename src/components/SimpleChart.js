@@ -4,27 +4,26 @@ import { CryptoState } from "../CryptoContext";
 import Service from "../service/Service";
 
 function SimpleChart({ coin }) {
-  const { currency } = CryptoState();
+  const { currency, setAlert } = CryptoState();
 
   const [histData, setHistData] = useState([]);
-  const [loading, setLoading] = useState(false);
   const [days, setDays] = useState(1);
 
   const getHistoricalChart = (e, f, g) => {
-    setLoading(true);
-
     Service.getHistoricalChart(e, f, g)
       .then((response) => {
         setHistData(response.data.prices);
-        setLoading(false);
       })
       .catch((err) => {
-        console.log(err);
+        setAlert({
+          open: true,
+          message: `API request exceed 50 limit, please wait 1 minute`,
+          type: "error",
+        });
       });
   };
 
   useEffect(() => {
-    setLoading(true);
     getHistoricalChart(coin?.id, days, currency);
   }, [currency, days, coin?.id]);
 
