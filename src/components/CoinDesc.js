@@ -5,17 +5,18 @@ import parser from "html-react-parser";
 
 const useStyles = makeStyles((theme) => ({
   description: {
-    padding: 25,
+    padding: 15,
     textAlign: "justify",
     fontFamily: "VT323",
   },
   descbox: {
     display: "flex",
     flexDirection: "column",
-    alignItems: "flex-start",
-    justifyContent: "space-evenly",
-    width: "85%",
-    margin: 15,
+    alignItems: "center",
+    justifyContent: "flex-start",
+    width: "90%",
+    padding: 20,
+    marginLeft: 60,
     borderRadius: "15px",
     background: "rgba(79, 58, 84, 0.52)",
     minHeight: "185px",
@@ -23,6 +24,9 @@ const useStyles = makeStyles((theme) => ({
       flexDirection: "column",
       display: "flex",
       width: "90%",
+      marginTop: 40,
+      marginLeft: 0,
+      padding: 10,
       alignItems: "center",
       justifyContent: "space-evenly",
     },
@@ -62,7 +66,7 @@ function CoinDesc({ coin }) {
             }}
             onClick={() => setShowMore(!showMore)}
           >
-            {showMore ? "Show less" : "Show more"}
+            {showMore ? "Show less" : "Read more"}
           </Button>
         </Typography>
       </div>

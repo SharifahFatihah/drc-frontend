@@ -11,6 +11,8 @@ function CryptoContext({ children }) {
   const [symbol, setSymbol] = useState("$");
   const [user, setUser] = useState(null);
   const [watchlist, setWatchlist] = useState([]);
+  const [balance, setBalance] = useState({});
+  const [receipt, setReceipt] = useState([]);
   const [coins, setCoins] = useState([]);
   const [loading, setLoading] = useState(false);
   const [globalInfo, setGlobalInfo] = useState();
@@ -55,7 +57,11 @@ function CryptoContext({ children }) {
         setLoading(false);
       })
       .catch((err) => {
-        console.log(err);
+        setAlert({
+          open: true,
+          message: `API request exceed 50 limit, please wait 1 minute`,
+          type: "error",
+        });
       });
   };
 
@@ -67,6 +73,8 @@ function CryptoContext({ children }) {
   useEffect(() => {
     if (user) {
       const coinRef = doc(db, "watchlist", user?.uid);
+      const walletRef = doc(db, "wallet", user?.uid);
+      const transactionRef = doc(db, "transaction", user?.uid);
 
       var unsubscribe = onSnapshot(coinRef, (coin) => {
         if (coin.exists()) {
@@ -74,16 +82,33 @@ function CryptoContext({ children }) {
         } else {
         }
       });
+      var unsubscribe2 = onSnapshot(walletRef, (wallet) => {
+        if (wallet.exists()) {
+          setBalance(wallet.data().balances);
+        } else {
+        }
+      });
+      var unsubscribe3 = onSnapshot(transactionRef, (transaction) => {
+        if (transaction.exists()) {
+          setReceipt(transaction.data().receipts);
+        } else {
+        }
+      });
       return () => {
         unsubscribe();
+        unsubscribe2();
+        unsubscribe3();
       };
     }
   }, [user]);
 
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
-      if (user) setUser(user);
-      else setUser(null);
+      if (user) {
+        setUser(user);
+      } else {
+        setUser(null);
+      }
     });
   }, []);
 
@@ -117,6 +142,9 @@ function CryptoContext({ children }) {
         setAuthValue,
         setPortfolioVol,
         portfolioVol,
+        balance,
+        receipt,
+        setReceipt,
       }}
     >
       {children}

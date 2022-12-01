@@ -42,7 +42,7 @@ function PriceHorizontal() {
   const classes = useStyle();
   const navigate = useNavigate();
 
-  const { currency } = CryptoState();
+  const { currency, setAlert } = CryptoState();
 
   const [trending, setTrending] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -56,7 +56,11 @@ function PriceHorizontal() {
         setLoading(false);
       })
       .catch((err) => {
-        console.log(err);
+        setAlert({
+          open: true,
+          message: `API request exceed 50 limit, please wait 1 minute`,
+          type: "error",
+        });
       });
   };
 
@@ -86,7 +90,12 @@ function PriceHorizontal() {
         className={classes.scrollElement}
         onClick={() => navigate(`/coins/${coin.id}`)}
       >
-        <img src={coin.image} height="20" style={{ marginRight: "10px" }} />
+        <img
+          src={coin.image}
+          height="20"
+          style={{ marginRight: "10px" }}
+          alt="coin icon"
+        />
 
         <div>{coin?.symbol.toUpperCase()} &thinsp; </div>
         <div

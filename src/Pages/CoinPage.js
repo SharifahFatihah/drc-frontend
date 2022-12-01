@@ -11,8 +11,8 @@ import { db } from "../firebase";
 import { useNavigate } from "react-router-dom";
 import CoinDesc from "../components/CoinDesc";
 import CoinStats from "../components/CoinStats";
-import favouriteIcon from "../asset/favouriteicon.png";
-import unfavouriteIcon from "../asset/unfavouriteicon.png";
+import favouriteIcon from "../asset/favourite.png";
+import unfavouriteIcon from "../asset/unfav-icon.png";
 import githubIcon from "../asset/github.png";
 import redditIcon from "../asset/reddit.png";
 import announcementIcon from "../asset/announcement.png";
@@ -40,21 +40,26 @@ const useStyles = makeStyles((theme) => ({
     width: "30%",
     [theme.breakpoints.down("md")]: {
       width: "100%",
+      marginBottom: 0,
+      paddingBottom: 40,
     },
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
-    marginTop: 25,
+    paddingTop: 50,
+    paddingBottom: 100,
+    marginBottom: -100,
     whiteSpace: "wrap",
+    background: "rgba(79, 58, 84, 0.52)",
   },
   description: {
-    padding: 25,
+    paddingBottom: 25,
     textAlign: "justify",
-    fontFamily: "VT323",
   },
   coinBasicContainer: {
     display: "flex",
     flexDirection: "column",
+    marginTop: 20,
     [theme.breakpoints.down("md")]: {
       flexDirection: "column",
       alignItems: "center",
@@ -184,24 +189,26 @@ function CoinPage() {
         >
           <img src={coin?.image.large} alt={coin?.name} height="110" />
           <div style={{ marginLeft: 20 }}>
-            <Typography variant="h3">{coin?.symbol.toUpperCase()}</Typography>
-            <Typography variant="h4">{coin?.name}</Typography>
+            <Typography style={{ fontFamily: "VT323" }} variant="h2">
+              {coin?.symbol.toUpperCase()}
+            </Typography>
+            <Typography style={{ fontFamily: "VT323" }} variant="h3">
+              {coin?.name}
+            </Typography>
           </div>
           <Card
             style={{
               display: "flex",
               justifyContent: "center",
               height: 30,
-              width: 50,
+              width: 70,
               margin: 20,
               backgroundColor: "#FFE227",
               color: "black",
-              fontSize: 30,
+              fontSize: 26,
             }}
           >
-            <div style={{ fontFamily: "VT323", padding: 0 }}>
-              #{coin?.market_cap_rank}
-            </div>
+            <div style={{ padding: 0 }}>#{coin?.market_cap_rank}</div>
           </Card>
           {coin?.market_cap_rank < 250 ? (
             user ? (
@@ -235,7 +242,7 @@ function CoinPage() {
 
         <div className={classes.coinBasicContainer}>
           <span className={classes.coinBasic}>
-            <Typography variant="h5" className={classes.description}>
+            <Typography variant="h6" className={classes.description}>
               Market Cap: {symbol}
               {coin?.market_data.market_cap[currency.toLowerCase()]
                 .toString()
@@ -245,7 +252,7 @@ function CoinPage() {
             </Typography>
           </span>
           <span className={classes.coinBasic}>
-            <Typography variant="h5" className={classes.description}>
+            <Typography variant="h6" className={classes.description}>
               Circulating Supply:{" "}
               {coin?.market_data?.circulating_supply
                 .toString()
@@ -255,7 +262,7 @@ function CoinPage() {
             </Typography>
           </span>
           <span className={classes.coinBasic}>
-            <Typography variant="h5" className={classes.description}>
+            <Typography variant="h6" className={classes.description}>
               Total Supply:{" "}
               {coin?.market_data.total_supply
                 ? coin?.market_data.total_supply
@@ -267,7 +274,7 @@ function CoinPage() {
             </Typography>
           </span>
           <span className={classes.coinBasic}>
-            <Typography variant="h5" className={classes.description}>
+            <Typography variant="h6" className={classes.description}>
               Max Supply:{" "}
               {coin?.market_data.max_supply
                 ? coin?.market_data.max_supply.toString().slice(0, -6)
@@ -279,6 +286,7 @@ function CoinPage() {
             variant="outlined"
             style={{
               backgroundColor: "#FFE227",
+              border: "5px solid #FFFFFF",
               color: "black",
               width: "90%",
               height: 40,
@@ -302,7 +310,7 @@ function CoinPage() {
                 variant="outlined"
                 style={{
                   backgroundColor: "#5F5F5F",
-
+                  border: "5px solid #FFFFFF",
                   width: "90%",
                   height: 40,
                   margin: 5,
@@ -324,6 +332,7 @@ function CoinPage() {
                 variant="outlined"
                 style={{
                   backgroundColor: "#FF5733",
+                  border: "5px solid #FFFFFF",
                   color: "black",
                   width: "90%",
                   height: 40,
@@ -346,6 +355,7 @@ function CoinPage() {
                 variant="outlined"
                 style={{
                   backgroundColor: "#626FC2",
+                  border: "5px solid #FFFFFF",
                   color: "black",
                   width: "90%",
                   height: 40,
@@ -367,7 +377,7 @@ function CoinPage() {
               </Button>
             )}
           </div>
-          <div style={{ marginTop: 20, width: "90%" }}>
+          <div style={{ marginTop: 70, width: "100%" }}>
             <CoinConverter coin={coin} />
           </div>
         </div>

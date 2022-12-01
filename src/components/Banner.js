@@ -2,6 +2,8 @@ import { Button, Container, Typography, makeStyles } from "@material-ui/core";
 
 import React from "react";
 import pixel from "../asset/pixelated_1.png";
+import { CryptoState } from "../CryptoContext";
+import { useNavigate } from "react-router-dom";
 
 const useStyle = makeStyles((theme) => ({
   banner: {
@@ -38,9 +40,10 @@ const useStyle = makeStyles((theme) => ({
     [theme.breakpoints.down("md")]: {
       flexDirection: "column",
       display: "flex",
-      width: "50%",
+      width: "100%",
       alignItems: "center",
-      justifyContent: "space-evenly",
+      justifyContent: "center",
+      marginLeft: 0,
     },
   },
   description: {
@@ -59,6 +62,9 @@ const useStyle = makeStyles((theme) => ({
 }));
 
 function Banner() {
+  const { user, setOpen } = CryptoState();
+  const navigate = useNavigate();
+
   const classes = useStyle();
 
   return (
@@ -70,7 +76,6 @@ function Banner() {
               variant="h1"
               style={{
                 marginBottom: 15,
-                paddingRight: 20,
                 paddingLeft: 20,
                 fontFamily: "VT323",
                 color: "white",
@@ -98,6 +103,9 @@ function Banner() {
                 fontFamily: "VT323",
                 fontSize: 20,
                 marginLeft: 20,
+              }}
+              onClick={() => {
+                user ? navigate("/portfolio") : setOpen(true);
               }}
             >
               Get Started!

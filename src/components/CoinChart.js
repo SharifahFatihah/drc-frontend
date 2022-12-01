@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import Service from "../service/Service";
 import { CryptoState } from "../CryptoContext";
 import {
@@ -18,11 +18,11 @@ import CandlestickIcon from "../asset/candlestickicon.png";
 
 const useStyle = makeStyles((theme) => ({
   container: {
-    width: "90%",
+    width: "100%",
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
-    padding: 40,
+    padding: 60,
     [theme.breakpoints.down("md")]: {
       width: "100%",
       padding: "0",
@@ -30,16 +30,20 @@ const useStyle = makeStyles((theme) => ({
   },
   selectButton: {
     width: "15%",
-    border: "1px solid #FFE227",
+    border: "5px solid #FFFFFF",
     borderRadius: 5,
     padding: 10,
     cursor: "pointer",
     marginLeft: 10,
     alignItems: "center",
-
     "&:hover": {
       backgroundColor: "#FFE227",
       color: "black",
+    },
+    [theme.breakpoints.down("sm")]: {
+      height: "50%",
+      padding: 5,
+      border: "2px solid #FFFFFF",
     },
   },
   chartContainer: {
@@ -61,6 +65,13 @@ const useStyle = makeStyles((theme) => ({
       justifyContent: "center",
     },
   },
+  priceContainer: {
+    fontFamily: "VT323",
+    fontSize: "48px",
+    [theme.breakpoints.down("sm")]: {
+      fontSize: "32px",
+    },
+  },
   basicContainer: {
     display: "flex",
     alignItems: "center",
@@ -71,14 +82,14 @@ const useStyle = makeStyles((theme) => ({
     },
   },
   red: {
-    backgroundColor: "#FF4B25",
+    backgroundColor: "#FF0000",
     marginLeft: 10,
     color: "black",
     padding: 5,
     borderRadius: 5,
   },
   green: {
-    backgroundColor: "#00FF19",
+    backgroundColor: "#33FF00",
     marginLeft: 10,
     color: "black",
     padding: 5,
@@ -89,7 +100,7 @@ const useStyle = makeStyles((theme) => ({
 function CoinChart({ coin }) {
   const classes = useStyle();
 
-  const { currency, symbol } = CryptoState();
+  const { currency, symbol, setAlert } = CryptoState();
 
   const [histData, setHistData] = useState([]);
   const [histCandle, setHistCandle] = useState([]);
@@ -100,7 +111,7 @@ function CoinChart({ coin }) {
   const [isLine, setIsLine] = useState(true);
 
   const handleResize = () => {
-    if (window.innerWidth < 630) {
+    if (window.innerWidth < 500) {
       setIsMobile(true);
     } else if (window.innerWidth < 1000) {
       setIsTablet(true);
@@ -114,6 +125,17 @@ function CoinChart({ coin }) {
     window.addEventListener("resize", handleResize);
   });
 
+  useEffect(() => {
+    if (window.innerWidth < 500) {
+      setIsMobile(true);
+    } else if (window.innerWidth < 1000) {
+      setIsTablet(true);
+    } else {
+      setIsMobile(false);
+      setIsTablet(false);
+    }
+  }, []);
+
   const getHistoricalChart = (e, f, g) => {
     setLoading(true);
 
@@ -123,7 +145,11 @@ function CoinChart({ coin }) {
         setLoading(false);
       })
       .catch((err) => {
-        console.log(err);
+        setAlert({
+          open: true,
+          message: `API request exceed 50 limit, please wait 1 minute`,
+          type: "error",
+        });
       });
   };
 
@@ -136,7 +162,11 @@ function CoinChart({ coin }) {
         setLoading(false);
       })
       .catch((err) => {
-        console.log(err);
+        setAlert({
+          open: true,
+          message: `API request exceed 50 limit, please wait 1 minute`,
+          type: "error",
+        });
       });
   };
 
@@ -153,8 +183,6 @@ function CoinChart({ coin }) {
     getHistoricalCandle(coin?.id, days, currency?.toLowerCase());
   }, [currency, days, coin?.id]);
 
-  console.log("histCandle", histCandle);
-
   const priceData = {
     data: histCandle.map((e) => {
       return {
@@ -163,8 +191,6 @@ function CoinChart({ coin }) {
       };
     }),
   };
-
-  console.log("priceData", priceData);
 
   const totalDuration = 2500;
   const delayBetweenPoints = totalDuration / histData.length;
@@ -185,10 +211,21 @@ function CoinChart({ coin }) {
   };
   return (
     <ThemeProvider theme={darkTheme}>
+      <Typography
+        style={{
+          fontFamily: "VT323",
+          marginTop: 40,
+          marginLeft: 40,
+          alignItems: "flex-start",
+        }}
+        variant="h2"
+      >
+        Coin Details
+      </Typography>
       <div className={classes.container}>
         <div className={classes.chartContainer}>
           <div className={classes.basicContainer}>
-            <Typography variant="h4">
+            <Typography id="coinPrice" className={classes.priceContainer}>
               {symbol}
               {coin?.market_data.current_price[currency.toLowerCase()] > 1
                 ? coin?.market_data.current_price[currency.toLowerCase()]
@@ -223,9 +260,9 @@ function CoinChart({ coin }) {
             >
               {" "}
               {isLine ? (
-                <img src={CandlestickIcon} height={30} />
+                <img src={CandlestickIcon} height={30} alt="candlestickicon" />
               ) : (
-                <img src={LineChartIcon} height={20} />
+                <img src={LineChartIcon} height={20} alt="linecharticon" />
               )}
             </Button>
             {chartDays.map((e) => (
@@ -261,7 +298,6 @@ function CoinChart({ coin }) {
                       label: `Price of ${coin?.name} in the last ${days} days in ${currency}`,
                       borderColor: "#FFE227",
                       borderWidth: 2,
-
                       pointBorderColor: "rgba(0,0,0,0)",
                       pointBackgroundColor: "rgba(0,0,0,0)",
                       pointHoverBorderColor: "#5AC53B",
@@ -298,6 +334,7 @@ function CoinChart({ coin }) {
                   display: "flex",
                   width: "100%",
                   justifyContent: "center",
+                  marginTop: 20,
                 }}
               >
                 <Chart
@@ -327,13 +364,19 @@ function CoinChart({ coin }) {
                     },
                     theme: {
                       mode: "dark",
-                      palette: "palette2",
+                      palette: "palette8",
+                      monochrome: {
+                        enabled: true,
+                        color: "#FFE227",
+                        shadeTo: "dark",
+                        shadeIntensity: 0.65,
+                      },
                     },
                   }}
                   series={[priceData]}
                   type="candlestick"
-                  width={isMobile ? "125%" : isTablet ? "200%" : "300%"}
-                  height={isMobile ? "125%" : isTablet ? "200%" : "300%"}
+                  width={isMobile ? "125%" : isTablet ? "300%" : "400%"}
+                  height={isMobile ? "125%" : isTablet ? "300%" : "400%"}
                 />
               </div>
             )}

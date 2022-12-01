@@ -3,12 +3,11 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
-import DeleteIcon from "../asset/deleteicon.png";
 import { doc, setDoc } from "firebase/firestore";
 import { db } from "../firebase";
 import { CryptoState } from "../CryptoContext";
-import { makeStyles } from "@material-ui/core";
-import { style } from "@mui/system";
+import { makeStyles, TextField } from "@material-ui/core";
+import WinSound from "../asset/winsound.mp3";
 
 const useStyle = makeStyles((theme) => ({
   paper: {
@@ -29,53 +28,60 @@ const useStyle = makeStyles((theme) => ({
     },
   },
 }));
-export default function DeleteModal(row) {
-  const { user, setAlert, watchlist, coins, currency, symbol } = CryptoState();
+export default function CheatModal() {
+  const { user, setAlert, balance } = CryptoState();
 
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  const [cheatCode, setCheatCode] = React.useState("");
   const classes = useStyle();
 
-  const setHoldingWatchlist = async (coin) => {
-    const coinRef = await doc(db, "watchlist", user.uid);
+  const playSound = () => {
+    var winSound = new Audio(WinSound);
+    winSound.play();
 
-    try {
-      await setDoc(
-        coinRef,
-        {
-          coins: watchlist.map((watch) =>
-            watch.id === coin?.id
-              ? { id: coin.id, holding: 0 }
-              : { id: watch.id, holding: watch.holding }
-          ),
-        },
-        { merge: "true" }
-      );
-    } catch (error) {}
+    winSound.onended = () => {
+      winSound.remove();
+      winSound.setAttribute("src", "");
+    };
+  };
 
-    try {
-      await setDoc(
-        coinRef,
-        {
-          coins: watchlist.filter((watch) => watch.id !== coin?.id),
-        },
-        { merge: "true" }
-      );
+  const cheatCodeSuccess = async () => {
+    const walletRef = await doc(db, "wallet", user.uid);
 
+    if (cheatCode === "42" || cheatCode === 42) {
+      try {
+        await setDoc(
+          walletRef,
+          {
+            balances: balance
+              ? { usd: balance.usd + 1000000, btc: balance.btc + 1 }
+              : { usd: 1000000, btc: 1 },
+          },
+          { merge: "true" }
+        );
+        setAlert({
+          open: true,
+          message: `CONGRATULATION, YOU JUST WON $1000000!`,
+          type: "success",
+        });
+
+        handleClose();
+        playSound();
+      } catch (error) {}
+    } else {
       setAlert({
         open: true,
-        message: `${coin.name} remove from your watchlist`,
-        type: "success",
+        message: `oops, wrong answer!`,
+        type: "error",
       });
-    } catch (error) {}
+    }
   };
 
   return (
     <div>
-      <Button onClick={handleOpen}>
-        <img src={DeleteIcon} height={20} style={{ cursor: "pointer" }} />
-      </Button>
+      <Typography onClick={handleOpen}>Balance</Typography>
       <Modal
         open={open}
         onClose={handleClose}
@@ -87,6 +93,7 @@ export default function DeleteModal(row) {
             style={{
               display: "flex",
               flexDirection: "column",
+              alignItems: "center",
               gap: "20px",
               marginLeft: "50px",
               marginRight: "50px",
@@ -94,13 +101,26 @@ export default function DeleteModal(row) {
               marginBottom: "10px",
             }}
           >
-            <Typography id="modal-modal-title" variant="h6" component="h2">
-              Delete {row?.row?.name}
-            </Typography>
             <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-              Are you sure you want to delete {row?.row?.name}?
+              What's the answer to the question?
             </Typography>
-            <div style={{ display: "flex", justifyContent: "space-evenly" }}>
+            <TextField
+              type="string"
+              variant="outlined"
+              label="Enter your answer"
+              value={cheatCode}
+              onChange={(e) => {
+                setCheatCode(e.target.value);
+              }}
+              fullWidth
+            />
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-evenly",
+                width: "80%",
+              }}
+            >
               <Button
                 style={{
                   backgroundColor: "#FFE227",
@@ -111,26 +131,10 @@ export default function DeleteModal(row) {
                   width: "40%",
                 }}
                 onClick={() => {
-                  handleClose();
+                  cheatCodeSuccess();
                 }}
               >
-                Cancel
-              </Button>
-              <Button
-                style={{
-                  backgroundColor: "#FFE227",
-                  border: "5px solid white",
-                  color: "black",
-                  fontFamily: "VT323",
-                  fontSize: 16,
-                  width: "40%",
-                }}
-                onClick={() => {
-                  setHoldingWatchlist(row?.row);
-                  handleClose();
-                }}
-              >
-                Delete
+                Submit
               </Button>
             </div>
           </Box>
