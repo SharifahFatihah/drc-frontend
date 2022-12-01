@@ -590,11 +590,7 @@ function PortfolioPage() {
                   }
                 >
                   <Typography variant="h4" style={{ fontFamily: "VT323" }}>
-                    {portfolioVol > 3
-                      ? "high"
-                      : portfolioVol > 2
-                      ? "moderate"
-                      : "low"}
+                    {timeVol > 35 ? "high" : timeVol > 10 ? "moderate" : "low"}
                   </Typography>
                 </div>
               </div>

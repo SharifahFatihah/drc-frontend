@@ -139,6 +139,22 @@ function TradePage() {
       });
   };
 
+  const resetFirstBalance = async () => {
+    const walletRef = await doc(db, "wallet", user.uid);
+
+    try {
+      await setDoc(walletRef, {
+        balances: balance
+          ? { usd: balance.usd, btc: balance.btc }
+          : { usd: 10000, btc: 0 },
+      });
+    } catch (error) {}
+  };
+
+  useEffect(() => {
+    resetFirstBalance();
+  }, [user]);
+
   useEffect(() => {
     getSingleCoin("bitcoin");
   }, []);
