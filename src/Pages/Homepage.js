@@ -5,6 +5,7 @@ import Sound from "react-sound";
 import Trending from "../components/Trending";
 import GlobalMarket from "../components/GlobalMarket";
 import FavCoin from "../components/FavCoin";
+import TradeSimulation from "../components/TradeSimulation";
 
 function Homepage() {
   return (
@@ -18,6 +19,7 @@ function Homepage() {
       <Trending />
       <GlobalMarket />
       <FavCoin />
+      <TradeSimulation />
     </div>
   );
 }
