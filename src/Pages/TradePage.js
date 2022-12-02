@@ -125,6 +125,14 @@ function TradePage() {
     window.addEventListener("resize", handleResize);
   });
 
+  useEffect(() => {
+    if (window.innerWidth < 1280) {
+      setIsMobile(true);
+    } else {
+      setIsMobile(false);
+    }
+  }, []);
+
   const getSingleCoin = (e) => {
     Service.getSingleCoin(e)
       .then((response) => {
