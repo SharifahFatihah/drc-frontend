@@ -8,7 +8,7 @@ import { signOut } from "firebase/auth";
 import { auth, db } from "../firebase";
 import { doc, setDoc } from "firebase/firestore";
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   container: {
     width: 350,
     padding: 25,
@@ -23,7 +23,6 @@ const useStyles = makeStyles({
     flexDirection: "column",
     alignItems: "center",
     gap: "20px",
-    height: "92%",
   },
 
   watchlist: {
@@ -34,13 +33,17 @@ const useStyles = makeStyles({
     flexDirection: "column",
     alignItems: "flex-start",
     gap: 12,
-    overFlowY: "scroll",
     fontFamily: "VT323",
     fontSize: 25,
     color: "white",
     fontWeight: "bolder",
+    [theme.breakpoints.down("sm")]: {
+      fontSize: 20,
+      padding: 15,
+      gap: 7,
+    },
   },
-});
+}));
 
 export default function UserSidebar() {
   const classes = useStyles();
@@ -48,6 +51,34 @@ export default function UserSidebar() {
     right: false,
   });
   const [userState, setUserState] = React.useState(false);
+  const [isMobile, setIsMobile] = React.useState(false);
+  const [isTablet, setIsTablet] = React.useState(false);
+
+  const handleResize = () => {
+    if (window.innerWidth < 500) {
+      setIsMobile(true);
+    } else if (window.innerWidth < 1280) {
+      setIsTablet(true);
+    } else {
+      setIsMobile(false);
+      setIsTablet(false);
+    }
+  };
+
+  React.useEffect(() => {
+    window.addEventListener("resize", handleResize);
+  });
+
+  React.useEffect(() => {
+    if (window.innerWidth < 500) {
+      setIsMobile(true);
+    } else if (window.innerWidth < 1280) {
+      setIsTablet(true);
+    } else {
+      setIsMobile(false);
+      setIsTablet(false);
+    }
+  }, []);
 
   const { user, setAlert, watchlist, coins, balance } = CryptoState();
 
@@ -121,8 +152,8 @@ export default function UserSidebar() {
                   src={user.photoURL}
                   alt={user.displayName || user.email}
                   style={{
-                    height: 200,
-                    width: 200,
+                    height: !isMobile ? 150 : 75,
+                    width: !isMobile ? 150 : 75,
                     cursor: "pointer",
                     backgroundColor: "yellow",
                   }}
@@ -130,7 +161,7 @@ export default function UserSidebar() {
                 <span
                   style={{
                     width: "100%",
-                    fontSize: 20,
+                    fontSize: !isMobile ? 20 : 15,
                     color: "white",
                     textAlign: "center",
                     fontWeight: "bolder",
@@ -145,7 +176,7 @@ export default function UserSidebar() {
                     color: "white",
                     fontWeight: "bolder",
                     wordWrap: "break-word",
-                    fontSize: 20,
+                    fontSize: !isMobile ? 20 : 15,
                   }}
                 >
                   Wallet
@@ -157,18 +188,28 @@ export default function UserSidebar() {
                 >
                   <hr></hr>
                 </div>
-                <Typography
-                  variant="h4"
-                  style={{ color: "white", fontFamily: "VT323" }}
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    justifyContent: "space-evenly",
+                  }}
                 >
-                  {balance?.usd?.toFixed(2)} USD
-                </Typography>
-                <Typography
-                  variant="h4"
-                  style={{ color: "white", fontFamily: "VT323" }}
-                >
-                  {balance?.btc} BTC
-                </Typography>
+                  {" "}
+                  <Typography
+                    variant={!isMobile ? "h4" : "h6"}
+                    style={{ color: "white", fontFamily: "VT323" }}
+                  >
+                    {balance?.usd?.toFixed(2)} USD
+                  </Typography>
+                  <Typography
+                    variant={!isMobile ? "h4" : "h6"}
+                    style={{ color: "white", fontFamily: "VT323" }}
+                  >
+                    {balance?.btc} BTC
+                  </Typography>
+                </div>
                 <Button
                   style={{
                     background: "yellow",
@@ -190,7 +231,8 @@ export default function UserSidebar() {
                     color: "white",
                     fontWeight: "bolder",
                     wordWrap: "break-word",
-                    fontSize: 20,
+                    fontSize: !isMobile ? 20 : 15,
+                    marginTop: 20,
                   }}
                 >
                   Assets
@@ -204,7 +246,10 @@ export default function UserSidebar() {
                 </div>
                 <div
                   className={classes.watchlist}
-                  style={{ overflowY: "auto", maxHeight: "250px" }}
+                  style={{
+                    overflowY: "auto",
+                    maxHeight: !isMobile ? "225px" : "125px",
+                  }}
                 >
                   {coins.map((coin) => {
                     if (
@@ -218,7 +263,10 @@ export default function UserSidebar() {
                           key={coin?.id}
                         >
                           <div style={{ marginRight: 20 }}>
-                            <img src={coin.image} height="25" />
+                            <img
+                              src={coin.image}
+                              height={!isMobile ? "25" : "20"}
+                            />
                           </div>
                           {coin.name}
                         </div>
