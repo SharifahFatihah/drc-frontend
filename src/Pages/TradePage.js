@@ -361,7 +361,7 @@ function TradePage() {
 
     try {
       await setDoc(walletRef, {
-        balances: { usd: 10000, btc: 0 },
+        balances: { usd: 30000, btc: 0 },
       });
 
       setAlert({
