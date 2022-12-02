@@ -16,9 +16,6 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     flexDirection: "column",
     background: "black",
-    [theme.breakpoints.down("md")]: {
-      padding: 20,
-    },
   },
   profile: {
     flex: 1,
@@ -26,13 +23,8 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: "column",
     alignItems: "center",
     gap: "20px",
-    height: "92%",
-    [theme.breakpoints.down("md")]: {
-      gap: "10px",
-      height: "50%",
-    },
   },
-  profileAvatar: {},
+
   watchlist: {
     flex: 1,
     width: "100%",
@@ -41,15 +33,14 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: "column",
     alignItems: "flex-start",
     gap: 12,
-    overFlowY: "scroll",
     fontFamily: "VT323",
     fontSize: 25,
     color: "white",
     fontWeight: "bolder",
-    [theme.breakpoints.down("md")]: {
-      padding: 10,
-      gap: 5,
-      fontSize: 15,
+    [theme.breakpoints.down("sm")]: {
+      fontSize: 20,
+      padding: 15,
+      gap: 7,
     },
   },
 }));
@@ -59,6 +50,35 @@ export default function UserSidebar() {
   const [state, setState] = React.useState({
     right: false,
   });
+  const [userState, setUserState] = React.useState(false);
+  const [isMobile, setIsMobile] = React.useState(false);
+  const [isTablet, setIsTablet] = React.useState(false);
+
+  const handleResize = () => {
+    if (window.innerWidth < 500) {
+      setIsMobile(true);
+    } else if (window.innerWidth < 1280) {
+      setIsTablet(true);
+    } else {
+      setIsMobile(false);
+      setIsTablet(false);
+    }
+  };
+
+  React.useEffect(() => {
+    window.addEventListener("resize", handleResize);
+  });
+
+  React.useEffect(() => {
+    if (window.innerWidth < 500) {
+      setIsMobile(true);
+    } else if (window.innerWidth < 1280) {
+      setIsTablet(true);
+    } else {
+      setIsMobile(false);
+      setIsTablet(false);
+    }
+  }, []);
 
   const { user, setAlert, watchlist, coins, balance } = CryptoState();
 
@@ -80,6 +100,9 @@ export default function UserSidebar() {
       message: "See you again!",
       type: "success",
     });
+    setTimeout(() => {
+      refreshPage();
+    }, 500);
   };
 
   const resetBalance = async () => {
@@ -87,7 +110,7 @@ export default function UserSidebar() {
 
     try {
       await setDoc(walletRef, {
-        balances: { usd: 10000, btc: 0 },
+        balances: { usd: 30000, btc: 0 },
       });
 
       setAlert({
@@ -98,28 +121,25 @@ export default function UserSidebar() {
     } catch (error) {}
   };
 
+  const refreshPage = () => {
+    window.location.reload(false);
+  };
+
   const resetFirstBalance = async () => {
     const walletRef = await doc(db, "wallet", user.uid);
 
-    if (balance && !balance.usd && !balance.btc) {
-      try {
-        await setDoc(
-          walletRef,
-          {
-            balances: balance
-              ? { usd: balance.usd, btc: balance.btc }
-              : { usd: 10000, btc: 0 },
-          },
-          { merge: "true" }
-        );
-      } catch (error) {}
-    } else {
-    }
+    try {
+      await setDoc(walletRef, {
+        balances: balance
+          ? { usd: balance.usd, btc: balance.btc }
+          : { usd: 10000, btc: 0 },
+      });
+    } catch (error) {}
   };
 
   React.useEffect(() => {
     resetFirstBalance();
-  });
+  }, []);
 
   return (
     <div>
@@ -145,20 +165,19 @@ export default function UserSidebar() {
               <div className={classes.profile}>
                 {" "}
                 <Avatar
-                  className={classes.profileAvatar}
                   src={user.photoURL}
                   alt={user.displayName || user.email}
                   style={{
-                    height: 200,
-                    width: 200,
+                    height: !isMobile ? 150 : 75,
+                    width: !isMobile ? 150 : 75,
                     cursor: "pointer",
-                    backgroundColor: "#FFE227",
+                    backgroundColor: "yellow",
                   }}
                 />{" "}
                 <span
                   style={{
                     width: "100%",
-                    fontSize: 20,
+                    fontSize: !isMobile ? 20 : 15,
                     color: "white",
                     textAlign: "center",
                     fontWeight: "bolder",
@@ -173,7 +192,7 @@ export default function UserSidebar() {
                     color: "white",
                     fontWeight: "bolder",
                     wordWrap: "break-word",
-                    fontSize: 20,
+                    fontSize: !isMobile ? 20 : 15,
                   }}
                 >
                   Wallet
@@ -185,18 +204,28 @@ export default function UserSidebar() {
                 >
                   <hr></hr>
                 </div>
-                <Typography
-                  variant="h4"
-                  style={{ color: "white", fontFamily: "VT323" }}
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    justifyContent: "space-evenly",
+                  }}
                 >
-                  {balance?.usd?.toFixed(2)} USD
-                </Typography>
-                <Typography
-                  variant="h4"
-                  style={{ color: "white", fontFamily: "VT323" }}
-                >
-                  {balance?.btc} BTC
-                </Typography>
+                  {" "}
+                  <Typography
+                    variant={!isMobile ? "h4" : "h6"}
+                    style={{ color: "white", fontFamily: "VT323" }}
+                  >
+                    {balance?.usd?.toFixed(2)} USD
+                  </Typography>
+                  <Typography
+                    variant={!isMobile ? "h4" : "h6"}
+                    style={{ color: "white", fontFamily: "VT323" }}
+                  >
+                    {balance?.btc} BTC
+                  </Typography>
+                </div>
                 <Button
                   style={{
                     background: "yellow",
@@ -211,17 +240,18 @@ export default function UserSidebar() {
                   onClick={resetBalance}
                 >
                   {" "}
-                  Reset
+                  Reset Balance
                 </Button>
                 <div
                   style={{
                     color: "white",
                     fontWeight: "bolder",
                     wordWrap: "break-word",
-                    fontSize: 20,
+                    fontSize: !isMobile ? 20 : 15,
+                    marginTop: 20,
                   }}
                 >
-                  Assets
+                  Portfolio Assets
                 </div>
                 <div
                   style={{
@@ -232,7 +262,10 @@ export default function UserSidebar() {
                 </div>
                 <div
                   className={classes.watchlist}
-                  style={{ overflowY: "auto", maxHeight: "250px" }}
+                  style={{
+                    overflowY: "auto",
+                    maxHeight: !isMobile ? "225px" : "125px",
+                  }}
                 >
                   {coins.map((coin) => {
                     if (
@@ -246,7 +279,10 @@ export default function UserSidebar() {
                           key={coin?.id}
                         >
                           <div style={{ marginRight: 20 }}>
-                            <img src={coin.image} height="25" />
+                            <img
+                              src={coin.image}
+                              height={!isMobile ? "25" : "20"}
+                            />
                           </div>
                           {coin.name}
                         </div>
@@ -255,7 +291,9 @@ export default function UserSidebar() {
                 </div>
               </div>
               <Button
-                onClick={logout}
+                onClick={() => {
+                  logout();
+                }}
                 style={{
                   background: "yellow",
                   marginRight: 80,

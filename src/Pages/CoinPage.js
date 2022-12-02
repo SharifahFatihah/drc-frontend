@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { CryptoState } from "../CryptoContext";
 import Service from "../service/Service";
-import { Button, Card, makeStyles, Paper } from "@material-ui/core";
+import { Button, Card, makeStyles, Paper, Tooltip } from "@material-ui/core";
 import { Typography } from "@material-ui/core";
 import CoinChart from "../components/CoinChart";
 import { LinearProgress } from "@material-ui/core";
@@ -89,6 +89,14 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: "#3EFF47",
     color: "black",
   },
+  rankFav: {
+    display: "flex",
+    alignItems: "center",
+    [theme.breakpoints.down("sm")]: {
+      flexDirection: "column",
+      alignItems: "center",
+    },
+  },
 }));
 
 function CoinPage() {
@@ -155,7 +163,7 @@ function CoinPage() {
 
       setAlert({
         open: true,
-        message: `${coin.name} added to your watchlist`,
+        message: `${coin.name} added to your portfolio`,
         type: "success",
       });
     } catch (error) {}
@@ -168,7 +176,7 @@ function CoinPage() {
       await setDoc(
         coinRef,
         {
-          coins: watchlist.filter((watch) => watch !== coin?.id),
+          coins: watchlist.filter((watch) => watch.id !== coin?.id),
         },
         { merge: "true" }
       );
@@ -187,57 +195,71 @@ function CoinPage() {
         <div
           style={{ display: "flex", alignItems: "center", marginBottom: 25 }}
         >
-          <img src={coin?.image.large} alt={coin?.name} height="110" />
+          <img src={coin?.image.large} alt={coin?.name} height="90" />
           <div style={{ marginLeft: 20 }}>
-            <Typography style={{ fontFamily: "VT323" }} variant="h2">
+            <Typography style={{ fontFamily: "VT323" }} variant="h3">
               {coin?.symbol.toUpperCase()}
             </Typography>
-            <Typography style={{ fontFamily: "VT323" }} variant="h3">
+            <Typography style={{ fontFamily: "VT323" }} variant="h4">
               {coin?.name}
             </Typography>
           </div>
-          <Card
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              height: 30,
-              width: 70,
-              margin: 20,
-              backgroundColor: "#FFE227",
-              color: "black",
-              fontSize: 26,
-            }}
-          >
-            <div style={{ padding: 0 }}>#{coin?.market_cap_rank}</div>
-          </Card>
-          {coin?.market_cap_rank < 250 ? (
-            user ? (
-              inWatchlist ? (
-                <img
-                  src={favouriteIcon}
-                  height="30rem"
-                  onClick={inWatchlist ? removeFromWatchlist : addToWatchList}
-                  style={{ cursor: "pointer" }}
-                />
+          <div className={classes.rankFav}>
+            <Card
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                height: 30,
+                width: 70,
+                margin: 20,
+                backgroundColor: "#FFE227",
+              }}
+            >
+              <Typography
+                variant="h5"
+                style={{ padding: 0, color: "black", fontFamily: "VT323" }}
+              >
+                #{coin?.market_cap_rank}
+              </Typography>
+            </Card>
+            {coin?.market_cap_rank < 250 ? (
+              user ? (
+                inWatchlist ? (
+                  <Tooltip title="remove from portfolio">
+                    <img
+                      src={favouriteIcon}
+                      height="25rem"
+                      onClick={
+                        inWatchlist ? removeFromWatchlist : addToWatchList
+                      }
+                      style={{ cursor: "pointer" }}
+                    />
+                  </Tooltip>
+                ) : (
+                  <Tooltip title="add to portfolio">
+                    <img
+                      src={unfavouriteIcon}
+                      height="25rem"
+                      onClick={
+                        inWatchlist ? removeFromWatchlist : addToWatchList
+                      }
+                      style={{ cursor: "pointer" }}
+                    />
+                  </Tooltip>
+                )
               ) : (
                 <img
                   src={unfavouriteIcon}
                   height="30rem"
-                  onClick={inWatchlist ? removeFromWatchlist : addToWatchList}
+                  onClick={handleOpen}
                   style={{ cursor: "pointer" }}
                 />
               )
             ) : (
-              <img
-                src={unfavouriteIcon}
-                height="30rem"
-                onClick={handleOpen}
-                style={{ cursor: "pointer" }}
-              />
-            )
-          ) : (
-            ""
-          )}
+              ""
+            )}
+          </div>
         </div>
 
         <div className={classes.coinBasicContainer}>

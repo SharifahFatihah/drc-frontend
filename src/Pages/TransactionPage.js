@@ -22,6 +22,19 @@ const useStyles = makeStyles((theme) => ({
       alignItems: "center",
     },
   },
+  title: {
+    width: "90%",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
+    marginTop: 20,
+    marginBottom: 20,
+    [theme.breakpoints.down("md")]: {
+      flexDirection: "column",
+      alignItems: "center",
+      justifyContent: "center",
+    },
+  },
 }));
 
 const darkTheme = createTheme({
@@ -49,22 +62,26 @@ function TransactionPage() {
     } catch (error) {}
   };
 
+  const totalGain = () => {
+    const totalgain = receipt?.map((e) => {
+      return e?.total_gain;
+    });
+
+    return totalgain.reduce(
+      (accumulator, currentValue) => accumulator + currentValue,
+      0
+    );
+  };
+
+  console.log("receipt", receipt);
+
   return (
     <ThemeProvider theme={darkTheme}>
       <div className={classes.container}>
-        <div
-          style={{
-            width: "90%",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            marginTop: 20,
-            marginBottom: 20,
-          }}
-        >
+        <div className={classes.title}>
           <div
             style={{
-              width: "50%",
+              width: "100%",
               alignItems: "center",
               justifyContent: "flex-start",
             }}
@@ -74,6 +91,7 @@ function TransactionPage() {
               Transaction History
             </Typography>
           </div>
+          <Typography>Net Profit: {totalGain()?.toFixed(2)}</Typography>
           <Button
             variant="contained"
             style={{
@@ -82,6 +100,7 @@ function TransactionPage() {
               color: "white",
               fontFamily: "VT323",
               fontSize: 20,
+              margin: 20,
             }}
             onClick={deleteReceipt}
           >
