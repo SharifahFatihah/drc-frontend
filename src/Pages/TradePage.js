@@ -188,7 +188,7 @@ function TradePage() {
   }, [time]);
 
   //buying
-  const buyCoin = async (q, p, tp) => {
+  const buyCoin = async (q, p, tp, bf) => {
     if (tp > balance.usd) {
       setAlert({
         open: true,
@@ -228,7 +228,7 @@ function TradePage() {
           type: "success",
         });
 
-        buyReceipt(new Date(time), q, p, tp);
+        buyReceipt(new Date(time), q, p, tp, bf);
         playSound();
       } catch (error) {}
     }
@@ -255,7 +255,7 @@ function TradePage() {
         message: `invalid`,
         type: "error",
       });
-    } else if (q > balance.btc) {
+    } else if (q > balance.btc?.toPrecision(4)) {
       setAlert({
         open: true,
         message: `insufficient coin`,
@@ -263,7 +263,7 @@ function TradePage() {
       });
     } else {
       const newUsd = balance.usd + tp;
-      const newBtc = balance.btc - q;
+      const newBtc = balance.btc?.toPrecision(4) - q;
       const walletRef = await doc(db, "wallet", user.uid);
 
       try {
@@ -280,13 +280,13 @@ function TradePage() {
           message: `Sell succesful, current balance $${newUsd}USD`,
           type: "success",
         });
-        sellReceipt(new Date(time), q, p, tp);
+        sellReceipt(new Date(time), q, p, tp, bf);
         playSound();
       } catch (error) {}
     }
   };
 
-  const buyReceipt = async (time, quantity, price, cost) => {
+  const buyReceipt = async (time, quantity, price, cost, brokerfee) => {
     const transactionRef = doc(db, "transaction", user?.uid);
 
     try {
@@ -303,6 +303,7 @@ function TradePage() {
                   quantity: quantity,
                   profit: -1 * price,
                   total_gain: -1 * cost,
+                  broker_fee: brokerfee,
                 },
               ]
             : [
@@ -313,6 +314,7 @@ function TradePage() {
                   quantity: quantity,
                   profit: -1 * price,
                   total_gain: -1 * cost,
+                  broker_fee: brokerfee,
                 },
               ],
         },
@@ -321,7 +323,7 @@ function TradePage() {
     } catch (error) {}
   };
 
-  const sellReceipt = async (time, quantity, profit, cost) => {
+  const sellReceipt = async (time, quantity, profit, cost, brokerfee) => {
     const transactionRef = doc(db, "transaction", user?.uid);
 
     try {
@@ -338,6 +340,7 @@ function TradePage() {
                   quantity: quantity,
                   profit: profit,
                   total_gain: cost,
+                  broker_fee: brokerfee,
                 },
               ]
             : [
@@ -348,6 +351,7 @@ function TradePage() {
                   quantity: quantity,
                   profit: profit,
                   total_gain: cost,
+                  broker_fee: brokerfee,
                 },
               ],
         },
@@ -720,7 +724,12 @@ function TradePage() {
                   }}
                   onClick={() =>
                     isBuy
-                      ? buyCoin(parseFloat(buyQuantity), buyUsd, totalPayment)
+                      ? buyCoin(
+                          parseFloat(buyQuantity),
+                          buyUsd,
+                          totalPayment,
+                          brokerFee
+                        )
                       : sellCoin(
                           parseFloat(buyQuantity),
                           buyUsd,

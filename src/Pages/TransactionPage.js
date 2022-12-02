@@ -62,6 +62,19 @@ function TransactionPage() {
     } catch (error) {}
   };
 
+  const totalGain = () => {
+    const totalgain = receipt?.map((e) => {
+      return e?.total_gain;
+    });
+
+    return totalgain.reduce(
+      (accumulator, currentValue) => accumulator + currentValue,
+      0
+    );
+  };
+
+  console.log("receipt", receipt);
+
   return (
     <ThemeProvider theme={darkTheme}>
       <div className={classes.container}>
@@ -78,6 +91,7 @@ function TransactionPage() {
               Transaction History
             </Typography>
           </div>
+          <Typography>Net Profit: {totalGain()?.toFixed(2)}</Typography>
           <Button
             variant="contained"
             style={{

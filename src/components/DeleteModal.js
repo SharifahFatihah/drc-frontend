@@ -7,7 +7,7 @@ import DeleteIcon from "../asset/deleteicon.png";
 import { doc, setDoc } from "firebase/firestore";
 import { db } from "../firebase";
 import { CryptoState } from "../CryptoContext";
-import { makeStyles } from "@material-ui/core";
+import { makeStyles, Tooltip } from "@material-ui/core";
 import { style } from "@mui/system";
 
 const useStyle = makeStyles((theme) => ({
@@ -73,9 +73,15 @@ export default function DeleteModal(row) {
 
   return (
     <div>
-      <Button onClick={handleOpen}>
-        <img src={DeleteIcon} height={20} style={{ cursor: "pointer" }} />
-      </Button>
+      <Tooltip title="Delete Coin">
+        <img
+          src={DeleteIcon}
+          height={20}
+          style={{ cursor: "pointer" }}
+          onClick={handleOpen}
+        />
+      </Tooltip>
+
       <Modal
         open={open}
         onClose={handleClose}

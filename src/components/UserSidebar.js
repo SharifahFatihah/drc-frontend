@@ -125,7 +125,6 @@ export default function UserSidebar() {
     window.location.reload(false);
   };
 
-
   const resetFirstBalance = async () => {
     const walletRef = await doc(db, "wallet", user.uid);
 
@@ -141,7 +140,6 @@ export default function UserSidebar() {
   React.useEffect(() => {
     resetFirstBalance();
   }, []);
-
 
   return (
     <div>
@@ -253,7 +251,7 @@ export default function UserSidebar() {
                     marginTop: 20,
                   }}
                 >
-                  Assets
+                  Portfolio Assets
                 </div>
                 <div
                   style={{

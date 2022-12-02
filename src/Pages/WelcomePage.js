@@ -7,7 +7,6 @@ import LogoWord from "../asset/logoword.png";
 import Mario from "../asset/mario3.gif";
 import MarioStay from "../asset/mario-ready.gif";
 import Coin from "../asset/mariocoin.gif";
-
 const useStyle = makeStyles((theme) => ({
   banner: {
     backgroundPosition: "center center",
@@ -103,21 +102,17 @@ const useStyle = makeStyles((theme) => ({
     },
   },
 }));
-
 function WelcomePage() {
   const classes = useStyle();
   const navigate = useNavigate();
   const [isClick, setIsClick] = useState(false);
-
   const playSound = () => {
     var kaching = new Audio(Kaching);
     kaching.play();
-
     kaching.onended = () => {
       kaching.setAttribute("src", "");
     };
   };
-
   return (
     <div className={classes.banner}>
       <Container maxWidth="xl" className={classes.bannerContent}>
@@ -127,34 +122,6 @@ function WelcomePage() {
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
-
-              marginBottom: 50,
-              paddingLeft: 20,
-            }}
-          />
-          <Typography className={classes.investor}>Hello Investor!</Typography>
-          <Typography className={classes.adventure}>
-            Are you ready for an adventure?
-          </Typography>
-          {isClick ? (
-            <img className={classes.coingif} src={Coin} alt="coins" />
-          ) : (
-            <img
-              className={classes.coingif}
-              style={{ visibility: "hidden" }}
-              src={Coin}
-              alt="coins"
-            />
-          )}
-          <Button
-            className={classes.buttonStart}
-            variant="contained"
-            onClick={() => {
-              playSound();
-              setIsClick(true);
-              setTimeout(() => {
-                navigate("/homepage");
-              }, 650);
             }}
           >
             {" "}
@@ -223,5 +190,4 @@ function WelcomePage() {
     </div>
   );
 }
-
 export default WelcomePage;
