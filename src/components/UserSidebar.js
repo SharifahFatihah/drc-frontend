@@ -125,6 +125,24 @@ export default function UserSidebar() {
     window.location.reload(false);
   };
 
+
+  const resetFirstBalance = async () => {
+    const walletRef = await doc(db, "wallet", user.uid);
+
+    try {
+      await setDoc(walletRef, {
+        balances: balance
+          ? { usd: balance.usd, btc: balance.btc }
+          : { usd: 10000, btc: 0 },
+      });
+    } catch (error) {}
+  };
+
+  React.useEffect(() => {
+    resetFirstBalance();
+  }, []);
+
+
   return (
     <div>
       {["right"].map((anchor) => (

@@ -127,6 +127,34 @@ function WelcomePage() {
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
+
+              marginBottom: 50,
+              paddingLeft: 20,
+            }}
+          />
+          <Typography className={classes.investor}>Hello Investor!</Typography>
+          <Typography className={classes.adventure}>
+            Are you ready for an adventure?
+          </Typography>
+          {isClick ? (
+            <img className={classes.coingif} src={Coin} alt="coins" />
+          ) : (
+            <img
+              className={classes.coingif}
+              style={{ visibility: "hidden" }}
+              src={Coin}
+              alt="coins"
+            />
+          )}
+          <Button
+            className={classes.buttonStart}
+            variant="contained"
+            onClick={() => {
+              playSound();
+              setIsClick(true);
+              setTimeout(() => {
+                navigate("/homepage");
+              }, 650);
             }}
           >
             {" "}
