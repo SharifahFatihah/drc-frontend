@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import Kaching from "../asset/kaching.mp3";
 import LogoWord from "../asset/logoword.png";
 import Mario from "../asset/mario3.gif";
-import MarioStay from "../asset/mariostay.png";
+import MarioStay from "../asset/mario-ready.gif";
 import Coin from "../asset/mariocoin.gif";
 
 const useStyle = makeStyles((theme) => ({
@@ -48,6 +48,7 @@ const useStyle = makeStyles((theme) => ({
       height: "90%",
       paddingTop: 40,
       padding: 20,
+      justifyContent: "space-evenly",
     },
   },
   investor: {
@@ -121,10 +122,12 @@ function WelcomePage() {
     <div className={classes.banner}>
       <Container maxWidth="xl" className={classes.bannerContent}>
         <div className={classes.hello}>
-          <img
-            src={LogoWord}
-            alt="kaching"
+          <div
             style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+
               marginBottom: 50,
               paddingLeft: 20,
             }}
@@ -154,21 +157,67 @@ function WelcomePage() {
               }, 650);
             }}
           >
-            Let's Start!
-          </Button>
-          {!isClick ? (
+            {" "}
             <img
-              className={classes.mariogif}
-              src={MarioStay}
-              alt="mario collect coins"
+              src={LogoWord}
+              alt="kaching"
+              style={{
+                marginBottom: 50,
+                paddingLeft: 20,
+              }}
             />
-          ) : (
-            <img
-              className={classes.mariogif}
-              src={Mario}
-              alt="mario collect coins"
-            />
-          )}
+            <Typography className={classes.investor}>
+              Hello Investor!
+            </Typography>
+            <Typography className={classes.adventure}>
+              Are you ready for an adventure?
+            </Typography>
+          </div>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+            }}
+          >
+            {" "}
+            {isClick ? (
+              <img className={classes.coingif} src={Coin} alt="coins" />
+            ) : (
+              <img
+                className={classes.coingif}
+                style={{ visibility: "hidden" }}
+                src={Coin}
+                alt="coins"
+              />
+            )}
+            <Button
+              className={classes.buttonStart}
+              variant="contained"
+              onClick={() => {
+                playSound();
+                setIsClick(true);
+                setTimeout(() => {
+                  navigate("/homepage");
+                }, 650);
+              }}
+            >
+              Let's Start!
+            </Button>
+            {!isClick ? (
+              <img
+                className={classes.mariogif}
+                src={MarioStay}
+                alt="mario collect coins"
+              />
+            ) : (
+              <img
+                className={classes.mariogif}
+                src={Mario}
+                alt="mario collect coins"
+              />
+            )}
+          </div>
         </div>
       </Container>
     </div>

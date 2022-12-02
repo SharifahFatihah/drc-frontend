@@ -3,11 +3,10 @@ import { CircularProgress, makeStyles, Typography } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import moment from "moment/moment";
 import Pacman from "../asset/all-coins.gif";
-import mario from "../asset/mario-reading.png";
+import news from "../asset/crypto_news.gif";
 
 const useStyles = makeStyles((theme) => ({
   newsbox: {
-    // background: "rgba(79, 58, 84, 0.52)",
     background:
       "linear-gradient(180deg, rgba(107,13,116,0.4) 0%, rgba(255,226,39,0.2) 100%)",
     display: "flex",
@@ -47,7 +46,6 @@ const useStyles = makeStyles((theme) => ({
   right: {
     display: "flex",
     marginRight: 50,
-    marginTop: 70,
     width: "50%",
     justifyContent: "center",
     alignItems: "center",
@@ -111,7 +109,7 @@ function NewsPage() {
             </Typography>
           </div>
           <div className={classes.right}>
-            <img src={mario} alt="mario reading news" height={300} />
+            <img src={news} alt="news" height={300} />
           </div>
         </div>
 
