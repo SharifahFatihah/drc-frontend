@@ -224,7 +224,7 @@ export default function UserSidebar() {
                   onClick={resetBalance}
                 >
                   {" "}
-                  Reset
+                  Reset Balance
                 </Button>
                 <div
                   style={{

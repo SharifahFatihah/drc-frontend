@@ -769,7 +769,7 @@ function TradePage() {
                       color: "black",
                       fontFamily: "VT323",
                       fontSize: 16,
-                      width: "80%",
+                      width: "100%",
                     }}
                     onClick={resetBalance}
                   >
