@@ -22,7 +22,7 @@ const useStyle = makeStyles((theme) => ({
     borderRadius: 10,
     [theme.breakpoints.down("sm")]: {
       width: "80%",
-      height: "90%",
+      height: "70%",
     },
   },
   google: {
@@ -90,6 +90,7 @@ export default function AuthModal() {
             style={{
               backgroundColor: "transparent",
               color: "white",
+              height: "100%",
             }}
           >
             <Tabs variant="fullWidth" value={authValue} onChange={handleChange}>
@@ -118,7 +119,7 @@ export default function AuthModal() {
                 label="Sign Up"
               />
             </Tabs>
-            <div style={{ padding: 20 }}>
+            <div style={{ padding: 20, height: "100%" }}>
               {authValue === 0 && <Login handleClose={handleClose} />}
               {authValue === 1 && <Signup handleClose={handleClose} />}
             </div>
