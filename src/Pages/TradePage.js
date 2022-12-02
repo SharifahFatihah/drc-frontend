@@ -534,238 +534,254 @@ function TradePage() {
         </div>
         {user ? (
           <div className={classes.sidebar}>
-            <div className={classes.inSidebar}>
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-evenly",
-                  width: "40%",
-                }}
-              >
-                <div>
-                  <img
-                    src={coin?.image?.small}
-                    height={30}
-                    style={{ marginRight: 10 }}
-                    alt="coinicon"
+            {balance.usd ? (
+              <>
+                <div className={classes.inSidebar}>
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-evenly",
+                      width: "40%",
+                    }}
+                  >
+                    <div>
+                      <img
+                        src={coin?.image?.small}
+                        height={30}
+                        style={{ marginRight: 10 }}
+                        alt="coinicon"
+                      />
+                    </div>
+                    <Typography>BTC/USD</Typography>
+                  </div>
+                  <div></div>
+                </div>
+                <div
+                  className={classes.inSidebar}
+                  style={{ alignItems: "flex-start" }}
+                >
+                  <CheatModal />
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      justifyContent: "flex-start",
+                      alignItems: "center",
+                    }}
+                  >
+                    <>
+                      <Typography>${balance?.usd?.toFixed(2)}</Typography>
+                      <Typography> {balance?.btc?.toFixed(4)}BTC</Typography>
+                    </>
+                  </div>
+                </div>
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-evenly",
+                    width: "80%",
+                  }}
+                >
+                  <div
+                    className={classes.inSidebar}
+                    style={{
+                      display: "flex",
+                      width: "100%",
+                      backgroundColor: "rgba(79, 58, 84, 0.52)",
+                      borderRadius: 5,
+                      justifyContent: "space-evenly",
+                    }}
+                  >
+                    <Button
+                      style={{
+                        backgroundColor: isBuy ? "yellow" : "transparent",
+                        color: isBuy ? "black" : "white",
+                        width: "80%",
+                      }}
+                      onClick={() => {
+                        setIsBuy(true);
+                        setBuyUsd("");
+                        setBuyQuantity("");
+                        setBrokerFee("");
+                        setTotalPayment("");
+                      }}
+                    >
+                      Buy
+                    </Button>
+                    <Button
+                      style={{
+                        backgroundColor: !isBuy ? "yellow" : "transparent",
+                        color: !isBuy ? "black" : "white",
+                        width: "80%",
+                      }}
+                      onClick={() => {
+                        setIsBuy(false);
+                        setBuyUsd("");
+                        setBuyQuantity("");
+                        setBrokerFee("");
+                        setTotalPayment("");
+                      }}
+                    >
+                      Sell
+                    </Button>
+                  </div>
+                </div>
+
+                <div className={classes.inSidebar}>
+                  <TextField
+                    type="number"
+                    step="0.01"
+                    variant="outlined"
+                    label="Position Size"
+                    value={buyQuantity}
+                    onChange={(e) =>
+                      isBuy
+                        ? (setBuyUsd(
+                            e.target.value * priceArr[priceArr.length - 1].price
+                          ),
+                          setBuyQuantity(e.target.value),
+                          e.target.value *
+                            priceArr[priceArr.length - 1].price *
+                            0.001 >
+                          8
+                            ? (setBrokerFee(
+                                e.target.value *
+                                  priceArr[priceArr.length - 1].price *
+                                  0.001
+                              ),
+                              setTotalPayment(
+                                e.target.value *
+                                  priceArr[priceArr.length - 1].price +
+                                  e.target.value *
+                                    priceArr[priceArr.length - 1].price *
+                                    0.001
+                              ))
+                            : (setBrokerFee(8),
+                              setTotalPayment(
+                                e.target.value *
+                                  priceArr[priceArr.length - 1].price +
+                                  8
+                              )))
+                        : (setBuyUsd(
+                            e.target.value * priceArr[priceArr.length - 1].price
+                          ),
+                          setBuyQuantity(e.target.value),
+                          e.target.value *
+                            priceArr[priceArr.length - 1].price *
+                            0.001 >
+                          8
+                            ? (setBrokerFee(
+                                e.target.value *
+                                  priceArr[priceArr.length - 1].price *
+                                  0.001
+                              ),
+                              setTotalPayment(
+                                e.target.value *
+                                  priceArr[priceArr.length - 1].price -
+                                  e.target.value *
+                                    priceArr[priceArr.length - 1].price *
+                                    0.001
+                              ))
+                            : (setBrokerFee(8),
+                              setTotalPayment(
+                                e.target.value *
+                                  priceArr[priceArr.length - 1].price -
+                                  8
+                              )))
+                    }
+                    fullWidth
                   />
                 </div>
-                <Typography>BTC/USD</Typography>
-              </div>
-              <div></div>
-            </div>
-            <div
-              className={classes.inSidebar}
-              style={{ alignItems: "flex-start" }}
-            >
-              <CheatModal />
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "flex-start",
-                  alignItems: "center",
-                }}
-              >
-                {balance.usd ? (
-                  <>
-                    <Typography>${balance?.usd?.toFixed(2)}</Typography>
-                    <Typography> {balance?.btc?.toFixed(4)}BTC</Typography>
-                  </>
-                ) : (
-                  <Typography>Please reset your balance</Typography>
-                )}
-              </div>
-            </div>
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-evenly",
-                width: "80%",
-              }}
-            >
-              <div
-                className={classes.inSidebar}
-                style={{
-                  display: "flex",
-                  width: "100%",
-                  backgroundColor: "rgba(79, 58, 84, 0.52)",
-                  borderRadius: 5,
-                  justifyContent: "space-evenly",
-                }}
-              >
-                <Button
-                  style={{
-                    backgroundColor: isBuy ? "yellow" : "transparent",
-                    color: isBuy ? "black" : "white",
-                    width: "80%",
-                  }}
-                  onClick={() => {
-                    setIsBuy(true);
-                    setBuyUsd("");
-                    setBuyQuantity("");
-                    setBrokerFee("");
-                    setTotalPayment("");
-                  }}
-                >
-                  Buy
-                </Button>
-                <Button
-                  style={{
-                    backgroundColor: !isBuy ? "yellow" : "transparent",
-                    color: !isBuy ? "black" : "white",
-                    width: "80%",
-                  }}
-                  onClick={() => {
-                    setIsBuy(false);
-                    setBuyUsd("");
-                    setBuyQuantity("");
-                    setBrokerFee("");
-                    setTotalPayment("");
-                  }}
-                >
-                  Sell
-                </Button>
-              </div>
-            </div>
+                <div className={classes.inSidebar}></div>
+                <div className={classes.inSidebar}>
+                  <Typography>{isBuy ? "Price" : "Profit"}</Typography>
+                  <Typography>{buyUsd} </Typography>
+                </div>
+                <div className={classes.inSidebar}>
+                  <Typography>Broker Fee</Typography>
+                  <Typography>{brokerFee} </Typography>
+                </div>
+                <div className={classes.inSidebar}>
+                  <Typography>{isBuy ? "Total Cost" : "Total Gain"}</Typography>
+                  <Typography>{totalPayment} </Typography>
+                </div>
 
-            <div className={classes.inSidebar}>
-              <TextField
-                type="number"
-                step="0.01"
-                variant="outlined"
-                label="Position Size"
-                value={buyQuantity}
-                onChange={(e) =>
-                  isBuy
-                    ? (setBuyUsd(
-                        e.target.value * priceArr[priceArr.length - 1].price
-                      ),
-                      setBuyQuantity(e.target.value),
-                      e.target.value *
-                        priceArr[priceArr.length - 1].price *
-                        0.001 >
-                      8
-                        ? (setBrokerFee(
-                            e.target.value *
-                              priceArr[priceArr.length - 1].price *
-                              0.001
-                          ),
-                          setTotalPayment(
-                            e.target.value *
-                              priceArr[priceArr.length - 1].price +
-                              e.target.value *
-                                priceArr[priceArr.length - 1].price *
-                                0.001
-                          ))
-                        : (setBrokerFee(8),
-                          setTotalPayment(
-                            e.target.value *
-                              priceArr[priceArr.length - 1].price +
-                              8
-                          )))
-                    : (setBuyUsd(
-                        e.target.value * priceArr[priceArr.length - 1].price
-                      ),
-                      setBuyQuantity(e.target.value),
-                      e.target.value *
-                        priceArr[priceArr.length - 1].price *
-                        0.001 >
-                      8
-                        ? (setBrokerFee(
-                            e.target.value *
-                              priceArr[priceArr.length - 1].price *
-                              0.001
-                          ),
-                          setTotalPayment(
-                            e.target.value *
-                              priceArr[priceArr.length - 1].price -
-                              e.target.value *
-                                priceArr[priceArr.length - 1].price *
-                                0.001
-                          ))
-                        : (setBrokerFee(8),
-                          setTotalPayment(
-                            e.target.value *
-                              priceArr[priceArr.length - 1].price -
-                              8
-                          )))
-                }
-                fullWidth
-              />
-            </div>
-            <div className={classes.inSidebar}></div>
-            <div className={classes.inSidebar}>
-              <Typography>{isBuy ? "Price" : "Profit"}</Typography>
-              <Typography>{buyUsd} </Typography>
-            </div>
-            <div className={classes.inSidebar}>
-              <Typography>Broker Fee</Typography>
-              <Typography>{brokerFee} </Typography>
-            </div>
-            <div className={classes.inSidebar}>
-              <Typography>{isBuy ? "Total Cost" : "Total Gain"}</Typography>
-              <Typography>{totalPayment} </Typography>
-            </div>
-            {balance.usd ? (
-              <Button
-                variant="contained"
-                style={{
-                  backgroundColor: "#FFE227",
-                  border: "5px solid white",
-                  color: "black",
-                  fontFamily: "VT323",
-                  fontSize: 16,
-                  width: "80%",
-                }}
-                onClick={() =>
-                  isBuy
-                    ? buyCoin(parseFloat(buyQuantity), buyUsd, totalPayment)
-                    : sellCoin(
-                        parseFloat(buyQuantity),
-                        buyUsd,
-                        totalPayment,
-                        brokerFee
-                      )
-                }
-              >
-                Submit
-              </Button>
+                <Button
+                  variant="contained"
+                  style={{
+                    backgroundColor: "#FFE227",
+                    border: "5px solid white",
+                    color: "black",
+                    fontFamily: "VT323",
+                    fontSize: 16,
+                    width: "80%",
+                  }}
+                  onClick={() =>
+                    isBuy
+                      ? buyCoin(parseFloat(buyQuantity), buyUsd, totalPayment)
+                      : sellCoin(
+                          parseFloat(buyQuantity),
+                          buyUsd,
+                          totalPayment,
+                          brokerFee
+                        )
+                  }
+                >
+                  Submit
+                </Button>
+
+                <Button
+                  variant="contained"
+                  style={{
+                    backgroundColor: "#212121",
+                    border: "5px solid #FFE227",
+                    color: "white",
+                    fontFamily: "VT323",
+                    fontSize: 16,
+                    width: "80%",
+                    marginTop: 10,
+                  }}
+                  onClick={() => {
+                    navigate("/transaction");
+                  }}
+                >
+                  History
+                </Button>
+              </>
             ) : (
-              <Button
-                variant="contained"
-                style={{
-                  backgroundColor: "#FFE227",
-                  border: "5px solid white",
-                  color: "black",
-                  fontFamily: "VT323",
-                  fontSize: 16,
-                  width: "80%",
-                }}
-                onClick={resetBalance}
-              >
-                Reset Balance
-              </Button>
+              <>
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    height: "100%",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  <Typography>
+                    {" "}
+                    Empty Wallet, please reset before trading
+                  </Typography>
+                  <Button
+                    variant="contained"
+                    style={{
+                      backgroundColor: "#FFE227",
+                      border: "5px solid white",
+                      color: "black",
+                      fontFamily: "VT323",
+                      fontSize: 16,
+                      width: "80%",
+                    }}
+                    onClick={resetBalance}
+                  >
+                    Reset Balance
+                  </Button>
+                </div>
+              </>
             )}
-            <Button
-              variant="contained"
-              style={{
-                backgroundColor: "#212121",
-                border: "5px solid #FFE227",
-                color: "white",
-                fontFamily: "VT323",
-                fontSize: 16,
-                width: "80%",
-                marginTop: 10,
-              }}
-              onClick={() => {
-                navigate("/transaction");
-              }}
-            >
-              History
-            </Button>
           </div>
         ) : (
           <div
