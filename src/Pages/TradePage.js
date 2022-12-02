@@ -761,10 +761,6 @@ function TradePage() {
                     alignItems: "center",
                   }}
                 >
-                  <Typography>
-                    {" "}
-                    Empty Wallet, please reset before trading
-                  </Typography>
                   <Button
                     variant="contained"
                     style={{
@@ -777,7 +773,7 @@ function TradePage() {
                     }}
                     onClick={resetBalance}
                   >
-                    Reset Balance
+                    Start Trading{" "}
                   </Button>
                 </div>
               </>
