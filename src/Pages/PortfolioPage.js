@@ -23,6 +23,7 @@ import { chartDays } from "../service/Service";
 import currentAssetIcon from "../asset/currentasseticon.png";
 import infoicon from "../asset/infoicon.png";
 import { useNavigate } from "react-router-dom";
+import { TableHead } from "@mui/material";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -430,6 +431,36 @@ function PortfolioPage() {
                     }}
                   >
                     <Table sx={{ minWidth: 650 }}>
+                      <TableHead>
+                        <TableRow>
+                          <TableCell
+                            style={{
+                              color: "black",
+                              backgroundColor: "#FFE227",
+                            }}
+                          >
+                            Coin
+                          </TableCell>
+                          <TableCell
+                            align="right"
+                            style={{
+                              color: "black",
+                              backgroundColor: "#FFE227",
+                            }}
+                          >
+                            Holdings
+                          </TableCell>
+                          <TableCell
+                            align="right"
+                            style={{
+                              color: "black",
+                              backgroundColor: "#FFE227",
+                            }}
+                          >
+                            Action
+                          </TableCell>
+                        </TableRow>
+                      </TableHead>
                       <TableBody>
                         {userCoin3?.map((row) => {
                           if (
@@ -506,9 +537,11 @@ function PortfolioPage() {
                                       display: "flex",
                                       alignItems: "center",
                                       justifyContent: "flex-end",
+                                      gap: 10,
                                     }}
                                   >
                                     <HoldingModal coin={row} />
+
                                     <DeleteModal row={row} />
                                   </div>
                                 </TableCell>

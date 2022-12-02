@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { CryptoState } from "../CryptoContext";
 import Service from "../service/Service";
-import { Button, Card, makeStyles, Paper } from "@material-ui/core";
+import { Button, Card, makeStyles, Paper, Tooltip } from "@material-ui/core";
 import { Typography } from "@material-ui/core";
 import CoinChart from "../components/CoinChart";
 import { LinearProgress } from "@material-ui/core";
@@ -163,7 +163,7 @@ function CoinPage() {
 
       setAlert({
         open: true,
-        message: `${coin.name} added to your watchlist`,
+        message: `${coin.name} added to your portfolio`,
         type: "success",
       });
     } catch (error) {}
@@ -226,19 +226,27 @@ function CoinPage() {
             {coin?.market_cap_rank < 250 ? (
               user ? (
                 inWatchlist ? (
-                  <img
-                    src={favouriteIcon}
-                    height="25rem"
-                    onClick={inWatchlist ? removeFromWatchlist : addToWatchList}
-                    style={{ cursor: "pointer" }}
-                  />
+                  <Tooltip title="remove from portfolio">
+                    <img
+                      src={favouriteIcon}
+                      height="25rem"
+                      onClick={
+                        inWatchlist ? removeFromWatchlist : addToWatchList
+                      }
+                      style={{ cursor: "pointer" }}
+                    />
+                  </Tooltip>
                 ) : (
-                  <img
-                    src={unfavouriteIcon}
-                    height="25rem"
-                    onClick={inWatchlist ? removeFromWatchlist : addToWatchList}
-                    style={{ cursor: "pointer" }}
-                  />
+                  <Tooltip title="add to portfolio">
+                    <img
+                      src={unfavouriteIcon}
+                      height="25rem"
+                      onClick={
+                        inWatchlist ? removeFromWatchlist : addToWatchList
+                      }
+                      style={{ cursor: "pointer" }}
+                    />
+                  </Tooltip>
                 )
               ) : (
                 <img

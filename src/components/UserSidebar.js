@@ -110,7 +110,7 @@ export default function UserSidebar() {
 
     try {
       await setDoc(walletRef, {
-        balances: { usd: 10000, btc: 0 },
+        balances: { usd: 30000, btc: 0 },
       });
 
       setAlert({
@@ -124,7 +124,6 @@ export default function UserSidebar() {
   const refreshPage = () => {
     window.location.reload(false);
   };
-
 
   const resetFirstBalance = async () => {
     const walletRef = await doc(db, "wallet", user.uid);
@@ -141,7 +140,6 @@ export default function UserSidebar() {
   React.useEffect(() => {
     resetFirstBalance();
   }, []);
-
 
   return (
     <div>
@@ -253,7 +251,7 @@ export default function UserSidebar() {
                     marginTop: 20,
                   }}
                 >
-                  Assets
+                  Portfolio Assets
                 </div>
                 <div
                   style={{

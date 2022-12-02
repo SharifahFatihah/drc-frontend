@@ -84,13 +84,19 @@ const headCells = [
     id: "profit",
     numeric: true,
     disablePadding: false,
-    label: "Profit",
+    label: "Net amount paid/receive",
+  },
+  {
+    id: "broker_fee",
+    numeric: true,
+    disablePadding: false,
+    label: "Broker Fee",
   },
   {
     id: "total_gain",
     numeric: true,
     disablePadding: false,
-    label: "Total Gain",
+    label: "Total buying/selling price",
   },
 ];
 
@@ -242,11 +248,24 @@ export default function EnhancedTable({ receipt }) {
                       <TableCell align="right" style={{ color: "white" }}>
                         {row.quantity}
                       </TableCell>
-                      <TableCell align="right" style={{ color: "white" }}>
-                        {row.profit}
+                      <TableCell
+                        align="right"
+                        style={{
+                          color: row.profit > 0 ? "#33FF00" : "#FF0000",
+                        }}
+                      >
+                        {row.profit?.toFixed(2)}
                       </TableCell>
                       <TableCell align="right" style={{ color: "white" }}>
-                        {row.total_gain}
+                        {row.broker_fee?.toFixed(2)}
+                      </TableCell>
+                      <TableCell
+                        align="right"
+                        style={{
+                          color: row.total_gain > 0 ? "#33FF00" : "#FF0000",
+                        }}
+                      >
+                        {row.total_gain?.toFixed(2)}
                       </TableCell>
                     </TableRow>
                   );

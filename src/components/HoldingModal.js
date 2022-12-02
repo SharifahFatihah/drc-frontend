@@ -7,6 +7,7 @@ import {
   makeStyles,
   TextField,
   ThemeProvider,
+  Tooltip,
   Typography,
 } from "@material-ui/core";
 import { CryptoState } from "../CryptoContext";
@@ -108,9 +109,15 @@ export default function HoldingModal({ coin }) {
     <>
       {" "}
       <ThemeProvider theme={darkTheme}>
-        <Button onClick={handleOpen}>
-          <img src={EditIcon} height={20} />
-        </Button>
+        <Tooltip title="Edit holding amount">
+          <img
+            src={EditIcon}
+            height={20}
+            onClick={handleOpen}
+            style={{ cursor: "pointer" }}
+          />
+        </Tooltip>
+
         <Modal open={openHolding} onClose={handleClose}>
           <div className={classes.paper}>
             <Box
