@@ -47,6 +47,7 @@ export default function UserSidebar() {
   const [state, setState] = React.useState({
     right: false,
   });
+  const [userState, setUserState] = React.useState(false);
 
   const { user, setAlert, watchlist, coins, balance } = CryptoState();
 
@@ -68,6 +69,9 @@ export default function UserSidebar() {
       message: "See you again!",
       type: "success",
     });
+    setTimeout(() => {
+      refreshPage();
+    }, 500);
   };
 
   const resetBalance = async () => {
@@ -86,21 +90,9 @@ export default function UserSidebar() {
     } catch (error) {}
   };
 
-  const resetFirstBalance = async () => {
-    const walletRef = await doc(db, "wallet", user.uid);
-
-    try {
-      await setDoc(walletRef, {
-        balances: balance
-          ? { usd: balance.usd, btc: balance.btc }
-          : { usd: 10000, btc: 0 },
-      });
-    } catch (error) {}
+  const refreshPage = () => {
+    window.location.reload(false);
   };
-
-  React.useEffect(() => {
-    resetFirstBalance();
-  }, []);
 
   return (
     <div>
@@ -235,7 +227,9 @@ export default function UserSidebar() {
                 </div>
               </div>
               <Button
-                onClick={logout}
+                onClick={() => {
+                  logout();
+                }}
                 style={{
                   background: "yellow",
                   marginRight: 80,

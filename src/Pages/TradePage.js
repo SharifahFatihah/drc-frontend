@@ -139,22 +139,6 @@ function TradePage() {
       });
   };
 
-  const resetFirstBalance = async () => {
-    const walletRef = await doc(db, "wallet", user.uid);
-
-    try {
-      await setDoc(walletRef, {
-        balances: balance
-          ? { usd: balance.usd, btc: balance.btc }
-          : { usd: 10000, btc: 0 },
-      });
-    } catch (error) {}
-  };
-
-  useEffect(() => {
-    resetFirstBalance();
-  }, [user]);
-
   useEffect(() => {
     getSingleCoin("bitcoin");
   }, []);
@@ -364,6 +348,22 @@ function TradePage() {
     } catch (error) {}
   };
 
+  const resetBalance = async () => {
+    const walletRef = await doc(db, "wallet", user.uid);
+
+    try {
+      await setDoc(walletRef, {
+        balances: { usd: 10000, btc: 0 },
+      });
+
+      setAlert({
+        open: true,
+        message: `You have reset your balance`,
+        type: "success",
+      });
+    } catch (error) {}
+  };
+
   return (
     <ThemeProvider theme={darkTheme}>
       <div className={classes.container}>
@@ -560,9 +560,14 @@ function TradePage() {
                   alignItems: "center",
                 }}
               >
-                {" "}
-                <Typography>${balance?.usd?.toFixed(2)}</Typography>
-                <Typography> {balance?.btc?.toFixed(4)}BTC</Typography>
+                {balance.usd ? (
+                  <>
+                    <Typography>${balance?.usd?.toFixed(2)}</Typography>
+                    <Typography> {balance?.btc?.toFixed(4)}BTC</Typography>
+                  </>
+                ) : (
+                  <Typography>Please reset your balance</Typography>
+                )}
               </div>
             </div>
             <div
@@ -696,29 +701,46 @@ function TradePage() {
               <Typography>{isBuy ? "Total Cost" : "Total Gain"}</Typography>
               <Typography>{totalPayment} </Typography>
             </div>
-            <Button
-              variant="contained"
-              style={{
-                backgroundColor: "#FFE227",
-                border: "5px solid white",
-                color: "black",
-                fontFamily: "VT323",
-                fontSize: 16,
-                width: "80%",
-              }}
-              onClick={() =>
-                isBuy
-                  ? buyCoin(parseFloat(buyQuantity), buyUsd, totalPayment)
-                  : sellCoin(
-                      parseFloat(buyQuantity),
-                      buyUsd,
-                      totalPayment,
-                      brokerFee
-                    )
-              }
-            >
-              Submit
-            </Button>
+            {balance.usd ? (
+              <Button
+                variant="contained"
+                style={{
+                  backgroundColor: "#FFE227",
+                  border: "5px solid white",
+                  color: "black",
+                  fontFamily: "VT323",
+                  fontSize: 16,
+                  width: "80%",
+                }}
+                onClick={() =>
+                  isBuy
+                    ? buyCoin(parseFloat(buyQuantity), buyUsd, totalPayment)
+                    : sellCoin(
+                        parseFloat(buyQuantity),
+                        buyUsd,
+                        totalPayment,
+                        brokerFee
+                      )
+                }
+              >
+                Submit
+              </Button>
+            ) : (
+              <Button
+                variant="contained"
+                style={{
+                  backgroundColor: "#FFE227",
+                  border: "5px solid white",
+                  color: "black",
+                  fontFamily: "VT323",
+                  fontSize: 16,
+                  width: "80%",
+                }}
+                onClick={resetBalance}
+              >
+                Reset Balance
+              </Button>
+            )}
             <Button
               variant="contained"
               style={{
