@@ -108,7 +108,7 @@ function TradeSimulation() {
                 fontSize: 20,
               }}
               onClick={() => {
-                navigate("/coinList");
+                navigate("/trade");
               }}
             >
               Trade Now
