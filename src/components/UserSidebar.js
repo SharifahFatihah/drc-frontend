@@ -8,7 +8,7 @@ import { signOut } from "firebase/auth";
 import { auth, db } from "../firebase";
 import { doc, setDoc } from "firebase/firestore";
 
-const useStyles = makeStyles((theme) => ((theme) => ({
+const useStyles = makeStyles((theme) => ({
   container: {
     width: 350,
     padding: 25,
@@ -16,9 +16,6 @@ const useStyles = makeStyles((theme) => ((theme) => ({
     display: "flex",
     flexDirection: "column",
     background: "black",
-    [theme.breakpoints.down("md")]: {
-      padding: 20,
-    },
   },
   profile: {
     flex: 1,
@@ -152,14 +149,13 @@ export default function UserSidebar() {
               <div className={classes.profile}>
                 {" "}
                 <Avatar
-                  className={classes.profileAvatar}
                   src={user.photoURL}
                   alt={user.displayName || user.email}
                   style={{
                     height: !isMobile ? 150 : 75,
                     width: !isMobile ? 150 : 75,
                     cursor: "pointer",
-                    backgroundColor: "#FFE227",
+                    backgroundColor: "yellow",
                   }}
                 />{" "}
                 <span
