@@ -68,7 +68,7 @@ const useStyle = makeStyles((theme) => ({
 function PortfolioChart({ days, volatilityDesc, timeFrame }) {
   const classes = useStyle();
 
-  const { setAlert, watchlist, coins, currency, setPortfolioVol } =
+  const { setAlert, watchlist, coins, currency, setPortfolioVol, symbol } =
     CryptoState();
 
   const [coinHistData, setCoinHistData] = useState([]);
@@ -339,7 +339,7 @@ function PortfolioChart({ days, volatilityDesc, timeFrame }) {
 
   const histPriceTooltip = `The price of your portfolio for the past ${days} day(s)`;
   const relPriceTooltip = `The price of each coin in your portfolio relative to its highest value for the past ${days} day(s).`;
-  const histReturnTooltip = `The Sum of Returns x Weightage of each coin in your portfolio for the past ${days} day(s).`;
+  const histReturnTooltip = `The Historical Returns of your portfolio for the past ${days} day(s).`;
 
   return (
     <div className={classes.container}>
@@ -626,7 +626,8 @@ function PortfolioChart({ days, volatilityDesc, timeFrame }) {
                             </div>
                           </TableCell>
                           <TableCell align="right" style={{ color: "white" }}>
-                            {priceVol.toPrecision(4)}
+                            {symbol}
+                            {priceVol.toPrecision(4)} {currency?.toUpperCase()}
                           </TableCell>
                           <TableCell align="right" style={{ color: "white" }}>
                             {returnVol2.toPrecision(4)}%

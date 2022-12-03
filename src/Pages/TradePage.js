@@ -372,7 +372,7 @@ function TradePage() {
 
       setAlert({
         open: true,
-        message: `You have reset your balance`,
+        message: `Enjoy Trading~`,
         type: "success",
       });
     } catch (error) {}
