@@ -650,7 +650,9 @@ function TradePage() {
                 <div className={classes.inSidebar}>
                   <Typography>{isBuy ? "Price" : "Profit"}</Typography>
                   <Typography>
-                    {buyQuantity * priceArr[priceArr.length - 1]?.price}{" "}
+                    {(
+                      buyQuantity * priceArr[priceArr.length - 1]?.price
+                    )?.toFixed(2)}{" "}
                   </Typography>
                 </div>
                 <div className={classes.inSidebar}>
