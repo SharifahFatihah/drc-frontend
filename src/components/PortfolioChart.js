@@ -337,9 +337,9 @@ function PortfolioChart({ days, volatilityDesc, timeFrame }) {
     return "rgba(" + o(r() * s) + "," + o(r() * s) + "," + o(r() * s) + ",1";
   };
 
-  const histPriceTooltip = `The price of coin in the past ${days} day(s)`;
+  const histPriceTooltip = `The price of your portfolio for the past ${days} day(s)`;
   const relPriceTooltip = `The price of each coin in your portfolio relative to its highest value for the past ${days} day(s).`;
-  const histReturnTooltip = `The 'Sum of Returns' x 'Weightage of each coin' in your portfolio for the past ${days} day(s).`;
+  const histReturnTooltip = `The Sum of Returns x Weightage of each coin in your portfolio for the past ${days} day(s).`;
 
   return (
     <div className={classes.container}>
@@ -373,7 +373,7 @@ function PortfolioChart({ days, volatilityDesc, timeFrame }) {
                   <Tooltip title={relPriceTooltip}>
                     <img
                       src={infoicon}
-                      height="13"
+                      height="13px"
                       style={{ marginBottom: "25px" }}
                     />
                   </Tooltip>
@@ -580,6 +580,27 @@ function PortfolioChart({ days, volatilityDesc, timeFrame }) {
                         watchlist.find((watch) => watch.id === row.coin.id)
                       )
                     ) {
+                      const priceVol = Math.sqrt(
+                        row.stats_price.sd_price /
+                          ((row.coin.holding * row.coin.current_price) /
+                            row.total_weight) **
+                            2
+                      );
+                      const returnVol1 =
+                        Math.sqrt(
+                          row.stats_return.sd_return /
+                            ((row.coin.holding * row.coin.current_price) /
+                              row.total_weight) **
+                              2
+                        ) * 100;
+
+                      const returnVol2 =
+                        days === 1
+                          ? returnVol1 / Math.sqrt(1 / 288)
+                          : days === 30
+                          ? returnVol1 / Math.sqrt(1 / 72)
+                          : returnVol1 / Math.sqrt(1 / 365);
+
                       return (
                         <TableRow
                           key={row.coin.name}
@@ -605,22 +626,10 @@ function PortfolioChart({ days, volatilityDesc, timeFrame }) {
                             </div>
                           </TableCell>
                           <TableCell align="right" style={{ color: "white" }}>
-                            {Math.sqrt(
-                              row.stats_price.sd_price /
-                                ((row.coin.holding * row.coin.current_price) /
-                                  row.total_weight)
-                            ).toPrecision(4)}
+                            {priceVol.toPrecision(4)}
                           </TableCell>
                           <TableCell align="right" style={{ color: "white" }}>
-                            {(
-                              Math.sqrt(
-                                row.stats_return.sd_return /
-                                  ((row.coin.holding * row.coin.current_price) /
-                                    row.total_weight) **
-                                    2
-                              ) * 100
-                            ).toPrecision(4)}
-                            %
+                            {returnVol2.toPrecision(4)}%
                           </TableCell>
                         </TableRow>
                       );

@@ -102,6 +102,8 @@ function TradePage() {
   const [isMobile, setIsMobile] = useState(false);
   const [brokerFee, setBrokerFee] = useState("");
   const [totalPayment, setTotalPayment] = useState("");
+  const [dummy, setDummy] = useState("");
+  const [dummyUsd, setDummyUsd] = useState("");
 
   const playSound = () => {
     var kaching = new Audio(Kaching);
@@ -224,7 +226,7 @@ function TradePage() {
 
         setAlert({
           open: true,
-          message: `Buy succesful, current balance $${newUsd}USD`,
+          message: `Buy succesful, current balance $${newUsd?.toFixed(2)}USD`,
           type: "success",
         });
 
@@ -277,7 +279,7 @@ function TradePage() {
 
         setAlert({
           open: true,
-          message: `Sell succesful, current balance $${newUsd}USD`,
+          message: `Sell succesful, current balance $${newUsd?.toFixed(2)}USD`,
           type: "success",
         });
         sellReceipt(new Date(time), q, p, tp, bf);
@@ -640,76 +642,54 @@ function TradePage() {
                     variant="outlined"
                     label="Position Size"
                     value={buyQuantity}
-                    onChange={(e) =>
-                      isBuy
-                        ? (setBuyUsd(
-                            e.target.value * priceArr[priceArr.length - 1].price
-                          ),
-                          setBuyQuantity(e.target.value),
-                          e.target.value *
-                            priceArr[priceArr.length - 1].price *
-                            0.001 >
-                          8
-                            ? (setBrokerFee(
-                                e.target.value *
-                                  priceArr[priceArr.length - 1].price *
-                                  0.001
-                              ),
-                              setTotalPayment(
-                                e.target.value *
-                                  priceArr[priceArr.length - 1].price +
-                                  e.target.value *
-                                    priceArr[priceArr.length - 1].price *
-                                    0.001
-                              ))
-                            : (setBrokerFee(8),
-                              setTotalPayment(
-                                e.target.value *
-                                  priceArr[priceArr.length - 1].price +
-                                  8
-                              )))
-                        : (setBuyUsd(
-                            e.target.value * priceArr[priceArr.length - 1].price
-                          ),
-                          setBuyQuantity(e.target.value),
-                          e.target.value *
-                            priceArr[priceArr.length - 1].price *
-                            0.001 >
-                          8
-                            ? (setBrokerFee(
-                                e.target.value *
-                                  priceArr[priceArr.length - 1].price *
-                                  0.001
-                              ),
-                              setTotalPayment(
-                                e.target.value *
-                                  priceArr[priceArr.length - 1].price -
-                                  e.target.value *
-                                    priceArr[priceArr.length - 1].price *
-                                    0.001
-                              ))
-                            : (setBrokerFee(8),
-                              setTotalPayment(
-                                e.target.value *
-                                  priceArr[priceArr.length - 1].price -
-                                  8
-                              )))
-                    }
+                    onChange={(e) => setBuyQuantity(e.target.value)}
                     fullWidth
                   />
                 </div>
-                <div className={classes.inSidebar}></div>
+
                 <div className={classes.inSidebar}>
                   <Typography>{isBuy ? "Price" : "Profit"}</Typography>
-                  <Typography>{buyUsd} </Typography>
+                  <Typography>
+                    {buyQuantity * priceArr[priceArr.length - 1]?.price}{" "}
+                  </Typography>
                 </div>
                 <div className={classes.inSidebar}>
                   <Typography>Broker Fee</Typography>
-                  <Typography>{brokerFee} </Typography>
+                  <Typography>
+                    {(buyQuantity *
+                      priceArr[priceArr.length - 1]?.price *
+                      0.001 >
+                    8
+                      ? buyQuantity *
+                        priceArr[priceArr.length - 1]?.price *
+                        0.001
+                      : 8
+                    )?.toFixed(2)}{" "}
+                  </Typography>
                 </div>
                 <div className={classes.inSidebar}>
                   <Typography>{isBuy ? "Total Cost" : "Total Gain"}</Typography>
-                  <Typography>{totalPayment} </Typography>
+                  <Typography>
+                    {(isBuy
+                      ? buyQuantity *
+                        (priceArr[priceArr.length - 1]?.price * 0.001 > 8
+                          ? buyQuantity *
+                              priceArr[priceArr.length - 1]?.price *
+                              0.001 +
+                            buyQuantity * priceArr[priceArr.length - 1]?.price
+                          : buyQuantity * priceArr[priceArr.length - 1]?.price +
+                            8)
+                      : buyQuantity *
+                          priceArr[priceArr.length - 1]?.price *
+                          0.001 >
+                        8
+                      ? buyQuantity * priceArr[priceArr.length - 1]?.price -
+                        buyQuantity *
+                          priceArr[priceArr.length - 1]?.price *
+                          0.001
+                      : buyQuantity * priceArr[priceArr.length - 1]?.price - 8
+                    )?.toFixed(2)}{" "}
+                  </Typography>
                 </div>
 
                 <Button
@@ -726,15 +706,51 @@ function TradePage() {
                     isBuy
                       ? buyCoin(
                           parseFloat(buyQuantity),
-                          buyUsd,
-                          totalPayment,
-                          brokerFee
+                          buyQuantity * priceArr[priceArr.length - 1]?.price,
+                          buyQuantity *
+                            priceArr[priceArr.length - 1].price *
+                            0.001 >
+                            8
+                            ? buyQuantity *
+                                priceArr[priceArr.length - 1].price *
+                                0.001 +
+                                buyQuantity *
+                                  priceArr[priceArr.length - 1].price
+                            : buyQuantity *
+                                priceArr[priceArr.length - 1].price +
+                                8,
+                          buyQuantity *
+                            priceArr[priceArr.length - 1].price *
+                            0.001 >
+                            8
+                            ? buyQuantity *
+                                priceArr[priceArr.length - 1].price *
+                                0.001
+                            : 8
                         )
                       : sellCoin(
                           parseFloat(buyQuantity),
-                          buyUsd,
-                          totalPayment,
-                          brokerFee
+                          buyQuantity * priceArr[priceArr.length - 1]?.price,
+                          buyQuantity *
+                            priceArr[priceArr.length - 1].price *
+                            0.001 >
+                            8
+                            ? buyQuantity *
+                                priceArr[priceArr.length - 1].price -
+                                buyQuantity *
+                                  priceArr[priceArr.length - 1].price *
+                                  0.001
+                            : buyQuantity *
+                                priceArr[priceArr.length - 1].price -
+                                8,
+                          buyQuantity *
+                            priceArr[priceArr.length - 1].price *
+                            0.001 >
+                            8
+                            ? buyQuantity *
+                                priceArr[priceArr.length - 1].price *
+                                0.001
+                            : 8
                         )
                   }
                 >
