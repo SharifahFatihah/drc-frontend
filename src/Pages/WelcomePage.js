@@ -1,5 +1,4 @@
 import { Button, Container, makeStyles, Typography } from "@material-ui/core";
-import { Gradient } from "@material-ui/icons";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Kaching from "../asset/kaching.mp3";
@@ -7,6 +6,7 @@ import LogoWord from "../asset/logoword.png";
 import Mario from "../asset/mario3.gif";
 import MarioStay from "../asset/mario-ready.gif";
 import Coin from "../asset/mariocoin.gif";
+import { CryptoState } from "../CryptoContext";
 const useStyle = makeStyles((theme) => ({
   banner: {
     backgroundPosition: "center center",
@@ -113,6 +113,8 @@ function WelcomePage() {
       kaching.setAttribute("src", "");
     };
   };
+  const { setAlert } = CryptoState();
+
   return (
     <div className={classes.banner}>
       <Container maxWidth="xl" className={classes.bannerContent}>
@@ -166,6 +168,11 @@ function WelcomePage() {
                 setIsClick(true);
                 setTimeout(() => {
                   navigate("/homepage");
+                  setAlert({
+                    open: true,
+                    message: `now playing: a town with an ocean view`,
+                    type: "info",
+                  });
                 }, 650);
               }}
             >
