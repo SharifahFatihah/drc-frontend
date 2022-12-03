@@ -40,6 +40,8 @@ const useStyles = makeStyles((theme) => ({
     paddingLeft: 20,
     fontFamily: "VT323",
     marginBottom: 30,
+    alignItems: "flex-start",
+    justifyContent: "flex-start",
     [theme.breakpoints.down("md")]: {
       paddingRight: 0,
       paddingLeft: 0,

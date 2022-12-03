@@ -50,10 +50,13 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.down("md")]: {
       width: "100%",
     },
+    backgroundColor: "rgba(79, 58, 84, 0.52)",
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
-    marginTop: 25,
+    paddingTop: 25,
+    paddingBottom: 25,
+    // marginTop: 25,
     whiteSpace: "wrap",
   },
   inSidebar: {
@@ -64,14 +67,14 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: 20,
   },
   red: {
-    backgroundColor: "#FF4B25",
+    backgroundColor: "#FF0000",
     marginLeft: 10,
     color: "black",
     padding: 5,
     borderRadius: 5,
   },
   green: {
-    backgroundColor: "#00FF19",
+    backgroundColor: "#33FF00",
     marginLeft: 10,
     color: "black",
     padding: 5,
@@ -355,9 +358,20 @@ function TradePage() {
           <div
             style={{
               width: "90%",
-              backgroundColor: "rgba(79, 58, 84, 0.52)",
             }}
           >
+            <Typography
+              variant="h4"
+              style={{
+                display: "flex",
+                fontFamily: "VT323",
+                marginBottom: 25,
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              Real Time Price
+            </Typography>
             <Paper
               sx={{
                 width: "100%",
@@ -428,7 +442,7 @@ function TradePage() {
               variant="h2"
               style={{
                 fontFamily: "VT323",
-                marginRight: 20,
+                marginLeft: 30,
                 color:
                   priceArr[priceArr.length - 1]?.price >
                   priceArr[priceArr.length - 2]?.price
@@ -569,7 +583,7 @@ function TradePage() {
               >
                 <Button
                   style={{
-                    backgroundColor: isBuy ? "yellow" : "transparent",
+                    backgroundColor: isBuy ? "#FFE227" : "transparent",
                     color: isBuy ? "black" : "white",
                     width: "80%",
                   }}
@@ -585,7 +599,7 @@ function TradePage() {
                 </Button>
                 <Button
                   style={{
-                    backgroundColor: !isBuy ? "yellow" : "transparent",
+                    backgroundColor: !isBuy ? "FFE227" : "transparent",
                     color: !isBuy ? "black" : "white",
                     width: "80%",
                   }}
