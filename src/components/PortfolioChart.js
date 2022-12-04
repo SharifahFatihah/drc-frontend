@@ -506,7 +506,7 @@ function PortfolioChart({ days, volatilityDesc, timeFrame }) {
                       data: portfolioReturnChart()?.avg_return.map(
                         (e) => e * 100
                       ),
-                      label: `test`,
+                      label: `Return %`,
                       borderColor: "rgba(255, 226, 39, 1)",
                       borderWidth: 0.5,
                       pointBorderColor: "rgba(0,0,0,0)",

@@ -113,7 +113,7 @@ function CoinChart({ coin }) {
   const handleResize = () => {
     if (window.innerWidth < 500) {
       setIsMobile(true);
-    } else if (window.innerWidth < 1000) {
+    } else if (window.innerWidth < 1280) {
       setIsTablet(true);
     } else {
       setIsMobile(false);
@@ -128,7 +128,7 @@ function CoinChart({ coin }) {
   useEffect(() => {
     if (window.innerWidth < 500) {
       setIsMobile(true);
-    } else if (window.innerWidth < 1000) {
+    } else if (window.innerWidth < 1280) {
       setIsTablet(true);
     } else {
       setIsMobile(false);
@@ -375,8 +375,8 @@ function CoinChart({ coin }) {
                   }}
                   series={[priceData]}
                   type="candlestick"
-                  width={isMobile ? "125%" : isTablet ? "300%" : "400%"}
-                  height={isMobile ? "125%" : isTablet ? "300%" : "400%"}
+                  width={isMobile ? "125%" : isTablet ? "250%" : "350%"}
+                  height={isMobile ? "125%" : isTablet ? "250%" : "350%"}
                 />
               </div>
             )}

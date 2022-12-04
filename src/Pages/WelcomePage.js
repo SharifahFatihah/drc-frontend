@@ -1,13 +1,12 @@
 import { Button, Container, makeStyles, Typography } from "@material-ui/core";
-import { Gradient } from "@material-ui/icons";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Kaching from "../asset/kaching.mp3";
 import LogoWord from "../asset/logoword.png";
 import Mario from "../asset/mario3.gif";
-import MarioStay from "../asset/mariostay.png";
+import MarioStay from "../asset/mario-ready.gif";
 import Coin from "../asset/mariocoin.gif";
-
+import { CryptoState } from "../CryptoContext";
 const useStyle = makeStyles((theme) => ({
   banner: {
     backgroundPosition: "center center",
@@ -48,6 +47,7 @@ const useStyle = makeStyles((theme) => ({
       height: "90%",
       paddingTop: 40,
       padding: 20,
+      justifyContent: "space-evenly",
     },
   },
   investor: {
@@ -102,70 +102,99 @@ const useStyle = makeStyles((theme) => ({
     },
   },
 }));
-
 function WelcomePage() {
   const classes = useStyle();
   const navigate = useNavigate();
   const [isClick, setIsClick] = useState(false);
-
   const playSound = () => {
     var kaching = new Audio(Kaching);
     kaching.play();
-
     kaching.onended = () => {
       kaching.setAttribute("src", "");
     };
   };
+  const { setAlert } = CryptoState();
 
   return (
     <div className={classes.banner}>
       <Container maxWidth="xl" className={classes.bannerContent}>
         <div className={classes.hello}>
-          <img
-            src={LogoWord}
-            alt="kaching"
+          <div
             style={{
-              marginBottom: 50,
-              paddingLeft: 20,
-            }}
-          />
-          <Typography className={classes.investor}>Hello Investor!</Typography>
-          <Typography className={classes.adventure}>
-            Are you ready for an adventure?
-          </Typography>
-          {isClick && (
-            <img className={classes.coingif} src={Coin} alt="coins" />
-          )}
-          <Button
-            className={classes.buttonStart}
-            variant="contained"
-            onClick={() => {
-              playSound();
-              setIsClick(true);
-              setTimeout(() => {
-                navigate("/homepage");
-              }, 650);
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
             }}
           >
-            Let's Start!
-          </Button>
-          {!isClick ? (
+            {" "}
             <img
-              className={classes.mariogif}
-              src={MarioStay}
-              alt="mario collect coins"
+              src={LogoWord}
+              alt="kaching"
+              style={{
+                marginBottom: 50,
+                paddingLeft: 20,
+              }}
             />
-          ) : (
-            <img
-              className={classes.mariogif}
-              src={Mario}
-              alt="mario collect coins"
-            />
-          )}
+            <Typography className={classes.investor}>
+              Hello Investor!
+            </Typography>
+            <Typography className={classes.adventure}>
+              Are you ready for an adventure?
+            </Typography>
+          </div>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+            }}
+          >
+            {" "}
+            {isClick ? (
+              <img className={classes.coingif} src={Coin} alt="coins" />
+            ) : (
+              <img
+                className={classes.coingif}
+                style={{ visibility: "hidden" }}
+                src={Coin}
+                alt="coins"
+              />
+            )}
+            <Button
+              className={classes.buttonStart}
+              variant="contained"
+              onClick={() => {
+                playSound();
+                setIsClick(true);
+                setTimeout(() => {
+                  navigate("/homepage");
+                  setAlert({
+                    open: true,
+                    message: `now playing: a town with an ocean view`,
+                    type: "info",
+                  });
+                }, 650);
+              }}
+            >
+              Let's Start!
+            </Button>
+            {!isClick ? (
+              <img
+                className={classes.mariogif}
+                src={MarioStay}
+                alt="mario collect coins"
+              />
+            ) : (
+              <img
+                className={classes.mariogif}
+                src={Mario}
+                alt="mario collect coins"
+              />
+            )}
+          </div>
         </div>
       </Container>
     </div>
   );
 }
-
 export default WelcomePage;
