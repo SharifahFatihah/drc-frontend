@@ -674,13 +674,14 @@ function TradePage() {
                   <Typography>
                     {(isBuy
                       ? buyQuantity *
-                        (priceArr[priceArr.length - 1]?.price * 0.001 > 8
-                          ? buyQuantity *
-                              priceArr[priceArr.length - 1]?.price *
-                              0.001 +
-                            buyQuantity * priceArr[priceArr.length - 1]?.price
-                          : buyQuantity * priceArr[priceArr.length - 1]?.price +
-                            8)
+                          priceArr[priceArr.length - 1]?.price *
+                          0.001 >
+                        8
+                        ? buyQuantity * priceArr[priceArr.length - 1]?.price +
+                          buyQuantity *
+                            priceArr[priceArr.length - 1]?.price *
+                            0.001
+                        : buyQuantity * priceArr[priceArr.length - 1]?.price + 8
                       : buyQuantity *
                           priceArr[priceArr.length - 1]?.price *
                           0.001 >
