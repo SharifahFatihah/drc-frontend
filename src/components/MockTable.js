@@ -22,6 +22,7 @@ import {
   LinearProgress,
   makeStyles,
   ThemeProvider,
+  Tooltip,
   Typography,
 } from "@material-ui/core";
 import { doc, setDoc } from "firebase/firestore";
@@ -315,27 +316,31 @@ export default function EnhancedTable({ coins }) {
                       <TableCell align="right">
                         {user ? (
                           inWatchlist ? (
-                            <img
-                              src={FavouriteIcon}
-                              height="30rem"
-                              onClick={() => {
-                                inWatchlist
-                                  ? removeFromWatchlist(row)
-                                  : addToWatchList(row);
-                              }}
-                              style={{ cursor: "pointer" }}
-                            />
+                            <Tooltip title="remove from portfolio">
+                              <img
+                                src={FavouriteIcon}
+                                height="30rem"
+                                onClick={() => {
+                                  inWatchlist
+                                    ? removeFromWatchlist(row)
+                                    : addToWatchList(row);
+                                }}
+                                style={{ cursor: "pointer" }}
+                              />
+                            </Tooltip>
                           ) : (
-                            <img
-                              src={UnFavouriteIcon}
-                              height="30rem"
-                              onClick={() => {
-                                inWatchlist
-                                  ? removeFromWatchlist(row)
-                                  : addToWatchList(row);
-                              }}
-                              style={{ cursor: "pointer" }}
-                            />
+                            <Tooltip title="add to portfolio">
+                              <img
+                                src={UnFavouriteIcon}
+                                height="30rem"
+                                onClick={() => {
+                                  inWatchlist
+                                    ? removeFromWatchlist(row)
+                                    : addToWatchList(row);
+                                }}
+                                style={{ cursor: "pointer" }}
+                              />
+                            </Tooltip>
                           )
                         ) : (
                           <img

@@ -27,6 +27,26 @@ import {
 import { doc, setDoc } from "firebase/firestore";
 import { db } from "../firebase";
 
+const useStyles = makeStyles((theme) => ({
+  red: {
+    display: "flex",
+    width: "50px",
+    justifyContent: "center",
+
+    backgroundColor: "#FF4B25",
+    color: "black",
+    borderRadius: 5,
+  },
+  green: {
+    display: "flex",
+    width: "50px",
+    justifyContent: "center",
+    backgroundColor: "#00FF19",
+    color: "black",
+    borderRadius: 5,
+  },
+}));
+
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
     return -1;
@@ -151,9 +171,7 @@ export default function EnhancedTable({ receipt }) {
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(receipt?.length);
 
-  const { user } = CryptoState();
-
-  const navigate = useNavigate();
+  const classes = useStyles();
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -237,13 +255,22 @@ export default function EnhancedTable({ receipt }) {
                       <TableCell align="right" style={{ color: "white" }}>
                         {row.coin?.toUpperCase()}
                       </TableCell>
-                      <TableCell
-                        align="right"
-                        style={{
-                          color: "white",
-                        }}
-                      >
-                        {row.type?.toUpperCase()}
+                      <TableCell align="right">
+                        <div
+                          style={{
+                            display: "flex",
+                            width: "100%",
+                            justifyContent: "flex-end",
+                          }}
+                        >
+                          <Typography
+                            className={
+                              row.type === "buy" ? classes.red : classes.green
+                            }
+                          >
+                            {row.type?.toUpperCase()}
+                          </Typography>
+                        </div>
                       </TableCell>
                       <TableCell align="right" style={{ color: "white" }}>
                         {row.quantity}

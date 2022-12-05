@@ -68,7 +68,7 @@ const useStyle = makeStyles((theme) => ({
 function PortfolioChart({ days, volatilityDesc, timeFrame }) {
   const classes = useStyle();
 
-  const { setAlert, watchlist, coins, currency, setPortfolioVol } =
+  const { setAlert, watchlist, coins, currency, setPortfolioVol, symbol } =
     CryptoState();
 
   const [coinHistData, setCoinHistData] = useState([]);
@@ -272,9 +272,11 @@ function PortfolioChart({ days, volatilityDesc, timeFrame }) {
   const coinChart = coinHistData2.map((e) => {
     const data1 = e.hist_data?.map((chartData) => chartData[1]);
 
-    const ratio = Math.max(...data1) / 100;
+    const ratio = Math.max(...data1) - Math.min(...data1);
 
-    const data2 = data1.map((v) => v / ratio);
+    const min = Math.min(...data1);
+
+    const data2 = data1.map((v) => (v - min) / ratio);
 
     const random_rgba = () => {
       var o = Math.round,
@@ -337,9 +339,9 @@ function PortfolioChart({ days, volatilityDesc, timeFrame }) {
     return "rgba(" + o(r() * s) + "," + o(r() * s) + "," + o(r() * s) + ",1";
   };
 
-  const histPriceTooltip = `The price of coin in the past ${days} day(s)`;
+  const histPriceTooltip = `The price of your portfolio for the past ${days} day(s)`;
   const relPriceTooltip = `The price of each coin in your portfolio relative to its highest value for the past ${days} day(s).`;
-  const histReturnTooltip = `The 'Sum of Returns' x 'Weightage of each coin' in your portfolio for the past ${days} day(s).`;
+  const histReturnTooltip = `The Historical Returns of your portfolio for the past ${days} day(s).`;
 
   return (
     <div className={classes.container}>
@@ -373,7 +375,7 @@ function PortfolioChart({ days, volatilityDesc, timeFrame }) {
                   <Tooltip title={relPriceTooltip}>
                     <img
                       src={infoicon}
-                      height="13"
+                      height="13px"
                       style={{ marginBottom: "25px" }}
                     />
                   </Tooltip>
@@ -580,6 +582,27 @@ function PortfolioChart({ days, volatilityDesc, timeFrame }) {
                         watchlist.find((watch) => watch.id === row.coin.id)
                       )
                     ) {
+                      const priceVol = Math.sqrt(
+                        row.stats_price.sd_price /
+                          ((row.coin.holding * row.coin.current_price) /
+                            row.total_weight) **
+                            2
+                      );
+                      const returnVol1 =
+                        Math.sqrt(
+                          row.stats_return.sd_return /
+                            ((row.coin.holding * row.coin.current_price) /
+                              row.total_weight) **
+                              2
+                        ) * 100;
+
+                      const returnVol2 =
+                        days === 1
+                          ? returnVol1 / Math.sqrt(1 / 288)
+                          : days === 30
+                          ? returnVol1 / Math.sqrt(1 / 72)
+                          : returnVol1 / Math.sqrt(1 / 365);
+
                       return (
                         <TableRow
                           key={row.coin.name}
@@ -605,22 +628,11 @@ function PortfolioChart({ days, volatilityDesc, timeFrame }) {
                             </div>
                           </TableCell>
                           <TableCell align="right" style={{ color: "white" }}>
-                            {Math.sqrt(
-                              row.stats_price.sd_price /
-                                ((row.coin.holding * row.coin.current_price) /
-                                  row.total_weight)
-                            ).toPrecision(4)}
+                            {symbol}
+                            {priceVol.toPrecision(4)} {currency?.toUpperCase()}
                           </TableCell>
                           <TableCell align="right" style={{ color: "white" }}>
-                            {(
-                              Math.sqrt(
-                                row.stats_return.sd_return /
-                                  ((row.coin.holding * row.coin.current_price) /
-                                    row.total_weight) **
-                                    2
-                              ) * 100
-                            ).toPrecision(4)}
-                            %
+                            {returnVol2.toPrecision(4)}%
                           </TableCell>
                         </TableRow>
                       );
