@@ -1,7 +1,5 @@
-import { Button, makeStyles, Typography } from "@material-ui/core";
+import { makeStyles, Typography } from "@material-ui/core";
 import React from "react";
-import { useNavigate } from "react-router-dom";
-import pixel from "../asset/pixelated_1.png";
 import Sharifah from "../asset/sharifah.png";
 import Esther from "../asset/esther.png";
 import Nic from "../asset/nic.png";
@@ -42,7 +40,6 @@ const useStyles = makeStyles((theme) => ({
 
 function Team() {
   const classes = useStyles();
-  const navigate = useNavigate();
 
   return (
     <div>
@@ -113,15 +110,6 @@ function Team() {
           </Typography>
         </div>
       </div>
-      {/* <img
-        src={pixel}
-        style={{
-          position: "relative",
-          width: "100%",
-          transform: "rotate(180deg)",
-          backgroundColor: "#6B0D74",
-        }}
-      ></img> */}
     </div>
   );
 }
