@@ -56,6 +56,10 @@ const useStyles = makeStyles((theme) => ({
     paddingBottom: 25,
     textAlign: "justify",
   },
+  circulatingDescription: {
+    paddingBottom: 25,
+    textAlign: "center",
+  },
   coinBasicContainer: {
     display: "flex",
     flexDirection: "column",
@@ -274,7 +278,7 @@ function CoinPage() {
             </Typography>
           </span>
           <span className={classes.coinBasic}>
-            <Typography variant="h6" className={classes.description}>
+            <Typography variant="h6" className={classes.circulatingDescription}>
               Circulating Supply:{" "}
               {coin?.market_data?.circulating_supply
                 .toString()

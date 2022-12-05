@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
       alignItems: "flex-start",
     },
   },
-  marketContainer: {
+  portfolioContainer: {
     padding: 40,
     display: "flex",
     flexDirection: "row",
@@ -98,8 +98,10 @@ function Portfolioinfo({
         width: "100%",
       }}
     >
-      <div className={classes.marketContainer}>
+      <div className={classes.portfolioContainer}>
         <div
+          data-aos="zoom-in-down"
+          data-aos-duration="1500"
           className={classes.infoContainer}
           style={{ display: "flex", alignItems: "flex-start" }}
         >
@@ -131,7 +133,11 @@ function Portfolioinfo({
             </div>
           </Typography>
         </div>
-        <div className={classes.infoContainer}>
+        <div
+          data-aos="zoom-in-down"
+          data-aos-duration="1500"
+          className={classes.infoContainer}
+        >
           <div
             style={{
               display: "flex",
@@ -198,7 +204,11 @@ function Portfolioinfo({
             </div>
           </div>
         </div>
-        <div className={classes.infoContainer}>
+        <div
+          data-aos="zoom-in-down"
+          data-aos-duration="1500"
+          className={classes.infoContainer}
+        >
           <div
             style={{
               display: "flex",
@@ -260,7 +270,11 @@ function Portfolioinfo({
             </div>
           </div>
         </div>
-        <div className={classes.infoContainer}>
+        <div
+          data-aos="zoom-in-down"
+          data-aos-duration="1500"
+          className={classes.infoContainer}
+        >
           <div
             style={{
               display: "flex",

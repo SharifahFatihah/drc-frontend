@@ -2,7 +2,6 @@ import getNews from "../service/newsservice";
 import { CircularProgress, makeStyles, Typography } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import moment from "moment/moment";
-import Pacman from "../asset/all-coins.gif";
 import news from "../asset/crypto_news.gif";
 
 const useStyles = makeStyles((theme) => ({
@@ -55,9 +54,11 @@ const useStyles = makeStyles((theme) => ({
   },
   leftSub: {
     paddingRight: 20,
-    paddingLeft: 80,
+    paddingLeft: 20,
     fontFamily: "VT323",
     marginBottom: 30,
+    alignItems: "flex-start",
+    justifyContent: "flex-start",
     [theme.breakpoints.down("md")]: {
       paddingRight: 0,
       paddingLeft: 0,
@@ -132,6 +133,7 @@ function NewsPage() {
               .map((article, i) => {
                 return (
                   <div
+                    data-aos="fade-up"
                     className={classes.newsbox}
                     onClick={() => {
                       window.open(article?.url);
