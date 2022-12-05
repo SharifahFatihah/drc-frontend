@@ -156,7 +156,7 @@ export default function EnhancedTable({ coins }) {
 
       setAlert({
         open: true,
-        message: `${usercoin.name} added to your watchlist`,
+        message: `${usercoin.name} Added to your portfolio`,
         type: "success",
       });
     } catch (error) {}
@@ -176,7 +176,7 @@ export default function EnhancedTable({ coins }) {
 
       setAlert({
         open: true,
-        message: `${usercoin.name} remove from your watchlist`,
+        message: `${usercoin.name} Removed from your portfolio`,
         type: "success",
       });
     } catch (error) {}
@@ -318,7 +318,7 @@ export default function EnhancedTable({ coins }) {
                       <TableCell align="right">
                         {user ? (
                           inWatchlist ? (
-                            <Tooltip title="Remove from portfolio">
+                            <Tooltip title="Removed from portfolio">
                               <img
                                 src={FavouriteIcon}
                                 height="30rem"

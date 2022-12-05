@@ -1,13 +1,15 @@
 import * as React from "react";
+
+import { Tooltip, makeStyles } from "@material-ui/core";
+import { doc, setDoc } from "firebase/firestore";
+
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
-import Modal from "@mui/material/Modal";
-import DeleteIcon from "../asset/deleteicon.png";
-import { doc, setDoc } from "firebase/firestore";
-import { db } from "../firebase";
 import { CryptoState } from "../CryptoContext";
-import { makeStyles, Tooltip } from "@material-ui/core";
+import DeleteIcon from "../asset/deleteicon.png";
+import Modal from "@mui/material/Modal";
+import Typography from "@mui/material/Typography";
+import { db } from "../firebase";
 import { style } from "@mui/system";
 
 const useStyle = makeStyles((theme) => ({
@@ -65,7 +67,7 @@ export default function DeleteModal(row) {
 
       setAlert({
         open: true,
-        message: `${coin.name} remove from your watchlist`,
+        message: `${coin.name} Removed from your portfolio`,
         type: "success",
       });
     } catch (error) {}

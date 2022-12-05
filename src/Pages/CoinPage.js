@@ -164,7 +164,7 @@ function CoinPage() {
 
       setAlert({
         open: true,
-        message: `${coin.name} added to your portfolio`,
+        message: `${coin.name} Added to your portfolio`,
         type: "success",
       });
     } catch (error) {}
@@ -184,7 +184,7 @@ function CoinPage() {
 
       setAlert({
         open: true,
-        message: `${coin.name} remove from your watchlist`,
+        message: `${coin.name} Removed from your portfolio`,
         type: "success",
       });
     } catch (error) {}
