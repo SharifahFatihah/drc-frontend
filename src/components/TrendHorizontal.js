@@ -1,9 +1,4 @@
-import {
-  CircularProgress,
-  LinearProgress,
-  makeStyles,
-  Typography,
-} from "@material-ui/core";
+import { CircularProgress, makeStyles, Typography } from "@material-ui/core";
 import React, { useState, useEffect } from "react";
 import Service from "../service/Service";
 import { CryptoState } from "../CryptoContext";
@@ -11,7 +6,7 @@ import AliceCarousel from "react-alice-carousel";
 import { useNavigate } from "react-router-dom";
 import SimpleChart from "./SimpleChart";
 
-const useStyle = makeStyles(() => ({
+const useStyle = makeStyles((theme) => ({
   scrollh: {
     height: "50%",
     width: "90%",
@@ -22,12 +17,21 @@ const useStyle = makeStyles(() => ({
   scrollElement: {
     boxShadow: "0px 0px 105px 45px 0px 0px 105px 45px ",
   },
+  BTCvalue: {
+    fontWeight: "bolder",
+    fontSize: 20,
+    [theme.breakpoints.down("md")]: {
+      fontSize: 14,
+      display: "flex",
+      flexDirection: "column",
+    },
+  },
 }));
 function TrendHorizontal() {
   const classes = useStyle();
   const navigate = useNavigate();
 
-  const { currency, symbol, setAlert } = CryptoState();
+  const { setAlert } = CryptoState();
 
   const [trending, setTrending] = useState([]);
 
@@ -70,7 +74,6 @@ function TrendHorizontal() {
         className={classes.scrollElement}
         onClick={() => navigate(`/coins/${coin?.item?.id}`)}
         style={{
-          // display: "flex",
           flexDirection: "column",
           alignItems: "center",
           cursor: "pointer",
@@ -105,14 +108,9 @@ function TrendHorizontal() {
               </Typography>
             </div>
           </div>
-          <div
-            style={{
-              fontWeight: "bolder",
-              fontSize: 20,
-            }}
-          >
-            {coin?.item?.price_btc?.toString().slice(0, 8)}
-            {" BTC "}
+          <div className={classes.BTCvalue}>
+            <div>{coin?.item?.price_btc?.toString().slice(0, 8)}</div>
+            <div>{" BTC "}</div>
           </div>
         </div>
 

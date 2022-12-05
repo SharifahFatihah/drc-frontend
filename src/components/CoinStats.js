@@ -50,6 +50,8 @@ function CoinStats({ coin }) {
     <div className={classes.chartbox}>
       <div className={classes.container}>
         <Container
+          data-aos="flip-down"
+          data-aos-duration="1500"
           style={{
             display: "flex",
             flexDirection: "column",
@@ -104,6 +106,8 @@ function CoinStats({ coin }) {
           />
         </Container>
         <Container
+          data-aos="flip-down"
+          data-aos-duration="1500"
           style={{
             display: "flex",
             flexDirection: "column",
@@ -158,6 +162,8 @@ function CoinStats({ coin }) {
           />
         </Container>
         <Container
+          data-aos="flip-down"
+          data-aos-duration="1500"
           style={{
             display: "flex",
             flexDirection: "column",
