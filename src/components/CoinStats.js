@@ -50,6 +50,8 @@ function CoinStats({ coin }) {
     <div className={classes.chartbox}>
       <div className={classes.container}>
         <Container
+          data-aos="flip-down"
+          data-aos-duration="1500"
           style={{
             display: "flex",
             flexDirection: "column",
@@ -65,7 +67,10 @@ function CoinStats({ coin }) {
               opacity: "0.8",
             }}
           >
-            <Tooltip title="The activeness of coin in different platforms such as the amount of Reddit active accounts, Telegram users and Twitter followers.">
+            <Tooltip
+              title="The activeness of coin in different platforms such as the amount of Reddit active accounts, Telegram users and Twitter followers."
+              enterTouchDelay={0}
+            >
               <img src={infoicon} height="13" />
             </Tooltip>
           </div>
@@ -101,6 +106,8 @@ function CoinStats({ coin }) {
           />
         </Container>
         <Container
+          data-aos="flip-down"
+          data-aos-duration="1500"
           style={{
             display: "flex",
             flexDirection: "column",
@@ -115,7 +122,10 @@ function CoinStats({ coin }) {
               opacity: "0.8",
             }}
           >
-            <Tooltip title="The measurement of developer's contribution activity on coin. ">
+            <Tooltip
+              title="The measurement of developer's contribution activity on coin. "
+              enterTouchDelay={0}
+            >
               <img src={infoicon} height="13" />
             </Tooltip>
           </div>
@@ -152,6 +162,8 @@ function CoinStats({ coin }) {
           />
         </Container>
         <Container
+          data-aos="flip-down"
+          data-aos-duration="1500"
           style={{
             display: "flex",
             flexDirection: "column",
@@ -166,7 +178,10 @@ function CoinStats({ coin }) {
               opacity: "0.8",
             }}
           >
-            <Tooltip title="The ease of the coin to be converted into cash without impacting the price and vice versa.">
+            <Tooltip
+              title="The ease of the coin to be converted into cash without impacting the price and vice versa."
+              enterTouchDelay={0}
+            >
               <img src={infoicon} height="13" />
             </Tooltip>
           </div>

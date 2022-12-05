@@ -9,6 +9,7 @@ import {
   Tooltip,
   Typography,
   makeStyles,
+  TableHead,
 } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 
@@ -249,6 +250,7 @@ function PortfolioPage() {
         return sum + 0;
       }
     }, 0);
+
     setAvgPriceChange(
       userCoin3?.length > 0 &&
         userCoin3?.reduce((sum, coin) => {
@@ -346,7 +348,14 @@ function PortfolioPage() {
     return "rgba(" + o(r() * s) + "," + o(r() * s) + "," + o(r() * s) + ",1";
   };
   const colourDoughnut = donutCoin?.map((e) => random_rgba());
-  const weightageTooltip = `The weightage of each coin in your portfolio for the past ${days} day(s).`;
+  const weightageTooltip = `The weightage of each coin in your portfolio`;
+
+  const timeVol =
+    days === 1
+      ? portfolioVol / Math.sqrt(1 / 288)
+      : days === 30
+      ? portfolioVol / Math.sqrt(1 / 72)
+      : portfolioVol / Math.sqrt(1 / 365);
 
   return (
     <div className={classes.container}>
@@ -422,7 +431,41 @@ function PortfolioPage() {
                       maxHeight: isMobile ? "250px" : "550px",
                     }}
                   >
-                    <Table sx={{ minWidth: 650 }}>
+                    <Table
+                      sx={{ minWidth: 650 }}
+                      aria-label="simple table"
+                      stickyHeader
+                    >
+                      <TableHead>
+                        <TableRow>
+                          <TableCell
+                            style={{
+                              color: "black",
+                              backgroundColor: "#FFE227",
+                            }}
+                          >
+                            Coin
+                          </TableCell>
+                          <TableCell
+                            align="right"
+                            style={{
+                              color: "black",
+                              backgroundColor: "#FFE227",
+                            }}
+                          >
+                            Holdings
+                          </TableCell>
+                          <TableCell
+                            align="right"
+                            style={{
+                              color: "black",
+                              backgroundColor: "#FFE227",
+                            }}
+                          >
+                            Action
+                          </TableCell>
+                        </TableRow>
+                      </TableHead>
                       <TableBody>
                         {userCoin3?.map((row) => {
                           if (
@@ -499,9 +542,11 @@ function PortfolioPage() {
                                       display: "flex",
                                       alignItems: "center",
                                       justifyContent: "flex-end",
+                                      gap: 20,
                                     }}
                                   >
                                     <HoldingModal coin={row} />
+
                                     <DeleteModal row={row} />
                                   </div>
                                 </TableCell>
@@ -563,6 +608,13 @@ function PortfolioPage() {
                   }}
                 >
                   Volatility
+                  <Tooltip title="Volatility is how much and how quickly prices move over a given span of time.">
+                    <img
+                      src={infoicon}
+                      height="13px"
+                      style={{ marginBottom: "25px" }}
+                    />
+                  </Tooltip>
                 </Typography>
                 <Typography variant="subtitle1" style={{ fontFamily: "VT323" }}>
                   {volatilityDesc} volatility of portfolio/
@@ -570,25 +622,30 @@ function PortfolioPage() {
                 </Typography>
                 <Typography variant="h2" style={{ fontFamily: "VT323" }}>
                   {" "}
-                  {portfolioVol.toFixed(2)}%
+                  {timeVol.toFixed(2)}%
                 </Typography>
 
                 <div
                   className={
-                    portfolioVol > 3
+                    timeVol > 35
                       ? classes.red
-                      : portfolioVol > 2
+                      : timeVol > 10
                       ? classes.yellow
                       : classes.green
                   }
                 >
-                  <Typography variant="h4" style={{ fontFamily: "VT323" }}>
-                    {portfolioVol > 3
-                      ? "high"
-                      : portfolioVol > 2
-                      ? "moderate"
-                      : "low"}
-                  </Typography>
+                  {" "}
+                  <Tooltip
+                    title={`Note that the risk level may not reflect to your risk appetite. eg: 36% volatility may not be considered as high for  you`}
+                  >
+                    <Typography variant="h4" style={{ fontFamily: "VT323" }}>
+                      {timeVol > 35
+                        ? "high"
+                        : timeVol > 10
+                        ? "moderate"
+                        : "low"}
+                    </Typography>
+                  </Tooltip>
                 </div>
               </div>
             </div>

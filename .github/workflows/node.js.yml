@@ -20,6 +20,16 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - name: Create .env file
+        run: |
+          touch .env
+          echo "REACT_APP_API_KEY= ${{ secrets.REACT_APP_API_KEY }}" >> .env
+          echo "REACT_APP_AUTH_DOMAIN= ${{ secrets.REACT_APP_AUTH_DOMAIN }}" >> .env
+          echo "REACT_APP_PROJECT_ID= ${{ secrets.REACT_APP_PROJECT_ID }}" >> .env
+          echo "REACT_APP_STORAGE_BUCKET= ${{ secrets.REACT_APP_STORAGE_BUCKET }}" >> .env
+          echo "REACT_APP_MESSAGING_SENDER_ID= ${{ secrets.REACT_APP_MESSAGING_SENDER_ID }}" >> .env
+          echo "REACT_APP_APP_ID= ${{ secrets.REACT_APP_APP_ID }}" >> .env
+          echo "REACT_APP_MEASUREMENT_ID= ${{ secrets.REACT_APP_MEASUREMENT_ID }}" >> .env
       - run: npm i --force
       - run: CI=false npm run build
 
@@ -29,6 +39,6 @@ jobs:
           switches: -avzr --delete
           path: ./build/
           remote_path: /var/www/my-app/
-          remote_host: ec2-54-169-126-248.ap-southeast-1.compute.amazonaws.com
+          remote_host: ec2-52-74-223-130.ap-southeast-1.compute.amazonaws.com
           remote_user: ubuntu
           remote_key: "${{ secrets.YOUR_SECRET }}"

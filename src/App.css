@@ -11,3 +11,18 @@ a {
   text-decoration: none;
   color: #ffe227;
 }
+
+*::-webkit-scrollbar-track {
+  border-radius: 10px;
+  background-color: #212121;
+}
+
+*::-webkit-scrollbar {
+  width: 12px;
+  background-color: #212121;
+}
+
+*::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background-color: rgba(79, 58, 84, 0.52);
+}
