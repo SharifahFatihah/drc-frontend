@@ -8,6 +8,7 @@ import LogoWord from "../asset/logoword.png";
 import Mario from "../asset/mario3.gif";
 import MarioStay from "../asset/mario-ready.gif";
 import { useNavigate } from "react-router-dom";
+
 const useStyle = makeStyles((theme) => ({
   banner: {
     backgroundPosition: "center center",

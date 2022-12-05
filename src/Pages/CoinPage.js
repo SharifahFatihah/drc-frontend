@@ -227,7 +227,7 @@ function CoinPage() {
             {coin?.market_cap_rank < 250 ? (
               user ? (
                 inWatchlist ? (
-                  <Tooltip title="remove from portfolio">
+                  <Tooltip title="Remove from portfolio">
                     <img
                       src={favouriteIcon}
                       height="25rem"
