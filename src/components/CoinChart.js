@@ -343,7 +343,7 @@ function CoinChart({ coin }) {
                       type: "candlestick",
                     },
                     title: {
-                      text: "Price of Coin",
+                      text: "",
                       align: "left",
                     },
                     xaxis: {

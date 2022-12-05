@@ -141,7 +141,7 @@ function CoinPage() {
 
   if (!coin) {
     return (
-      <div>
+      <div style={{ minHeight: "600px" }}>
         <LinearProgress />
       </div>
     );

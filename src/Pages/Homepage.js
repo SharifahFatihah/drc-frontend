@@ -6,6 +6,7 @@ import Trending from "../components/Trending";
 import GlobalMarket from "../components/GlobalMarket";
 import FavCoin from "../components/FavCoin";
 import TradeSimulation from "../components/TradeSimulation";
+import Team from "../components/Team";
 
 function Homepage() {
   return (
@@ -20,6 +21,7 @@ function Homepage() {
       <GlobalMarket />
       <FavCoin />
       <TradeSimulation />
+      <Team />
     </div>
   );
 }

@@ -15,7 +15,7 @@ const useStyles = makeStyles((theme) => ({
     height: "100%",
     display: "flex",
     flexDirection: "column",
-    background: "black",
+    background: "#212121",
   },
   profile: {
     flex: 1,
@@ -171,7 +171,7 @@ export default function UserSidebar() {
                     height: !isMobile ? 150 : 75,
                     width: !isMobile ? 150 : 75,
                     cursor: "pointer",
-                    backgroundColor: "yellow",
+                    backgroundColor: "#FFE227",
                   }}
                 />{" "}
                 <span
@@ -189,59 +189,69 @@ export default function UserSidebar() {
                 </span>
                 <div
                   style={{
-                    color: "white",
-                    fontWeight: "bolder",
-                    wordWrap: "break-word",
-                    fontSize: !isMobile ? 20 : 15,
-                  }}
-                >
-                  Wallet
-                </div>
-                <div
-                  style={{
-                    width: "240px",
-                  }}
-                >
-                  <hr></hr>
-                </div>
-                <div
-                  style={{
+                    background: "rgba(79, 58, 84, 0.52)",
+                    padding: 20,
+                    borderRadius: "15px",
                     display: "flex",
                     flexDirection: "column",
-                    alignItems: "center",
-                    justifyContent: "space-evenly",
+                    textAlign: "center",
+                    gap: "10px",
                   }}
                 >
-                  {" "}
-                  <Typography
-                    variant={!isMobile ? "h4" : "h6"}
-                    style={{ color: "white", fontFamily: "VT323" }}
+                  <div
+                    style={{
+                      color: "white",
+                      fontWeight: "bolder",
+                      wordWrap: "break-word",
+                      fontSize: !isMobile ? 20 : 15,
+                    }}
                   >
-                    {balance?.usd?.toFixed(2)} USD
-                  </Typography>
-                  <Typography
-                    variant={!isMobile ? "h4" : "h6"}
-                    style={{ color: "white", fontFamily: "VT323" }}
+                    Wallet
+                  </div>
+                  <div
+                    style={{
+                      width: "240px",
+                    }}
                   >
-                    {balance?.btc} BTC
-                  </Typography>
+                    <hr></hr>
+                  </div>
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
+                      justifyContent: "space-evenly",
+                    }}
+                  >
+                    {" "}
+                    <Typography
+                      variant={!isMobile ? "h4" : "h6"}
+                      style={{ color: "white", fontFamily: "VT323" }}
+                    >
+                      {balance?.usd?.toFixed(2)} USD
+                    </Typography>
+                    <Typography
+                      variant={!isMobile ? "h4" : "h6"}
+                      style={{ color: "white", fontFamily: "VT323" }}
+                    >
+                      {balance?.btc} BTC
+                    </Typography>
+                  </div>
+                  <Button
+                    style={{
+                      background: "#FFE227",
+                      display: "flex",
+                      alignItems: "center",
+                      border: "5px solid white",
+                      color: "black",
+                      fontWeight: "bolder",
+                    }}
+                    onClick={resetBalance}
+                  >
+                    {" "}
+                    Reset Balance
+                  </Button>
                 </div>
-                <Button
-                  style={{
-                    background: "yellow",
-                    marginRight: 80,
-                    marginLeft: 80,
-                    display: "flex",
-                    alignItems: "center",
-                    border: "5px solid white",
-                    color: "black",
-                    fontWeight: "bolder",
-                  }}
-                  onClick={resetBalance}
-                >
-                  {" "}
-                  Reset Balance
-                </Button>
                 <div
                   style={{
                     color: "white",
@@ -295,7 +305,7 @@ export default function UserSidebar() {
                   logout();
                 }}
                 style={{
-                  background: "yellow",
+                  background: "#FFE227",
                   marginRight: 80,
                   marginLeft: 80,
                   display: "flex",

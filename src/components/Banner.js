@@ -20,7 +20,7 @@ const useStyle = makeStyles((theme) => ({
     display: "flex",
     flexDirection: "column",
     alignItems: "flex-start",
-    justifyContent: "center",
+    marginTop: "10%",
   },
   pixelDiv: {
     display: "flex",
