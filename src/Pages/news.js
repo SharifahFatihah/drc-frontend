@@ -2,7 +2,6 @@ import getNews from "../service/newsservice";
 import { CircularProgress, makeStyles, Typography } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import moment from "moment/moment";
-import Pacman from "../asset/all-coins.gif";
 import news from "../asset/crypto_news.gif";
 
 const useStyles = makeStyles((theme) => ({
@@ -134,6 +133,7 @@ function NewsPage() {
               .map((article, i) => {
                 return (
                   <div
+                    data-aos="fade-up"
                     className={classes.newsbox}
                     onClick={() => {
                       window.open(article?.url);

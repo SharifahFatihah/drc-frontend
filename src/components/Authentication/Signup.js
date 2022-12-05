@@ -118,155 +118,153 @@ function Signup({ handleClose }) {
   };
 
   return (
-    <div>
-      <Box p={3} className={classes.box}>
+    <Box p={3} className={classes.box}>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <img src={LogoWord} width="200" />
+      </div>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+        }}
+      >
+        <h1> Create Account</h1>
+      </div>
+      <div
+        style={{
+          display: "flex",
+
+          justifyContent: "center",
+        }}
+      >
+        <span>Enter your details or continue with Google</span>
+      </div>
+      <TextField
+        variant="outlined"
+        type="email"
+        label="Enter Email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        fullWidth
+      />
+      <TextField
+        variant="outlined"
+        type="password"
+        label="Enter Password"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+        fullWidth
+      />
+      <TextField
+        variant="outlined"
+        type="password"
+        label="Confirm Password"
+        value={confirmPassword}
+        onChange={(e) => setConfirmPassword(e.target.value)}
+        fullWidth
+      />
+      <Button
+        variant="contained"
+        style={{
+          backgroundColor: "#FFE227",
+          border: "5px solid white",
+          color: "black",
+          fontFamily: "VT323",
+          fontSize: 20,
+        }}
+        onClick={handleSubmit}
+      >
+        Sign Up
+      </Button>
+      <Box className={classes.google}>
         <div
           style={{
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
+            gap: "30px",
           }}
         >
-          <img src={LogoWord} width="200" />
-        </div>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-          }}
-        >
-          <h1> Create Account</h1>
-        </div>
-        <div
-          style={{
-            display: "flex",
-
-            justifyContent: "center",
-          }}
-        >
-          <span>Enter your details or continue with Google</span>
-        </div>
-        <TextField
-          variant="outlined"
-          type="email"
-          label="Enter Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          fullWidth
-        />
-        <TextField
-          variant="outlined"
-          type="password"
-          label="Enter Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          fullWidth
-        />
-        <TextField
-          variant="outlined"
-          type="password"
-          label="Confirm Password"
-          value={confirmPassword}
-          onChange={(e) => setConfirmPassword(e.target.value)}
-          fullWidth
-        />
-        <Button
-          variant="contained"
-          style={{
-            backgroundColor: "#FFE227",
-            border: "5px solid white",
-            color: "black",
-            fontFamily: "VT323",
-            fontSize: 20,
-          }}
-          onClick={handleSubmit}
-        >
-          Sign Up
-        </Button>
-        <Box className={classes.google}>
           <div
             style={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              gap: "30px",
+              width: "150px",
             }}
           >
-            <div
-              style={{
-                width: "150px",
-              }}
-            >
-              <hr></hr>
-            </div>
+            <hr></hr>
+          </div>
 
-            <p
-              style={{
-                fontSize: "15px",
-              }}
-            >
-              or continue with
+          <p
+            style={{
+              fontSize: "15px",
+            }}
+          >
+            or continue with
+          </p>
+          <div
+            style={{
+              width: "150px",
+            }}
+          >
+            <hr></hr>
+          </div>
+        </div>
+        <div className={classes.googleSignIn}>
+          <Button
+            variant="contained"
+            onClick={signInWithGoogle}
+            style={{
+              backgroundColor: "#212121",
+              border: "5px solid #FFE227",
+              color: "white",
+              fontFamily: "VT323",
+              fontSize: 20,
+            }}
+          >
+            Sign In With Google
+          </Button>
+        </div>
+
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+          }}
+        >
+          {" "}
+          {authValue == 0 ? (
+            <p>
+              Don't have an account?{" "}
+              <a
+                onClick={() => {
+                  setAuthValue(1);
+                }}
+                style={{ cursor: "pointer" }}
+              >
+                Sign Up
+              </a>
             </p>
-            <div
-              style={{
-                width: "150px",
-              }}
-            >
-              <hr></hr>
-            </div>
-          </div>
-          <div className={classes.googleSignIn}>
-            <Button
-              variant="contained"
-              onClick={signInWithGoogle}
-              style={{
-                backgroundColor: "#212121",
-                border: "5px solid #FFE227",
-                color: "white",
-                fontFamily: "VT323",
-                fontSize: 20,
-              }}
-            >
-              Sign In With Google
-            </Button>
-          </div>
-
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-            }}
-          >
-            {" "}
-            {authValue == 0 ? (
-              <p>
-                Don't have an account?{" "}
-                <a
-                  onClick={() => {
-                    setAuthValue(1);
-                  }}
-                  style={{ cursor: "pointer" }}
-                >
-                  Sign Up
-                </a>
-              </p>
-            ) : (
-              <p>
-                Already have an account?{" "}
-                <a
-                  onClick={() => {
-                    setAuthValue(0);
-                  }}
-                  style={{ cursor: "pointer" }}
-                >
-                  Login{" "}
-                </a>
-              </p>
-            )}
-          </div>
-        </Box>
+          ) : (
+            <p>
+              Already have an account?{" "}
+              <a
+                onClick={() => {
+                  setAuthValue(0);
+                }}
+                style={{ cursor: "pointer" }}
+              >
+                Login{" "}
+              </a>
+            </p>
+          )}
+        </div>
       </Box>
-    </div>
+    </Box>
   );
 }
 
