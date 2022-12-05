@@ -20,10 +20,8 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: "10px",
     [theme.breakpoints.down("md")]: {
       margin: "0",
-      overflowY: "scroll",
-      height: "90%",
+      height: "100%",
       overflowY: "auto",
-      maxHeight: "500px",
     },
   },
   google: {
