@@ -329,7 +329,7 @@ export default function EnhancedTable({ coins }) {
                               />
                             </Tooltip>
                           ) : (
-                            <Tooltip title="add to portfolio">
+                            <Tooltip title="Add to portfolio">
                               <img
                                 src={UnFavouriteIcon}
                                 height="30rem"

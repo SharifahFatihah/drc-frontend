@@ -1,22 +1,23 @@
-import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
-import { CryptoState } from "../CryptoContext";
-import Service from "../service/Service";
-import { Button, Card, makeStyles, Paper, Tooltip } from "@material-ui/core";
-import { Typography } from "@material-ui/core";
-import CoinChart from "../components/CoinChart";
-import { LinearProgress } from "@material-ui/core";
+import { Button, Card, Paper, Tooltip, makeStyles } from "@material-ui/core";
+import React, { useEffect, useState } from "react";
 import { doc, setDoc } from "firebase/firestore";
-import { db } from "../firebase";
-import { useNavigate } from "react-router-dom";
+
+import CoinChart from "../components/CoinChart";
+import CoinConverter from "../components/CoinConverter";
 import CoinDesc from "../components/CoinDesc";
 import CoinStats from "../components/CoinStats";
+import { CryptoState } from "../CryptoContext";
+import { LinearProgress } from "@material-ui/core";
+import Service from "../service/Service";
+import { Typography } from "@material-ui/core";
+import announcementIcon from "../asset/announcement.png";
+import { db } from "../firebase";
 import favouriteIcon from "../asset/favourite.png";
-import unfavouriteIcon from "../asset/unfav-icon.png";
 import githubIcon from "../asset/github.png";
 import redditIcon from "../asset/reddit.png";
-import announcementIcon from "../asset/announcement.png";
-import CoinConverter from "../components/CoinConverter";
+import unfavouriteIcon from "../asset/unfav-icon.png";
+import { useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -237,7 +238,7 @@ function CoinPage() {
                     />
                   </Tooltip>
                 ) : (
-                  <Tooltip title="add to portfolio">
+                  <Tooltip title="Add to portfolio">
                     <img
                       src={unfavouriteIcon}
                       height="25rem"
