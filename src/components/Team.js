@@ -49,7 +49,11 @@ function Team() {
         </Typography>
       </div>
       <div className={classes.container}>
-        <div data-aos="zoom-out-right" className={classes.teamContainer}>
+        <div
+          data-aos="flip-up"
+          data-aos-duration="1500"
+          className={classes.teamContainer}
+        >
           <img src={Afifi} alt="coin pic" height={"250px"} />
           <Typography
             variant="h4"
@@ -61,7 +65,11 @@ function Team() {
             DevSecOps
           </Typography>
         </div>
-        <div data-aos="zoom-out-right" className={classes.teamContainer}>
+        <div
+          data-aos="flip-up"
+          data-aos-duration="1500"
+          className={classes.teamContainer}
+        >
           <img src={Sharifah} alt="coin pic" height={"250px"} />
           <Typography
             variant="h4"
@@ -73,7 +81,11 @@ function Team() {
             Product Design & Front-End
           </Typography>
         </div>
-        <div className={classes.teamContainer}>
+        <div
+          data-aos="flip-up"
+          data-aos-duration="1500"
+          className={classes.teamContainer}
+        >
           <img src={Nic} alt="coin pic" height={"250px"} />
           <Typography
             variant="h4"
@@ -85,7 +97,11 @@ function Team() {
             Front-End & Quants
           </Typography>
         </div>
-        <div data-aos="zoom-out-left" className={classes.teamContainer}>
+        <div
+          data-aos="flip-up"
+          data-aos-duration="1500"
+          className={classes.teamContainer}
+        >
           <img src={Esther} alt="coin pic" height={"250px"} />
           <Typography
             variant="h4"
@@ -97,7 +113,11 @@ function Team() {
             Quality Assurance
           </Typography>
         </div>
-        <div data-aos="zoom-out-left" className={classes.teamContainer}>
+        <div
+          data-aos="flip-up"
+          data-aos-duration="1500"
+          className={classes.teamContainer}
+        >
           <img src={Faiz} alt="coin pic" height={"250px"} />
           <Typography
             variant="h4"
