@@ -272,9 +272,11 @@ function PortfolioChart({ days, volatilityDesc, timeFrame }) {
   const coinChart = coinHistData2.map((e) => {
     const data1 = e.hist_data?.map((chartData) => chartData[1]);
 
-    const ratio = Math.max(...data1) / 100;
+    const ratio = Math.max(...data1) - Math.min(...data1);
 
-    const data2 = data1.map((v) => v / ratio);
+    const min = Math.min(...data1);
+
+    const data2 = data1.map((v) => (v - min) / ratio);
 
     const random_rgba = () => {
       var o = Math.round,

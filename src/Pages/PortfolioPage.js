@@ -250,6 +250,7 @@ function PortfolioPage() {
         return sum + 0;
       }
     }, 0);
+
     setAvgPriceChange(
       userCoin3?.length > 0 &&
         userCoin3?.reduce((sum, coin) => {
