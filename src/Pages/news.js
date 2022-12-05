@@ -55,9 +55,11 @@ const useStyles = makeStyles((theme) => ({
   },
   leftSub: {
     paddingRight: 20,
-    paddingLeft: 80,
+    paddingLeft: 20,
     fontFamily: "VT323",
     marginBottom: 30,
+    alignItems: "flex-start",
+    justifyContent: "flex-start",
     [theme.breakpoints.down("md")]: {
       paddingRight: 0,
       paddingLeft: 0,
