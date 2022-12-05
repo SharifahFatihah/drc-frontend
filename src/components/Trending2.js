@@ -17,11 +17,13 @@ const useStyles = makeStyles((theme) => ({
   left: {
     width: "30%",
     padding: 50,
+    marginLeft: 130,
     [theme.breakpoints.down("md")]: {
       alignItems: "center",
       justifyContent: "center",
       width: "100%",
       padding: 20,
+      marginLeft: 0,
     },
   },
   right: {

@@ -16,10 +16,36 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
-
     [theme.breakpoints.down("md")]: {
       flexDirection: "column",
       alignItems: "center",
+    },
+  },
+  title: {
+    width: "90%",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
+    marginTop: 20,
+    marginBottom: 20,
+    [theme.breakpoints.down("md")]: {
+      flexDirection: "column",
+      alignItems: "flex-end",
+      justifyContent: "center",
+    },
+  },
+  resetButton: {
+    display: "flex",
+    backgroundColor: "#212121",
+    border: "5px solid #FFE227",
+    color: "white",
+    fontFamily: "VT323",
+    fontSize: 20,
+    margin: 20,
+    width: "20%",
+    [theme.breakpoints.down("md")]: {
+      width: "auto",
+      marginRight: 0,
     },
   },
 }));
@@ -49,22 +75,26 @@ function TransactionPage() {
     } catch (error) {}
   };
 
+  const totalGain = () => {
+    const totalgain = receipt?.map((e) => {
+      return e?.total_gain;
+    });
+
+    return totalgain.reduce(
+      (accumulator, currentValue) => accumulator + currentValue,
+      0
+    );
+  };
+
+  console.log("receipt", receipt);
+
   return (
     <ThemeProvider theme={darkTheme}>
       <div className={classes.container}>
-        <div
-          style={{
-            width: "90%",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            marginTop: 20,
-            marginBottom: 20,
-          }}
-        >
+        <div className={classes.title}>
           <div
             style={{
-              width: "50%",
+              width: "100%",
               alignItems: "center",
               justifyContent: "flex-start",
             }}
@@ -74,15 +104,10 @@ function TransactionPage() {
               Transaction History
             </Typography>
           </div>
+          <Typography>Net Profit: {totalGain()?.toFixed(2)}</Typography>
           <Button
+            className={classes.resetButton}
             variant="contained"
-            style={{
-              backgroundColor: "#212121",
-              border: "5px solid #FFE227",
-              color: "white",
-              fontFamily: "VT323",
-              fontSize: 20,
-            }}
             onClick={deleteReceipt}
           >
             {" "}

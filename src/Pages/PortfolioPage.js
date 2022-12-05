@@ -23,6 +23,7 @@ import { chartDays } from "../service/Service";
 import currentAssetIcon from "../asset/currentasseticon.png";
 import infoicon from "../asset/infoicon.png";
 import { useNavigate } from "react-router-dom";
+import { TableHead } from "@mui/material";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -348,6 +349,13 @@ function PortfolioPage() {
   const colourDoughnut = donutCoin?.map((e) => random_rgba());
   const weightageTooltip = `The weightage of each coin in your portfolio for the past ${days} day(s).`;
 
+  const timeVol =
+    days === 1
+      ? portfolioVol / Math.sqrt(1 / 288)
+      : days === 30
+      ? portfolioVol / Math.sqrt(1 / 72)
+      : portfolioVol / Math.sqrt(1 / 365);
+
   return (
     <div className={classes.container}>
       <div className={classes.sidebar}>
@@ -423,6 +431,36 @@ function PortfolioPage() {
                     }}
                   >
                     <Table sx={{ minWidth: 650 }}>
+                      <TableHead>
+                        <TableRow>
+                          <TableCell
+                            style={{
+                              color: "black",
+                              backgroundColor: "#FFE227",
+                            }}
+                          >
+                            Coin
+                          </TableCell>
+                          <TableCell
+                            align="right"
+                            style={{
+                              color: "black",
+                              backgroundColor: "#FFE227",
+                            }}
+                          >
+                            Holdings
+                          </TableCell>
+                          <TableCell
+                            align="right"
+                            style={{
+                              color: "black",
+                              backgroundColor: "#FFE227",
+                            }}
+                          >
+                            Action
+                          </TableCell>
+                        </TableRow>
+                      </TableHead>
                       <TableBody>
                         {userCoin3?.map((row) => {
                           if (
@@ -499,9 +537,11 @@ function PortfolioPage() {
                                       display: "flex",
                                       alignItems: "center",
                                       justifyContent: "flex-end",
+                                      gap: 10,
                                     }}
                                   >
                                     <HoldingModal coin={row} />
+
                                     <DeleteModal row={row} />
                                   </div>
                                 </TableCell>
@@ -570,24 +610,20 @@ function PortfolioPage() {
                 </Typography>
                 <Typography variant="h2" style={{ fontFamily: "VT323" }}>
                   {" "}
-                  {portfolioVol.toFixed(2)}%
+                  {timeVol.toFixed(2)}%
                 </Typography>
 
                 <div
                   className={
-                    portfolioVol > 3
+                    timeVol > 35
                       ? classes.red
-                      : portfolioVol > 2
+                      : timeVol > 10
                       ? classes.yellow
                       : classes.green
                   }
                 >
                   <Typography variant="h4" style={{ fontFamily: "VT323" }}>
-                    {portfolioVol > 3
-                      ? "high"
-                      : portfolioVol > 2
-                      ? "moderate"
-                      : "low"}
+                    {timeVol > 35 ? "high" : timeVol > 10 ? "moderate" : "low"}
                   </Typography>
                 </div>
               </div>
