@@ -1,6 +1,6 @@
+import { Bar, Doughnut, Line } from "react-chartjs-2";
 import {
   Button,
-  makeStyles,
   Paper,
   Table,
   TableBody,
@@ -10,9 +10,10 @@ import {
   TableRow,
   Tooltip,
   Typography,
+  makeStyles,
 } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
-import { Bar, Doughnut, Line } from "react-chartjs-2";
+
 import { CryptoState } from "../CryptoContext";
 import Service from "../service/Service";
 import infoicon from "../asset/infoicon.png";
@@ -74,6 +75,7 @@ function PortfolioChart({ days, volatilityDesc, timeFrame }) {
   const [coinHistData, setCoinHistData] = useState([]);
   const [coinHistData2, setCoinHistData2] = useState([]);
   const [isChart, setIsChart] = useState("portfolio");
+  const [coinChart, setCoinChart] = useState([]);
 
   useEffect(() => {
     Promise.all(
@@ -221,98 +223,106 @@ function PortfolioChart({ days, volatilityDesc, timeFrame }) {
     return { time: dateData, avg_return: avgReturn(...arrReturn) };
   };
 
-  const portfolioVolatility = () => {
-    const pricestat = coinsd2?.map((e) => e.stats_price);
-    const returnstat = coinsd2?.map((e) => e.stats_return);
+  useEffect(() => {
+    const portfolioVolatility = () => {
+      const pricestat = coinsd2?.map((e) => e.stats_price);
+      const returnstat = coinsd2?.map((e) => e.stats_return);
 
-    const n_denomenator = coinsd2[0]?.price_data?.length;
+      const n_denomenator = coinsd2[0]?.price_data?.length;
 
-    const price_sum_var =
-      pricestat &&
-      pricestat
-        .map((stat) => stat.sd_price)
-        ?.reduce((acc, val) => acc + val, 0);
+      const price_sum_var =
+        pricestat &&
+        pricestat
+          .map((stat) => stat.sd_price)
+          ?.reduce((acc, val) => acc + val, 0);
 
-    const return_sum_var =
-      returnstat &&
-      returnstat
-        .map((stat) => stat.sd_return)
-        ?.reduce((acc, val) => acc + val, 0);
+      const return_sum_var =
+        returnstat &&
+        returnstat
+          .map((stat) => stat.sd_return)
+          ?.reduce((acc, val) => acc + val, 0);
 
-    const price_sum_cov =
-      pricestat &&
-      pricestat
-        .map((v, i, a) =>
-          a
-            .filter((_, _i) => _i !== i)
-            .reduce((p, c) => p + (v.sum * c.sum) / n_denomenator, 0)
-        )
-        .reduce((p, v) => p + v, 0);
+      const price_sum_cov =
+        pricestat &&
+        pricestat
+          .map((v, i, a) =>
+            a
+              .filter((_, _i) => _i !== i)
+              .reduce((p, c) => p + (v.sum * c.sum) / n_denomenator, 0)
+          )
+          .reduce((p, v) => p + v, 0);
 
-    const return_sum_cov =
-      returnstat &&
-      returnstat
-        .map((v, i, a) =>
-          a
-            .filter((_, _i) => _i !== i)
-            .reduce((p, c) => p + (v.sum * c.sum) / n_denomenator, 0)
-        )
-        .reduce((p, v) => p + v, 0);
+      const return_sum_cov =
+        returnstat &&
+        returnstat
+          .map((v, i, a) =>
+            a
+              .filter((_, _i) => _i !== i)
+              .reduce((p, c) => p + (v.sum * c.sum) / n_denomenator, 0)
+          )
+          .reduce((p, v) => p + v, 0);
 
-    return {
-      price_sd: Math.sqrt(price_sum_cov + price_sum_var),
-      return_sd: Math.sqrt(return_sum_cov + return_sum_var) * 100,
+      return {
+        price_sd: Math.sqrt(price_sum_cov + price_sum_var),
+        return_sd: Math.sqrt(return_sum_cov + return_sum_var) * 100,
+      };
     };
-  };
+
+    setPortfolioVol(portfolioVolatility()?.return_sd);
+  }, [watchlist, coinsd2, days, setPortfolioVol]);
 
   useEffect(() => {
-    setPortfolioVol(portfolioVolatility()?.return_sd);
-  }, [watchlist, coinsd2, days]);
+    setCoinChart(
+      coinHistData2.map((e) => {
+        const data1 = e.hist_data?.map((chartData) => chartData[1]);
 
-  const coinChart = coinHistData2.map((e) => {
-    const data1 = e.hist_data?.map((chartData) => chartData[1]);
+        const ratio = Math.max(...data1) - Math.min(...data1);
 
-    const ratio = Math.max(...data1) - Math.min(...data1);
+        const min = Math.min(...data1);
 
-    const min = Math.min(...data1);
+        const data2 = data1.map((v) => (v - min) / ratio);
 
-    const data2 = data1.map((v) => (v - min) / ratio);
+        const random_rgba = () => {
+          var o = Math.round,
+            r = Math.random,
+            s = 255;
+          return (
+            "rgba(" + o(r() * s) + "," + o(r() * s) + "," + o(r() * s) + ",1"
+          );
+        };
 
-    const random_rgba = () => {
-      var o = Math.round,
-        r = Math.random,
-        s = 255;
-      return "rgba(" + o(r() * s) + "," + o(r() * s) + "," + o(r() * s) + ",1";
-    };
-
-    if (
-      watchlist.includes(watchlist.find((watch) => watch.id === e?.coin?.id))
-    ) {
-      return {
-        data: data2,
-        label: ` ${e.coin.id}`,
-        borderColor: random_rgba(),
-        borderWidth: 2,
-        pointBorderColor: "rgba(0,0,0,0)",
-        pointBackgroundColor: "rgba(0,0,0,0)",
-        pointHoverBorderColor: "#5AC53B",
-        pointHitRadius: 6,
-        yAxisID: "y",
-      };
-    } else {
-      return {
-        data: [],
-        label: ``,
-        borderColor: "rgba(0,0,0,0.0)",
-        borderWidth: 2,
-        pointBorderColor: "rgba(0,0,0,0)",
-        pointBackgroundColor: "rgba(0,0,0,0)",
-        pointHoverBorderColor: "#5AC53B",
-        pointHitRadius: 6,
-        yAxisID: "y",
-      };
-    }
-  });
+        if (
+          watchlist.includes(
+            watchlist.find((watch) => watch.id === e?.coin?.id)
+          )
+        ) {
+          return {
+            data: data2,
+            label: ` ${e.coin.id}`,
+            borderColor: random_rgba(),
+            borderWidth: 2,
+            pointBorderColor: "rgba(0,0,0,0)",
+            pointBackgroundColor: "rgba(0,0,0,0)",
+            pointHoverBorderColor: "#5AC53B",
+            pointHitRadius: 6,
+            yAxisID: "y",
+          };
+        } else {
+          return {
+            data: [],
+            label: ``,
+            borderColor: "rgba(0,0,0,0.0)",
+            borderWidth: 2,
+            pointBorderColor: "rgba(0,0,0,0)",
+            pointBackgroundColor: "rgba(0,0,0,0)",
+            pointHoverBorderColor: "#5AC53B",
+            pointHitRadius: 6,
+            yAxisID: "y",
+          };
+        }
+      })
+    );
+  }, [coinHistData2]);
 
   const totalDuration = 2500;
   const delayBetweenPoints = totalDuration / 250;

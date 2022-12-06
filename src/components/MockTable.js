@@ -1,6 +1,23 @@
 import * as React from "react";
-import PropTypes from "prop-types";
+
+import {
+  LinearProgress,
+  ThemeProvider,
+  Tooltip,
+  Typography,
+  createTheme,
+  makeStyles,
+} from "@material-ui/core";
+import { doc, setDoc } from "firebase/firestore";
+
 import Box from "@mui/material/Box";
+import { CryptoState } from "../CryptoContext";
+import FavouriteIcon from "../asset/favourite.png";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Paper from "@mui/material/Paper";
+import PropTypes from "prop-types";
+import Service from "../service/Service";
+import Switch from "@mui/material/Switch";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -8,25 +25,10 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import TableSortLabel from "@mui/material/TableSortLabel";
-import Paper from "@mui/material/Paper";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Switch from "@mui/material/Switch";
-import { visuallyHidden } from "@mui/utils";
-import Service from "../service/Service";
-import { CryptoState } from "../CryptoContext";
-import { useNavigate } from "react-router-dom";
-import FavouriteIcon from "../asset/favourite.png";
 import UnFavouriteIcon from "../asset/unfav-icon.png";
-import {
-  createTheme,
-  LinearProgress,
-  makeStyles,
-  ThemeProvider,
-  Tooltip,
-  Typography,
-} from "@material-ui/core";
-import { doc, setDoc } from "firebase/firestore";
 import { db } from "../firebase";
+import { useNavigate } from "react-router-dom";
+import { visuallyHidden } from "@mui/utils";
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -154,7 +156,7 @@ export default function EnhancedTable({ coins }) {
 
       setAlert({
         open: true,
-        message: `${usercoin.name} added to your watchlist`,
+        message: `${usercoin.name} Added to your portfolio`,
         type: "success",
       });
     } catch (error) {}
@@ -174,7 +176,7 @@ export default function EnhancedTable({ coins }) {
 
       setAlert({
         open: true,
-        message: `${usercoin.name} remove from your watchlist`,
+        message: `${usercoin.name} Removed from your portfolio`,
         type: "success",
       });
     } catch (error) {}
@@ -316,7 +318,7 @@ export default function EnhancedTable({ coins }) {
                       <TableCell align="right">
                         {user ? (
                           inWatchlist ? (
-                            <Tooltip title="remove from portfolio">
+                            <Tooltip title="Removed from portfolio">
                               <img
                                 src={FavouriteIcon}
                                 height="30rem"
@@ -329,7 +331,7 @@ export default function EnhancedTable({ coins }) {
                               />
                             </Tooltip>
                           ) : (
-                            <Tooltip title="add to portfolio">
+                            <Tooltip title="Add to portfolio">
                               <img
                                 src={UnFavouriteIcon}
                                 height="30rem"

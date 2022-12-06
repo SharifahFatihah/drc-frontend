@@ -56,7 +56,6 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "center",
     paddingTop: 25,
     paddingBottom: 25,
-    // marginTop: 25,
     whiteSpace: "wrap",
   },
   inSidebar: {
@@ -98,15 +97,9 @@ function TradePage() {
   const [price, setPrice] = useState(0);
   const [time, setTime] = useState(0);
   const [priceArr, setPriceArr] = useState([]);
-  const [coin, setCoin] = useState();
   const [isBuy, setIsBuy] = useState(true);
-  const [buyUsd, setBuyUsd] = useState("");
   const [buyQuantity, setBuyQuantity] = useState("");
   const [isMobile, setIsMobile] = useState(false);
-  const [brokerFee, setBrokerFee] = useState("");
-  const [totalPayment, setTotalPayment] = useState("");
-  const [dummy, setDummy] = useState("");
-  const [dummyUsd, setDummyUsd] = useState("");
 
   const playSound = () => {
     var kaching = new Audio(Kaching);
@@ -136,24 +129,6 @@ function TradePage() {
     } else {
       setIsMobile(false);
     }
-  }, []);
-
-  const getSingleCoin = (e) => {
-    Service.getSingleCoin(e)
-      .then((response) => {
-        setCoin(response.data);
-      })
-      .catch((err) => {
-        setAlert({
-          open: true,
-          message: `API request exceed 50 limit, please wait 1 minute`,
-          type: "error",
-        });
-      });
-  };
-
-  useEffect(() => {
-    getSingleCoin("bitcoin");
   }, []);
 
   useEffect(() => {
@@ -567,7 +542,7 @@ function TradePage() {
                   >
                     <div>
                       <img
-                        src={coin?.image?.small}
+                        src="https://assets.coingecko.com/coins/images/1/small/bitcoin.png?1547033579"
                         height={30}
                         style={{ marginRight: 10 }}
                         alt="coinicon"
@@ -622,10 +597,7 @@ function TradePage() {
                       }}
                       onClick={() => {
                         setIsBuy(true);
-                        setBuyUsd("");
                         setBuyQuantity("");
-                        setBrokerFee("");
-                        setTotalPayment("");
                       }}
                     >
                       Buy
@@ -638,10 +610,7 @@ function TradePage() {
                       }}
                       onClick={() => {
                         setIsBuy(false);
-                        setBuyUsd("");
                         setBuyQuantity("");
-                        setBrokerFee("");
-                        setTotalPayment("");
                       }}
                     >
                       Sell
@@ -825,7 +794,7 @@ function TradePage() {
           <div
             className={classes.sidebar}
             style={{
-              height: "500px",
+              minHeight: 500,
               display: "flex",
               flexDirection: "column",
               alignItems: "center",

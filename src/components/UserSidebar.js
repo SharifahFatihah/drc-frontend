@@ -1,12 +1,14 @@
 import * as React from "react";
-import Drawer from "@mui/material/Drawer";
-import Button from "@mui/material/Button";
-import { CryptoState } from "../CryptoContext";
-import { Avatar } from "@mui/material";
-import { makeStyles, Typography } from "@material-ui/core";
-import { signOut } from "firebase/auth";
+
+import { Typography, makeStyles } from "@material-ui/core";
 import { auth, db } from "../firebase";
 import { doc, setDoc } from "firebase/firestore";
+
+import { Avatar } from "@mui/material";
+import Button from "@mui/material/Button";
+import { CryptoState } from "../CryptoContext";
+import Drawer from "@mui/material/Drawer";
+import { signOut } from "firebase/auth";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -16,6 +18,9 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     flexDirection: "column",
     background: "#212121",
+    [theme.breakpoints.down("sm")]: {
+      width: 300,
+    },
   },
   profile: {
     flex: 1,
@@ -55,9 +60,9 @@ export default function UserSidebar() {
   const [isTablet, setIsTablet] = React.useState(false);
 
   const handleResize = () => {
-    if (window.innerWidth < 500) {
+    if (window.innerWidth < 1280) {
       setIsMobile(true);
-    } else if (window.innerWidth < 1280) {
+    } else if (window.innerWidth < 1300) {
       setIsTablet(true);
     } else {
       setIsMobile(false);
@@ -70,9 +75,9 @@ export default function UserSidebar() {
   });
 
   React.useEffect(() => {
-    if (window.innerWidth < 500) {
+    if (window.innerWidth < 1280) {
       setIsMobile(true);
-    } else if (window.innerWidth < 1280) {
+    } else if (window.innerWidth < 1300) {
       setIsTablet(true);
     } else {
       setIsMobile(false);
@@ -124,22 +129,6 @@ export default function UserSidebar() {
   const refreshPage = () => {
     window.location.reload(false);
   };
-
-  const resetFirstBalance = async () => {
-    const walletRef = await doc(db, "wallet", user.uid);
-
-    try {
-      await setDoc(walletRef, {
-        balances: balance
-          ? { usd: balance.usd, btc: balance.btc }
-          : { usd: 10000, btc: 0 },
-      });
-    } catch (error) {}
-  };
-
-  React.useEffect(() => {
-    resetFirstBalance();
-  }, []);
 
   return (
     <div>
