@@ -1,12 +1,14 @@
-import { Button, Container, makeStyles, Typography } from "@material-ui/core";
+import { Button, Container, Typography, makeStyles } from "@material-ui/core";
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+
+import Coin from "../asset/mariocoin.gif";
+import { CryptoState } from "../CryptoContext";
 import Kaching from "../asset/kaching.mp3";
 import LogoWord from "../asset/logoword.png";
 import Mario from "../asset/mario3.gif";
 import MarioStay from "../asset/mario-ready.gif";
-import Coin from "../asset/mariocoin.gif";
-import { CryptoState } from "../CryptoContext";
+import { useNavigate } from "react-router-dom";
+
 const useStyle = makeStyles((theme) => ({
   banner: {
     backgroundPosition: "center center",
@@ -170,7 +172,7 @@ function WelcomePage() {
                   navigate("/homepage");
                   setAlert({
                     open: true,
-                    message: `now playing: a town with an ocean view`,
+                    message: `Now Playing: A Town With An Ocean View`,
                     type: "info",
                   });
                 }, 650);

@@ -1,15 +1,16 @@
 import {
   CircularProgress,
   LinearProgress,
-  makeStyles,
   Typography,
+  makeStyles,
 } from "@material-ui/core";
-import React, { useState, useEffect } from "react";
-import Service from "../service/Service";
-import { CryptoState } from "../CryptoContext";
+import React, { useEffect, useState } from "react";
+
 import AliceCarousel from "react-alice-carousel";
-import { useNavigate } from "react-router-dom";
+import { CryptoState } from "../CryptoContext";
+import Service from "../service/Service";
 import SimpleChart from "./SimpleChart";
+import { useNavigate } from "react-router-dom";
 
 const useStyle = makeStyles(() => ({
   scrollh: {
@@ -109,7 +110,7 @@ function ScrollHorizontal() {
             style={{
               display: "flex",
               alignItems: "center",
-              justifyContent: "space-between",
+              justifyContent: "space-evenly",
             }}
           >
             <Typography variant="h4" style={{ fontFamily: "VT323" }}>
