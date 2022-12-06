@@ -75,6 +75,7 @@ function PortfolioChart({ days, volatilityDesc, timeFrame }) {
   const [coinHistData, setCoinHistData] = useState([]);
   const [coinHistData2, setCoinHistData2] = useState([]);
   const [isChart, setIsChart] = useState("portfolio");
+  const [coinChart, setCoinChart] = useState([]);
 
   useEffect(() => {
     Promise.all(
@@ -268,52 +269,60 @@ function PortfolioChart({ days, volatilityDesc, timeFrame }) {
     };
 
     setPortfolioVol(portfolioVolatility()?.return_sd);
-  }, [watchlist, coinsd2, days]);
+  }, [watchlist, coinsd2, days, setPortfolioVol]);
 
-  const coinChart = coinHistData2.map((e) => {
-    const data1 = e.hist_data?.map((chartData) => chartData[1]);
+  useEffect(() => {
+    setCoinChart(
+      coinHistData2.map((e) => {
+        const data1 = e.hist_data?.map((chartData) => chartData[1]);
 
-    const ratio = Math.max(...data1) - Math.min(...data1);
+        const ratio = Math.max(...data1) - Math.min(...data1);
 
-    const min = Math.min(...data1);
+        const min = Math.min(...data1);
 
-    const data2 = data1.map((v) => (v - min) / ratio);
+        const data2 = data1.map((v) => (v - min) / ratio);
 
-    const random_rgba = () => {
-      var o = Math.round,
-        r = Math.random,
-        s = 255;
-      return "rgba(" + o(r() * s) + "," + o(r() * s) + "," + o(r() * s) + ",1";
-    };
+        const random_rgba = () => {
+          var o = Math.round,
+            r = Math.random,
+            s = 255;
+          return (
+            "rgba(" + o(r() * s) + "," + o(r() * s) + "," + o(r() * s) + ",1"
+          );
+        };
 
-    if (
-      watchlist.includes(watchlist.find((watch) => watch.id === e?.coin?.id))
-    ) {
-      return {
-        data: data2,
-        label: ` ${e.coin.id}`,
-        borderColor: random_rgba(),
-        borderWidth: 2,
-        pointBorderColor: "rgba(0,0,0,0)",
-        pointBackgroundColor: "rgba(0,0,0,0)",
-        pointHoverBorderColor: "#5AC53B",
-        pointHitRadius: 6,
-        yAxisID: "y",
-      };
-    } else {
-      return {
-        data: [],
-        label: ``,
-        borderColor: "rgba(0,0,0,0.0)",
-        borderWidth: 2,
-        pointBorderColor: "rgba(0,0,0,0)",
-        pointBackgroundColor: "rgba(0,0,0,0)",
-        pointHoverBorderColor: "#5AC53B",
-        pointHitRadius: 6,
-        yAxisID: "y",
-      };
-    }
-  });
+        if (
+          watchlist.includes(
+            watchlist.find((watch) => watch.id === e?.coin?.id)
+          )
+        ) {
+          return {
+            data: data2,
+            label: ` ${e.coin.id}`,
+            borderColor: random_rgba(),
+            borderWidth: 2,
+            pointBorderColor: "rgba(0,0,0,0)",
+            pointBackgroundColor: "rgba(0,0,0,0)",
+            pointHoverBorderColor: "#5AC53B",
+            pointHitRadius: 6,
+            yAxisID: "y",
+          };
+        } else {
+          return {
+            data: [],
+            label: ``,
+            borderColor: "rgba(0,0,0,0.0)",
+            borderWidth: 2,
+            pointBorderColor: "rgba(0,0,0,0)",
+            pointBackgroundColor: "rgba(0,0,0,0)",
+            pointHoverBorderColor: "#5AC53B",
+            pointHitRadius: 6,
+            yAxisID: "y",
+          };
+        }
+      })
+    );
+  }, [coinHistData2]);
 
   const totalDuration = 2500;
   const delayBetweenPoints = totalDuration / 250;
